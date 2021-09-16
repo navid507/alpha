@@ -1,15 +1,36 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:alpha/back/accounting/user_stored_data.dart';
 import 'package:mockito/annotations.dart';
 
 
-@GenerateMocks([UserStoredData])
+
+class MockDeviceInfo extends Mock
+    implements DeviceInfoPlugin {
+  // @override
+  // // TODO: implement androidInfo
+  // Future<AndroidDeviceInfo> get androidInfo async =>
+  //     AndroidDeviceInfo(supported64BitAbis: [""], supportedAbis: [""], systemFeatures: [""], version: AndroidBuildVersion(), supported32BitAbis: [""]);
+}
+
+class MockUserStoredData extends Mock implements UserStoredData
+{
+
+  @override
+  Future<UserStoredData> createUserStoredData({required DeviceInfoPlugin deviceInfo}) {
+    // TODO: implement createUserStoredData
+    throw UnimplementedError();
+  }
+}
+
 void main() {
   late UserStoredData shr;
-  var shrMock =
+  var mockDeviceInfo = MockDeviceInfo();
   setUp(() async {
-    shr = await UserStoredData.createUserStoredData();
+    shr = await UserStoredData.createUserStoredData(deviceInfo: mockDeviceInfo);
   });
 
   test('is share preference ok', () {
@@ -41,6 +62,9 @@ void main() {
 
   test('is device id  ok', () async {
     shr.reset();
+
+    when(mockDeviceInfo.androidInfo.).thenAnswer((realInvocation) async => AndroidDeviceInfo(version: AndroidBuildVersion._fromMap(), supported32BitAbis: [], supported64BitAbis: [], supportedAbis: [], systemFeatures: []));
+
     var dID1 = await shr.getDeviceID();
     var dID2 = await shr.getDeviceID();
     print('$dID1: $dID2');

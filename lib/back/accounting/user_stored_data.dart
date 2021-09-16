@@ -1,8 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io' show Platform;
 
 class UserStoredData {
   SharedPreferences? _preferences;
+  late DeviceInfoPlugin _deviceInfo; // = DeviceInfoPlugin();
 
   static const PREFERENCE_NAME = "userPreferences";
 
@@ -11,9 +13,11 @@ class UserStoredData {
   static const USER_TOKEN = "userToken";
   static const USER_PASSWORD = "userPassword";
 
-  static Future<UserStoredData> createUserStoredData() async {
+  static Future<UserStoredData> createUserStoredData(
+      {required DeviceInfoPlugin deviceInfo}) async {
     var myUSD = UserStoredData();
     myUSD._preferences = await SharedPreferences.getInstance();
+    myUSD._deviceInfo = deviceInfo;
     return myUSD;
   }
 
@@ -76,22 +80,21 @@ class UserStoredData {
   Future<String?> getDeviceID() async {
     var dID = readValue(DEVICE_ID);
     if (dID == null) {
-      dID = await _findDeviceID();
+      dID = await findDeviceID();
       _setDeviceID(dID);
     }
     return dID;
   }
 
-  Future<String?> _findDeviceID() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    // if (Platform.isAndroid) {
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    return androidInfo.androidId;
-    // } else if (Platform.isIOS) {
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   return iosInfo.identifierForVendor;
-    // }
-    // return null;
+  Future<String?> findDeviceID() async {
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
+      return androidInfo.androidId;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor;
+    }
+    return null;
   }
 
   reset() {
