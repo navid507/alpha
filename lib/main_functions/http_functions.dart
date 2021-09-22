@@ -1,32 +1,50 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-abstract class HttpFunctionsInterface {
-  Future<Map<String, dynamic>> get({required String url});
+import 'main_models/api_result.dart';
 
-  Future<Map<String, dynamic>> post(
-      {required String url, Map<String, dynamic> body});
+abstract class HttpFunctionsInterface {
+  Future<APIResult> get({required String url});
+
+  Future<APIResult> post({required String url, Map<String, dynamic> body});
 }
 
 class HttpCalls implements HttpFunctionsInterface {
+  // var http
+
+  http.Client httpClient;
+
+  HttpCalls({required this.httpClient});
+
   @override
-  Future<Map<String, dynamic>> get({required String url}) async {
-    var res = await http.get(Uri.parse(url));
-    if (res.statusCode == 200) {
-      return jsonDecode(res.body);
-    } else {
-      return {"error": "cant find the url"};
-    }
+  Future<APIResult> get({required String url}) async {
+    print('url: $url');
+    var res = await httpClient.get(Uri.parse(url));
+
+    return createResult(res);
   }
 
   @override
-  Future<Map<String, dynamic>> post(
+  Future<APIResult> post(
       {required String url, Map<String, dynamic>? body}) async {
-    var res = await http.post(Uri.parse(url), body: body);
-    if (res.statusCode == 200) {
-      return jsonDecode(res.body);
+    print('url: $url');
+    print('parameters: $body');
+    var res = await httpClient.post(
+      Uri.parse(url),
+      body: json.encode(body),
+      headers: {'Content-Type': 'application/json'},
+    );
+    return createResult(res);
+  }
+
+  APIResult createResult(http.Response response) {
+    print(response.body);
+    if (response.statusCode == 200) {
+      // return jsonDecode(res.body);
+      return APIResult.fromJson(jsonDecode(response.body));
     } else {
-      return {"error": "cant find the url"};
+      return APIResult(
+          state: StateResult(msg: "server not found!", error: -100));
     }
   }
 }

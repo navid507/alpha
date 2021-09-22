@@ -1,6 +1,5 @@
 import 'dart:core';
 
-
 class Swimmer {
   String id = "";
   String code = "";
@@ -8,6 +7,7 @@ class Swimmer {
   String firstName = "";
   String lastName = "";
   String birthDate = "";
+
   // String regDate = "";
   String homeAddress = "";
   String homePhone = "";
@@ -87,5 +87,36 @@ class Swimmer {
         shenasImage: json['shenas_image'],
         insuranceImage: json['insurance_image'],
         eshtegalImage: json['eshtegal_image']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'code': code,
+      'phone': phone,
+      'first_name': firstName,
+      'last_name': lastName,
+      'birth_date': birthDate,
+      'home_address': homeAddress,
+      'home_phone': homePhone,
+      'school_address': schoolAddress,
+      'school_phone': schoolPhone,
+      'school_region': schoolRegion,
+      'school_region': fatherEducation,
+      'father_job': fatherJob,
+      'father_phone': fatherPhone,
+      'mother_education': motherEducation,
+      'mother_job': motherJob,
+      'mother_phone': motherPhone,
+      'use_service': useService,
+      'score': score,
+      'reagent': reagent,
+      'introduction': introduction,
+      'image': image,
+      'national_image': nationalImage,
+      'shenas_image': shenasImage,
+      'insurance_image': insuranceImage,
+      'eshtegal_image': eshtegalImage
+    };
   }
 }

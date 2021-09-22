@@ -60,16 +60,16 @@ void main() {
     expect(shr.getUserPass(), equals(un));
   });
 
-  test('is device id  ok', () async {
-    shr.reset();
-
-    when(mockDeviceInfo.androidInfo.).thenAnswer((realInvocation) async => AndroidDeviceInfo(version: AndroidBuildVersion._fromMap(), supported32BitAbis: [], supported64BitAbis: [], supportedAbis: [], systemFeatures: []));
-
-    var dID1 = await shr.getDeviceID();
-    var dID2 = await shr.getDeviceID();
-    print('$dID1: $dID2');
-    expect(dID2, equals(dID1));
-  });
+  // test('is device id  ok', () async {
+  //   shr.reset();
+  //
+  //   when(mockDeviceInfo.androidInfo.).thenAnswer((realInvocation) async => AndroidDeviceInfo(version: AndroidBuildVersion._fromMap(), supported32BitAbis: [], supported64BitAbis: [], supportedAbis: [], systemFeatures: []));
+  //
+  //   var dID1 = await shr.getDeviceID();
+  //   var dID2 = await shr.getDeviceID();
+  //   print('$dID1: $dID2');
+  //   expect(dID2, equals(dID1));
+  // });
 
   test('is token ok', () {
     var un = 'device token';

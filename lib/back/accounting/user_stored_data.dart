@@ -1,3 +1,4 @@
+import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
@@ -8,6 +9,7 @@ class UserStoredData {
 
   static const PREFERENCE_NAME = "userPreferences";
 
+  static const REGISTER_STATE = "registerState";
   static const USER_NAME = "userName";
   static const DEVICE_ID = "deviceId";
   static const USER_TOKEN = "userToken";
@@ -49,12 +51,21 @@ class UserStoredData {
     return null;
   }
 
+  setRegisterState(RegisterState registerState) {
+    setValue(REGISTER_STATE, registerState.index);
+  }
+
+  RegisterState getRegisterState() {
+
+    return RegisterState.values[readValue(REGISTER_STATE) ?? 0];
+  }
+
   setUsername(String username) {
     setValue(USER_NAME, username);
   }
 
   String getUsername() {
-    return readValue(USER_NAME);
+    return readValue(USER_NAME) ?? "";
   }
 
   setUserPass(String password) {
@@ -62,14 +73,14 @@ class UserStoredData {
   }
 
   String getUserPass() {
-    return readValue(USER_PASSWORD);
+    return readValue(USER_PASSWORD) ?? "";
   }
 
   setUserToken(String userToken) {
     setValue(USER_TOKEN, userToken);
   }
 
-  String getUserToken() {
+  String? getUserToken() {
     return readValue(USER_TOKEN);
   }
 
@@ -94,7 +105,7 @@ class UserStoredData {
       IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
       return iosInfo.identifierForVendor;
     }
-    return null;
+    return "";
   }
 
   reset() {

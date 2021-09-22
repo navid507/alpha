@@ -1,12 +1,15 @@
-import 'package:alpha/back/accounting/accountingApiAbstract.dart';
+
+import 'package:alpha/back/accounting/abstracts/accounting_api_abstract.dart';
 import 'package:alpha/back/accounting/models/swimmer.dart';
 import 'package:alpha/main_functions/http_functions.dart';
-import 'package:http/http.dart' as http;
 
-class URLs {
-  static const String _root = "http://orkaswim.ir/index.php/alpha_api/user";
+
+class AccountingURLs {
+  static const String _root = "https://orkaswim.ir/index.php/alpha_api/user";
   static const String RelatedSwimmers = "$_root/relativeswimmer";
-  static const String Register = "$_root/register";
+  static const String RegisterPhone = "$_root/addphone";
+  static const String Verify = "$_root/verify";
+  static const String RegisterSwimmer = "$_root/register";
 
 // Profile
 }
@@ -21,12 +24,12 @@ class AccountingAPI implements AccountingApiInterface {
       {required String private, required String fbToken}) async {
     List<Swimmer> swimmers = List.empty(growable: true);
 
-    var res = await http.get(url: URLs.RelatedSwimmers);
+    var res = await http.get(url: AccountingURLs.RelatedSwimmers);
 
-    int err = res['error'];
+    int err = res.state.error;
     if (err != 0) return swimmers;
 
-    List<Map<String, dynamic>> swimmersJson = res['swimmers'];
+    List<Map<String, dynamic>> swimmersJson = res.data;
     swimmersJson.forEach((element) {
       swimmers.add(Swimmer.fromJson(element));
     });
@@ -35,15 +38,26 @@ class AccountingAPI implements AccountingApiInterface {
   }
 
   @override
-  registerPhone({required String phone, required String uid}) {}
-
-  @override
-  verifyPhone({required String phone, required String uid}) {
-    // TODO: implement verifyPhone
-    throw UnimplementedError();
+  Future<int> registerPhone(
+      {required String phone, required String uid}) async {
+    var res = await http.get(url: AccountingURLs.RegisterPhone);
+    return res.state.error;
   }
 
   @override
+  Future<int> verifyPhone({required String phone, required String uid}) async {
+    var res = await http.get(url: AccountingURLs.Verify);
+    return res.state.error;
+  }
+
+  @override
+  Future<int> registerUser({required Swimmer swimmer}) async {
+    var res = await http.get(url: AccountingURLs.RegisterSwimmer);
+    return res.state.error;
+  }
+
+/*
+   @override
   registerUser(
       {required String code,
       required String phone,
@@ -73,8 +87,5 @@ class AccountingAPI implements AccountingApiInterface {
     // TODO: implement registerUser
     throw UnimplementedError();
   }
+   */
 }
-
-class AccountingRepo {}
-
-extension on AccountingRepo {}
