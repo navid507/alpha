@@ -1,4 +1,3 @@
-
 import 'package:alpha/ui/splash/splash_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // to hide both:
-    SystemChrome.setEnabledSystemUIOverlays ([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -19,12 +18,26 @@ class SplashScreen extends StatelessWidget {
       ),
       home: Scaffold(
           // appBar: AppBar(title: Text('First Implementation of UI')),
-          body: Column(
+          body: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Stack(children: [
+          Image(
+            image: AssetImage('assets/images/alpha_splash.jpg'),
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+            alignment: Alignment.center,
+          ),
+          Column(
             children: [
+              getRefreshButton(context: context),
+              Spacer(),
               getVersionTextInfo(),
-              getRefreshButton(context: context)
             ],
-          )) /*MyBrothersName(title: 'Flutter Demo Home Page')*/,
+          )
+        ]),
+      )),
     );
   }
 }
@@ -37,11 +50,11 @@ getRefreshButton({required BuildContext context}) {
       child: Text('change name'));
 }
 
-
 getVersionTextInfo() {
   return Consumer<SplashModel>(
     builder: (context, splash, child) {
-      return Text('We found ${splash.versionName}');
+      return Container(
+          alignment: Alignment.center, child: Text('For ${splash.versionName}'));
     },
   );
 }
