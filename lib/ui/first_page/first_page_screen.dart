@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
 
-class FirstPage extends StatelessWidget{
+class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-
+    return Scaffold(appBar: AppBar(title: Text('First Pate'),),
+      body: Text('Content'),
+    );
   }
 
 }

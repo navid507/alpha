@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:alpha/back/accounting/abstracts/accounting_api_abstract.dart';
+import 'package:alpha/back/accounting/accounting_api.dart';
 import 'package:alpha/back/accounting/models/swimmer.dart';
 import 'package:alpha/back/accounting/user_stored_data.dart';
 import 'package:alpha/main_functions/http_functions.dart';
@@ -9,6 +10,21 @@ import 'package:http/http.dart' as http;
 import 'abstracts/accounting_repo_abstract.dart';
 
 class AccountingRepo implements AccountingRepositoryInterface {
+
+  static AccountingRepo? _instance;
+  // AccountingRepo._internal();
+  static AccountingRepo getInstance()
+  {
+    if (_instance == null)
+      {
+        _instance = AccountingRepo._internal(userStoredData: UserStoredData(), accountingApi: AccountingAPI(http: HttpCalls(httpClient: http.Client())));
+      }
+
+    return _instance!;
+  }
+
+
+
   Swimmer? _activeSwimmer;
   List<Swimmer>? _relativeSwimmers;
   RegisterState _registerState = RegisterState.Nothing;
@@ -33,7 +49,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
   UserStoredData userStoredData;
   AccountingApiInterface accountingApi;
 
-  AccountingRepo({required this.userStoredData, required this.accountingApi});
+  AccountingRepo._internal({required this.userStoredData, required this.accountingApi});
 
 
   @override
@@ -54,4 +70,6 @@ class AccountingRepo implements AccountingRepositoryInterface {
   
 }
 
-extension on AccountingRepo {}
+extension on AccountingRepo {
+
+}
