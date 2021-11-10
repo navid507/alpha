@@ -1,5 +1,9 @@
+// import 'dart:html';
+
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
+import 'dart:io';
 
 import 'main_models/api_result.dart';
 
@@ -7,9 +11,41 @@ abstract class HttpFunctionsInterface {
   Future<APIResult> get({required String url});
 
   Future<APIResult> post({required String url, Map<String, dynamic> body});
+  Future<APIResult> multiPartPost({required String url, Map<String, dynamic>? body, Map<String, String>? files});
+
 }
 
 class HttpCalls implements HttpFunctionsInterface {
+  @override
+  Future<APIResult> multiPartPost(
+      {required String url,
+      Map<String, dynamic>? body,
+      Map<String, String>? files}) async {
+    print('url: $url');
+    print('parameters: $body');
+    var req = http.MultipartRequest("POST", Uri.parse(url));
+    for (String key in body!.keys) {
+      req.fields[key] = body[key];
+    }
+
+    for (String key in files!.keys) {
+      // req.fields[key] = body[key];
+      var filePath = files[key];
+      req.files.add(http.MultipartFile.fromBytes(
+          'file', await File.fromUri(Uri.parse(filePath!)).readAsBytes(),
+          contentType: MediaType('image', 'jpeg')));
+    }
+
+    var res = await req.send();
+
+    // var res = await httpMultiPart.Mul(
+    //   Uri.parse(url),
+    //   body: json.encode(body),
+    //   headers: {'Content-Type': 'application/json'},
+    // );
+    return createResultFromStreamedResponse(res);
+  }
+
   // var http
 
   http.Client httpClient;
@@ -46,5 +82,21 @@ class HttpCalls implements HttpFunctionsInterface {
       return APIResult(
           state: StateResult(msg: "server not found!", error: -100));
     }
+  }
+
+  APIResult createResultFromStreamedResponse(http.StreamedResponse response)  {
+    response.stream.bytesToString().then((resString) {
+      print(resString);
+      if (response.statusCode == 200) {
+        // return jsonDecode(res.body);
+        return APIResult.fromJson(jsonDecode(resString));
+      }
+    });
+
+    return APIResult(
+        state: StateResult(msg: "server not found!", error: -100));
+
+
+
   }
 }

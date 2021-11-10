@@ -48,17 +48,17 @@ void main() {
     expect(shr.readValue('test'), equals(x));
   });
 
-  test('is user name  ok', () {
-    var un = 'navid';
-    shr.setUsername(un);
-    expect(shr.getUsername(), equals(un));
-  });
-
-  test('is user pass  ok', () {
-    var un = 'pass word';
-    shr.setUserPass(un);
-    expect(shr.getUserPass(), equals(un));
-  });
+  // test('is user name  ok', () {
+  //   var un = 'navid';
+  //   shr.setUsername(un);
+  //   expect(shr.getUsername(), equals(un));
+  // });
+  //
+  // test('is user pass  ok', () {
+  //   var un = 'pass word';
+  //   shr.setUserPass(un);
+  //   expect(shr.getUserPass(), equals(un));
+  // });
 
   // test('is device id  ok', () async {
   //   shr.reset();

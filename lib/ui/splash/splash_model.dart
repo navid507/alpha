@@ -25,7 +25,7 @@ class SplashModel extends ChangeNotifier {
   }
 
   void checkPhoneRegisterState() {
-    _accountingRepo.getRegisterStateStream();
+    _accountingRepo.getRegisterState();
     _accountingRepo.registerStateStream.listen((registerState) {
       this._registerState = registerState;
       notifyListeners();
