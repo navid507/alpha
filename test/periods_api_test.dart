@@ -1,4 +1,5 @@
 import 'package:alpha/back/periods/abstracts/periods_api_abstracts.dart';
+import 'package:alpha/back/periods/models/period/periods_result.dart';
 import 'package:alpha/back/periods/perdiods_apis.dart';
 import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
 import 'package:alpha/back/public_repo/public_apis.dart';
@@ -17,16 +18,25 @@ void main() {
   });
   test('is get all periods ok', () async {
     var res = await periodsApi.getAllPeriods();
-    expect(res.length, equals(1));
+    if (res is SuccessPeriods) {
+      expect(res.periods.length, greaterThanOrEqualTo(1));
+    } else {
+      fail('problem in get all periods');
+    }
   });
 
   test('is get registered periods ok', () async {
     var res = await periodsApi.getRegisteredPeriods(userID: 16);
-    expect(res.length, equals(8));
+    if (res is SuccessPeriods) {
+      expect(res.periods.length, greaterThan(1));
+    } else {
+      fail('problem in get registered periods');
+    }
   });
 
   test('is register period ok', () async {
-    var res = await periodsApi.registerPeriod(userToken: PRiVATE,
+    var res = await periodsApi.registerPeriod(
+        userToken: PRiVATE,
         userID: USERiD,
         periodID: "1",
         discountCode: "no",
@@ -35,14 +45,13 @@ void main() {
   });
 
   test('is discount ok', () async {
-    var res = await periodsApi.getDiscount(userToken: PRiVATE,
-        userID: USERiD,
-        discountCode: "no",
-     );
+    var res = await periodsApi.getDiscount(
+      userToken: PRiVATE,
+      userID: USERiD,
+      discountCode: "no",
+    );
     expect(res.data, equals(0));
   });
-
-
 
   // "private" -> ""
 

@@ -1,11 +1,12 @@
-import 'package:alpha/back/periods/models/period.dart';
+import 'package:alpha/back/periods/models/period/period.dart';
+import 'package:alpha/back/periods/models/period/periods_result.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 
 abstract class PeriodsApiInterface
 {
-  Future<List<Period>> getAllPeriods();
+  Future<PeriodsResult> getAllPeriods();
 
-  Future<List<Period>> getRegisteredPeriods({required int userID});
+  Future<PeriodsResult> getRegisteredPeriods({required int userID});
 
   Future<APIResult> registerPeriod(
       {required String userToken,

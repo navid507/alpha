@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:alpha/back/public_repo/models/alpha_club.dart';
+import 'package:alpha/back/public_repo/models/alpha_club/alpha_club.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 String res = '''

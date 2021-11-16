@@ -1,5 +1,5 @@
 class Session {
-  int id;
+  String id;
   String date;
   String type;
   String score;

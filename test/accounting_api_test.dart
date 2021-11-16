@@ -3,6 +3,8 @@
 import 'package:alpha/back/accounting/abstracts/accounting_api_abstract.dart';
 import 'package:alpha/back/accounting/accounting_api.dart';
 import 'package:alpha/back/accounting/accounting_repo.dart';
+import 'package:alpha/back/accounting/models/record/record_result.dart';
+import 'package:alpha/back/accounting/models/record/record_type_result.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -55,6 +57,28 @@ void main()
   test('test if verify code is ok ', () async {
     var res = await accountingApi.verifyPhone(phone: "09366", uid: "testFromMacFlutter", code: "7600");
     expect(res.state.error, equals(3));
+  });
+
+  test('test if record types is ok ', () async {
+    var res = await accountingApi.getRecordTypes();
+    if (res is SuccessRecordTypes)
+    {
+      expect(res.recordTypes.length, greaterThan(3));
+
+    }else{
+      expect(1, equals(0));
+    }
+  });
+  
+  test('test if records is ok ', () async {
+    var res = await accountingApi.getRecordOfUser("62", "-1", "en");
+    if (res is SuccessRecords)
+    {
+      expect(res.records.length, greaterThan(3));
+
+    }else{
+      expect(1, equals(0));
+    }
   });
 
 

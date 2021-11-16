@@ -15,31 +15,30 @@ class SplashScreen extends StatelessWidget {
 
     return ChangeNotifierProvider<SplashModel>(
       create: (context) => SplashModel(),
-      child:  Scaffold(
-            // appBar: AppBar(title: Text('First Implementation of UI')),
-            body: Container(
-          width: double.infinity,
-          alignment: Alignment.center,
-          child: Stack(children: [
-            Image(
-              image: AssetImage('assets/images/splash_screen.png'),
-              fit: BoxFit.cover,
-              height: double.infinity,
-              width: double.infinity,
-              alignment: Alignment.center,
-            ),
-            Column(
-              children: [
-                getRefreshButton(context: context),
-                Spacer(),
-                getLoading(),
-                getJustVersionTextInfo(),
-              ],
-            )
-          ]),
-        )),
-      );
-
+      child: Scaffold(
+          // appBar: AppBar(title: Text('First Implementation of UI')),
+          body: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Stack(children: [
+          Image(
+            image: AssetImage('assets/images/splash_screen.png'),
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+            alignment: Alignment.center,
+          ),
+          Column(
+            children: [
+              getRefreshButton(context: context),
+              Spacer(),
+              getLoading(),
+              getJustVersionTextInfo(),
+            ],
+          )
+        ]),
+      )),
+    );
   }
 }
 
@@ -63,14 +62,28 @@ getVersionTextInfo() {
 }
 
 getJustVersionTextInfo() {
-  return Selector<SplashModel, String>(selector: (_, model) => model.versionName,
-    builder: (context, versionName, child) {
-      return Container(
-          alignment: Alignment.center,
-          margin: const EdgeInsets.all(5.0),
-          child: Text('For $versionName'));
-    },
-  );
+  return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.all(5.0),
+      child: Selector<SplashModel, String>(
+        selector: (
+          _,
+          model,
+        ) =>
+            model.versionName,
+        builder: (context, versionName, child) {
+          return Text(' $versionName');
+        },
+      ));
+
+  // return Selector<SplashModel, String>(selector: (_, model) => model.versionName,
+  //   builder: (context, versionName, child) {
+  //     return Container(
+  //         alignment: Alignment.center,
+  //         margin: const EdgeInsets.all(5.0),
+  //         child: Text('For $versionName'));
+  //   },
+  // );
 }
 
 getLoading() {
@@ -83,10 +96,9 @@ getLoading() {
       //
       //     }
 
-      if (newState != RegisterState.NotSetYet)
-        {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => FirstPage()));
-        }
+      if (newState != RegisterState.NotSetYet) {
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => FirstPage()));
+      }
       return Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.all(5.0),

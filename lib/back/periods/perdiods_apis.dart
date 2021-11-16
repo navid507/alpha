@@ -1,8 +1,9 @@
-import 'package:alpha/back/periods/models/period.dart';
+import 'package:alpha/back/periods/models/period/period.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 
 import 'abstracts/periods_api_abstracts.dart';
+import 'models/period/periods_result.dart';
 
 class PeriodsURLs {
   static const String _root = "http://orkaswim.ir/index.php/alpha_api/period";
@@ -22,37 +23,36 @@ class PeriodsApi implements PeriodsApiInterface {
   PeriodsApi({required this.http});
 
   @override
-  Future<List<Period>> getAllPeriods() async {
-    List<Period> periods = List.empty(growable: true);
+  Future<PeriodsResult> getAllPeriods() async {
 
     var res = await http.get(url: PeriodsURLs.AllPeriods);
 
-    int err = res.state.error;
-    if (err != 0) return periods;
-
-    List<dynamic> swimmersJson = res.data;
-    swimmersJson.forEach((element) {
-      periods.add(Period.fromJson(element));
-    });
-
-    return periods;
+    if (res.isSuccess) {
+      List<Period> periods = List.empty(growable: true);
+      List<dynamic> periodsJson = res.data;
+      periodsJson.forEach((element) {
+        periods.add(Period.fromJson(element));
+      });
+      return PeriodsResult.success(periods);
+    } else {
+      return PeriodsResult.error(res.state.error, res.state.msg);
+    }
   }
 
   @override
-  Future<List<Period>> getRegisteredPeriods({required int userID}) async {
-    List<Period> periods = List.empty(growable: true);
-
+  Future<PeriodsResult> getRegisteredPeriods({required int userID}) async {
     var res = await http.get(url: "${PeriodsURLs.RegisteredPeriods}/$userID");
 
-    int err = res.state.error;
-    if (err != 0) return periods;
-
-    List<dynamic> swimmersJson = res.data;
-    swimmersJson.forEach((element) {
-      periods.add(Period.fromJson(element));
-    });
-
-    return periods;
+    if (res.isSuccess) {
+      List<Period> periods = List.empty(growable: true);
+      List<dynamic> periodsJson = res.data;
+      periodsJson.forEach((element) {
+        periods.add(Period.fromJson(element));
+      });
+      return PeriodsResult.success(periods);
+    } else {
+      return PeriodsResult.error(res.state.error, res.state.msg);
+    }
   }
 
   Future<APIResult> registerPeriod(
@@ -112,7 +112,6 @@ class PeriodsApi implements PeriodsApiInterface {
       required String userID,
       // required String periodID,
       required String discountCode}) async {
-
     Map<String, dynamic> body = Map();
     body['private'] = userToken;
     body['user'] = userID;
