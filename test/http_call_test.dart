@@ -55,7 +55,7 @@ void main() {
   });
 
   test('test post api of http calls for return swimmers ', () async {
-    Swimmer swimmer = Swimmer(id: '1', code: '2345', phone: 'phone', firstName: 'firstName', lastName: 'lastName', birthDate: 'birthDate', homeAddress: 'homeAddress', homePhone: 'homePhone', schoolAddress: 'schoolAddress', schoolPhone: 'schoolPhone', schoolRegion: 'schoolRegion', fatherEducation: 'fatherEducation', fatherJob: 'fatherJob', fatherPhone: 'fatherPhone', motherEducation: 'motherEducation', motherJob: 'motherJob', motherPhone: 'motherPhone', useService: 'useService', score: 'score', reagent: 'reagent', image: 'image', nationalImage: 'nationalImage', shenasImage: 'shenasImage', insuranceImage: 'insuranceImage', eshtegalImage: 'eshtegalImage', introduction: 'introduction');
+    Swimmer swimmer = Swimmer(id: 1, code: '2345', phone: 'phone', firstName: 'firstName', lastName: 'lastName', birthDate: 'birthDate', homeAddress: 'homeAddress', homePhone: 'homePhone', schoolAddress: 'schoolAddress', schoolPhone: 'schoolPhone', schoolRegion: 'schoolRegion', fatherEducation: 'fatherEducation', fatherJob: 'fatherJob', fatherPhone: 'fatherPhone', motherEducation: 'motherEducation', motherJob: 'motherJob', motherPhone: 'motherPhone', useService: 'useService', score: 'score', reagent: 'reagent', image: 'image', nationalImage: 'nationalImage', shenasImage: 'shenasImage', insuranceImage: 'insuranceImage', eshtegalImage: 'eshtegalImage', introduction: 'introduction');
     APIResult result =
     APIResult(state: StateResult(msg: 'success', error: 0), data: [swimmer, swimmer]);
 
@@ -82,7 +82,7 @@ void main() {
   });
 
   test('test post api of http calls for return swimmer ', () async {
-    Swimmer swimmer = Swimmer(id: '1', code: '2345', phone: 'phone', firstName: 'firstName', lastName: 'lastName', birthDate: 'birthDate', homeAddress: 'homeAddress', homePhone: 'homePhone', schoolAddress: 'schoolAddress', schoolPhone: 'schoolPhone', schoolRegion: 'schoolRegion', fatherEducation: 'fatherEducation', fatherJob: 'fatherJob', fatherPhone: 'fatherPhone', motherEducation: 'motherEducation', motherJob: 'motherJob', motherPhone: 'motherPhone', useService: 'useService', score: 'score', reagent: 'reagent', image: 'image', nationalImage: 'nationalImage', shenasImage: 'shenasImage', insuranceImage: 'insuranceImage', eshtegalImage: 'eshtegalImage', introduction: 'introduction');
+    Swimmer swimmer = Swimmer(id: 1, code: '2345', phone: 'phone', firstName: 'firstName', lastName: 'lastName', birthDate: 'birthDate', homeAddress: 'homeAddress', homePhone: 'homePhone', schoolAddress: 'schoolAddress', schoolPhone: 'schoolPhone', schoolRegion: 'schoolRegion', fatherEducation: 'fatherEducation', fatherJob: 'fatherJob', fatherPhone: 'fatherPhone', motherEducation: 'motherEducation', motherJob: 'motherJob', motherPhone: 'motherPhone', useService: 'useService', score: 'score', reagent: 'reagent', image: 'image', nationalImage: 'nationalImage', shenasImage: 'shenasImage', insuranceImage: 'insuranceImage', eshtegalImage: 'eshtegalImage', introduction: 'introduction');
     APIResult result =
     APIResult(state: StateResult(msg: 'success', error: 0), data: swimmer);
 

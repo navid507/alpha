@@ -2,13 +2,18 @@ import 'dart:ffi';
 
 import 'package:alpha/back/accounting/models/swimmer.dart';
 import 'package:alpha/back/accounting/models/swimmer.dart';
+import 'package:alpha/main_functions/main_models/api_result.dart';
 
-enum RegisterState { Nothing, Phone, Verify, Code, OK, Relative_User }
+enum RegisterState { Nothing, Phone, Verify, Code, OK, Relative_User, NotSetYet }
 
 abstract class AccountingRepositoryInterface {
-  getRegisterStateStream();
 
-  getActiveSwimmerStream();
+  getRegisterState();
+  Future<StateResult> registerPhone(String phone);
+  Future<StateResult> verifyPhone(String code);
 
-  getRelatedSwimmerStream();
+
+  updateActiveSwimmer();
+
+  updateRelatedSwimmers();
 }

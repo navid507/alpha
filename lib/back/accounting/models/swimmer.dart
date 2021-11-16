@@ -1,7 +1,7 @@
 import 'dart:core';
 
 class Swimmer {
-  String id = "";
+  int id = -1;
   String code = "";
   String phone = "";
   String firstName = "";
@@ -102,7 +102,7 @@ class Swimmer {
       'school_address': schoolAddress,
       'school_phone': schoolPhone,
       'school_region': schoolRegion,
-      'school_region': fatherEducation,
+      'father_education': fatherEducation,
       'father_job': fatherJob,
       'father_phone': fatherPhone,
       'mother_education': motherEducation,

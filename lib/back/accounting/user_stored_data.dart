@@ -10,10 +10,12 @@ class UserStoredData {
   static const PREFERENCE_NAME = "userPreferences";
 
   static const REGISTER_STATE = "registerState";
-  static const USER_NAME = "userName";
+  // static const USER_NAME = "userName";
   static const DEVICE_ID = "deviceId";
+  static const UNIQUE_ID = "uniqueId";
   static const USER_TOKEN = "userToken";
-  static const USER_PASSWORD = "userPassword";
+  static const ACTIVE_USER = "activeUser";
+  // static const USER_PASSWORD = "userPassword";
 
   static Future<UserStoredData> createUserStoredData(
       {required DeviceInfoPlugin deviceInfo}) async {
@@ -56,25 +58,42 @@ class UserStoredData {
   }
 
   RegisterState getRegisterState() {
-
     return RegisterState.values[readValue(REGISTER_STATE) ?? 0];
   }
 
-  setUsername(String username) {
-    setValue(USER_NAME, username);
+  setActiveUser(int userID) {
+    setValue(ACTIVE_USER, userID);
   }
 
-  String getUsername() {
-    return readValue(USER_NAME) ?? "";
+  int getActiveUser() {
+    return readValue(ACTIVE_USER);
   }
 
-  setUserPass(String password) {
-    setValue(USER_PASSWORD, password);
+  // setUsername(String username) {
+  //   setValue(USER_NAME, username);
+  // }
+  //
+  // String getUsername() {
+  //   return readValue(USER_NAME) ?? "";
+  // }
+  //
+  // setUserPass(String password) {
+  //   setValue(USER_PASSWORD, password);
+  // }
+  //
+  // String getUserPass() {
+  //   return readValue(USER_PASSWORD) ?? "";
+  // }
+
+
+  setDeviceID(String userToken) {
+    setValue(DEVICE_ID, userToken);
   }
 
-  String getUserPass() {
-    return readValue(USER_PASSWORD) ?? "";
+  String? getDeviceID() {
+    return readValue(DEVICE_ID);
   }
+
 
   setUserToken(String userToken) {
     setValue(USER_TOKEN, userToken);
@@ -84,20 +103,20 @@ class UserStoredData {
     return readValue(USER_TOKEN);
   }
 
-  _setDeviceID(String deviceID) {
-    setValue(DEVICE_ID, deviceID);
+  _setDeviceUniqueID(String deviceID) {
+    setValue(UNIQUE_ID, deviceID);
   }
 
-  Future<String?> getDeviceID() async {
-    var dID = readValue(DEVICE_ID);
-    if (dID == null) {
-      dID = await findDeviceID();
-      _setDeviceID(dID);
+  Future<String> getDeviceUniqueID() async {
+    var uID = readValue(UNIQUE_ID);
+    if (uID == null) {
+      uID = await findDeviceUniqueID();
+      _setDeviceUniqueID(uID);
     }
-    return dID;
+    return uID;
   }
 
-  Future<String?> findDeviceID() async {
+  Future<String?> findDeviceUniqueID() async {
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
       return androidInfo.androidId;

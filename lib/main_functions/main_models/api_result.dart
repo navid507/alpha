@@ -1,7 +1,10 @@
 
+
 class StateResult {
   String msg = "";
   int error = 0;
+
+  bool get isSuccess => error == 0;
 
   StateResult({required this.msg, required this.error});
 
@@ -20,6 +23,9 @@ class StateResult {
 class APIResult {
   StateResult state;
   dynamic data;
+
+  bool get isSuccess => state.isSuccess;
+
 
   APIResult({required this.state, this.data});
 
