@@ -45,8 +45,8 @@ class SessionApi implements SessionsApiInterface {
   }
 
   @override
-  Future<PeriodResult> getPeriodDetails(
-      {required String userID, required String token}) async {
+  Future<PeriodResult> getActivePeriodDetails(
+      {required int userID, required String token}) async {
     var res =
         await http.get(url: "${SessionsURLs.PeriodDetails}/$userID/$token");
     if (res.isSuccess) {
@@ -59,7 +59,7 @@ class SessionApi implements SessionsApiInterface {
 
   @override
   Future<MedicalsResult> getAllMedicals(
-      {required String userID, required String token}) async {
+      {required int userID, required String token}) async {
     List<Medical> sessions = List.empty(growable: true);
 
     var res =
@@ -82,7 +82,6 @@ class SessionApi implements SessionsApiInterface {
       required int score,
       required String comment,
       required String token}) async {
-    List<Medical> sessions = List.empty(growable: true);
     var body = Map<String, dynamic>();
     body['session'] = sessionID;
     body['score'] = score;

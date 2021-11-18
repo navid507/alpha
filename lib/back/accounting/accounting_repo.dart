@@ -31,13 +31,14 @@ class AccountingRepo implements AccountingRepositoryInterface {
   AccountingRepo._internal(
       {required this.userStoredData, required this.accountingApi});
 
-  String? get userToken {
+  String? get _userToken {
     var token = userStoredData.getUserToken();
     if (token == null) {
       changeUserStateToNothing();
     }
     return token;
   }
+
 
   changeUserStateToNothing() {
     userStoredData.setRegisterState(RegisterState.Nothing);
@@ -121,7 +122,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
     if (_relativeSwimmers != null) {
       _relativeSwimmersController.sink.add(_relativeSwimmers!);
     } else {
-      var token = userToken;
+      var token = _userToken;
       if (token != null) {
         _relativeSwimmers =
             await accountingApi.findRelativeSwimmers(private: token);
@@ -155,4 +156,10 @@ class AccountingRepo implements AccountingRepositoryInterface {
 
     return result.state;
   }
+
+  @override
+  String get token => _userToken ?? "";
+
+  @override
+  int get userID => _activeSwimmer?.id ?? -1;
 }

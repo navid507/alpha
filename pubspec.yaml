@@ -40,7 +40,6 @@ dependencies:
   freezed: ^0.15.1
 dev_dependencies:
   build_runner:
-  freezed:
 
   flutter_test:
     sdk: flutter

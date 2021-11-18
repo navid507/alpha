@@ -57,7 +57,7 @@ class PeriodsApi implements PeriodsApiInterface {
 
   Future<APIResult> registerPeriod(
       {required String userToken,
-      required String userID,
+      required int userID,
       required String periodID,
       required String discountCode,
       required String type}) async {
@@ -75,7 +75,7 @@ class PeriodsApi implements PeriodsApiInterface {
 
   Future<APIResult> cancelPeriod(
       {required String userToken,
-      required String userID,
+      required int userID,
       required String periodID}) async {
     Map<String, dynamic> body = Map();
     body['private'] = userToken;
@@ -90,7 +90,7 @@ class PeriodsApi implements PeriodsApiInterface {
   // using this api you ask a buy url from server
   Future<APIResult> buyPeriod({
     /*required String userToken,*/
-    required String userID,
+    required int userID,
     required String periodID,
     /*required String discountCode,*/
     /*required String type*/
@@ -109,7 +109,7 @@ class PeriodsApi implements PeriodsApiInterface {
 
   Future<APIResult> getDiscount(
       {required String userToken,
-      required String userID,
+      required int userID,
       // required String periodID,
       required String discountCode}) async {
     Map<String, dynamic> body = Map();
