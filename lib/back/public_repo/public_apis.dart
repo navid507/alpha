@@ -43,7 +43,7 @@ class PublicApis implements PublicApiInterface {
     var res = await httpCalls.get(url: PublicURLs.ImageGallery);
 
     if (res.isSuccess) {
-      return GalleryResult.success(Gallery.fromJsonImages(res.data));
+      return GalleryResult.success(AlphaImageGallery.fromJsonImages(res.data));
     } else {
       return GalleryResult.error(res.state.error, res.state.msg);
     }

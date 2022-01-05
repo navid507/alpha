@@ -22,7 +22,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
       _instance = AccountingRepo._internal(
           userStoredData: UserStoredData(),
           accountingApi:
-              AccountingAPI(http: HttpCalls(httpClient: http.Client())));
+          AccountingAPI(http: HttpCalls(httpClient: http.Client())));
     }
 
     return _instance!;
@@ -38,7 +38,6 @@ class AccountingRepo implements AccountingRepositoryInterface {
     }
     return token;
   }
-
 
   changeUserStateToNothing() {
     userStoredData.setRegisterState(RegisterState.Nothing);
@@ -115,7 +114,12 @@ class AccountingRepo implements AccountingRepositoryInterface {
   }
 
   @override
-  updateActiveSwimmer() {}
+  updateActiveSwimmer() async {
+    await updateRelatedSwimmers();
+    if (_activeSwimmer != null) {
+      _activeSwimmerController.sink.add(_activeSwimmer!);
+    }
+  }
 
   @override
   updateRelatedSwimmers() async {
@@ -125,7 +129,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
       var token = _userToken;
       if (token != null) {
         _relativeSwimmers =
-            await accountingApi.findRelativeSwimmers(private: token);
+        await accountingApi.findRelativeSwimmers(private: token);
         setInitialActiveSwimmer();
       }
     }
@@ -148,10 +152,10 @@ class AccountingRepo implements AccountingRepositoryInterface {
     _activeSwimmerController.sink.add(activeSwimmer);
   }
 
-
-  Future<StateResult> insertSwimmer(Swimmer swimmer, Map<String, String> files) async
-  {
-    var result = await accountingApi.registerUser(swimmer: swimmer, files: files);
+  Future<StateResult> insertSwimmer(Swimmer swimmer,
+      Map<String, String> files) async {
+    var result =
+    await accountingApi.registerUser(swimmer: swimmer, files: files);
     updateRelatedSwimmers();
 
     return result.state;

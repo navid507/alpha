@@ -83,32 +83,32 @@ void main() {
     }, onDone: () {});
   });
 
-  var image1 = ImageItem(
+  var image1 = AlphaImageItem(
       id: "1",
       title: "title",
       content: "content",
       link: "link",
       image: "image1");
-  var image2 = ImageItem(
+  var image2 = AlphaImageItem(
       id: "2",
       title: "title",
       content: "content",
       link: "link",
       image: "image2");
-  var image3 = ImageItem(
+  var image3 = AlphaImageItem(
       id: "3",
       title: "title",
       content: "content",
       link: "link",
       image: "image3");
 
-  var gallery = Gallery(images: [image1, image2, image3]);
+  var gallery = AlphaImageGallery(images: [image1, image2, image3]);
   test('is gallery ok', () async {
     when(mockPublicApis.getGallery())
         .thenAnswer((realInvocation) async => GalleryResult.success(gallery));
 
     publicRepo.getGallery();
-    publicRepo.galleryStream.listen((Gallery gallery) {
+    publicRepo.galleryStream.listen((AlphaImageGallery gallery) {
       expect(gallery.images.length, greaterThan(1));
     }, onError: (error) {
       fail('problem $error');

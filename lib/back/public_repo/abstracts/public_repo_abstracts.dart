@@ -7,7 +7,7 @@ abstract class PublicRepositoryInterface {
 
   Stream<String> get alphaClubErrorStream;
 
-  Stream<Gallery> get galleryStream;
+  Stream<AlphaImageGallery> get galleryStream;
 
   Stream<String> get galleryErrorStream;
 

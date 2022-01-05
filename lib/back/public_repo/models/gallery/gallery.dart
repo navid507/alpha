@@ -2,21 +2,21 @@
 
 import 'package:alpha/back/public_repo/models/gallery/image_item.dart';
 
-class Gallery
+class AlphaImageGallery
 {
-  List<ImageItem> images;
-  Gallery({required this.images});
+  List<AlphaImageItem> images;
+  AlphaImageGallery({required this.images});
 
-  factory Gallery.fromJsonImages(List<dynamic> jsonImages)
+  factory AlphaImageGallery.fromJsonImages(List<dynamic> jsonImages)
   {
-    List<ImageItem> tImages = List.empty(growable: true);
+    List<AlphaImageItem> tImages = List.empty(growable: true);
     jsonImages.forEach((element) {
-      ImageItem imageItem = ImageItem.fromJson(element);
+      AlphaImageItem imageItem = AlphaImageItem.fromJson(element);
       tImages.add(imageItem);
     });
 
 
-    return Gallery(images: tImages);
+    return AlphaImageGallery(images: tImages);
   }
 
 }

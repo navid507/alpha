@@ -82,11 +82,11 @@ class PublicRepo implements PublicRepositoryInterface {
 
   // Gallery
 
-  final _galleryStreamController = StreamController<Gallery>();
+  final _galleryStreamController = StreamController<AlphaImageGallery>();
 
 // defining Streams:
-  Stream<Gallery> get galleryStream => _galleryStreamController.stream;
-  Gallery? _gallery;
+  Stream<AlphaImageGallery> get galleryStream => _galleryStreamController.stream;
+  AlphaImageGallery? _gallery;
 
   final _galleryErrorStreamController = StreamController<String>();
 

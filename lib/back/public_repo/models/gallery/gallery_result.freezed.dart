@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$GalleryResultTearOff {
   const _$GalleryResultTearOff();
 
-  SuccessGallery success(Gallery gallery) {
+  SuccessGallery success(AlphaImageGallery gallery) {
     return SuccessGallery(
       gallery,
     );
@@ -38,19 +38,19 @@ const $GalleryResult = _$GalleryResultTearOff();
 mixin _$GalleryResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Gallery gallery) success,
+    required TResult Function(AlphaImageGallery gallery) success,
     required TResult Function(int code, String msg) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Gallery gallery)? success,
+    TResult Function(AlphaImageGallery gallery)? success,
     TResult Function(int code, String msg)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Gallery gallery)? success,
+    TResult Function(AlphaImageGallery gallery)? success,
     TResult Function(int code, String msg)? error,
     required TResult orElse(),
   }) =>
@@ -98,7 +98,7 @@ abstract class $SuccessGalleryCopyWith<$Res> {
   factory $SuccessGalleryCopyWith(
           SuccessGallery value, $Res Function(SuccessGallery) then) =
       _$SuccessGalleryCopyWithImpl<$Res>;
-  $Res call({Gallery gallery});
+  $Res call({AlphaImageGallery gallery});
 }
 
 /// @nodoc
@@ -120,7 +120,7 @@ class _$SuccessGalleryCopyWithImpl<$Res>
       gallery == freezed
           ? _value.gallery
           : gallery // ignore: cast_nullable_to_non_nullable
-              as Gallery,
+              as AlphaImageGallery,
     ));
   }
 }
@@ -131,7 +131,7 @@ class _$SuccessGallery implements SuccessGallery {
   const _$SuccessGallery(this.gallery);
 
   @override
-  final Gallery gallery;
+  final AlphaImageGallery gallery;
 
   @override
   String toString() {
@@ -157,7 +157,7 @@ class _$SuccessGallery implements SuccessGallery {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Gallery gallery) success,
+    required TResult Function(AlphaImageGallery gallery) success,
     required TResult Function(int code, String msg) error,
   }) {
     return success(gallery);
@@ -166,7 +166,7 @@ class _$SuccessGallery implements SuccessGallery {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Gallery gallery)? success,
+    TResult Function(AlphaImageGallery gallery)? success,
     TResult Function(int code, String msg)? error,
   }) {
     return success?.call(gallery);
@@ -175,7 +175,7 @@ class _$SuccessGallery implements SuccessGallery {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Gallery gallery)? success,
+    TResult Function(AlphaImageGallery gallery)? success,
     TResult Function(int code, String msg)? error,
     required TResult orElse(),
   }) {
@@ -218,9 +218,9 @@ class _$SuccessGallery implements SuccessGallery {
 }
 
 abstract class SuccessGallery implements GalleryResult {
-  const factory SuccessGallery(Gallery gallery) = _$SuccessGallery;
+  const factory SuccessGallery(AlphaImageGallery gallery) = _$SuccessGallery;
 
-  Gallery get gallery;
+  AlphaImageGallery get gallery;
   @JsonKey(ignore: true)
   $SuccessGalleryCopyWith<SuccessGallery> get copyWith =>
       throw _privateConstructorUsedError;
@@ -297,7 +297,7 @@ class _$ErrorGallery implements ErrorGallery {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Gallery gallery) success,
+    required TResult Function(AlphaImageGallery gallery) success,
     required TResult Function(int code, String msg) error,
   }) {
     return error(code, msg);
@@ -306,7 +306,7 @@ class _$ErrorGallery implements ErrorGallery {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Gallery gallery)? success,
+    TResult Function(AlphaImageGallery gallery)? success,
     TResult Function(int code, String msg)? error,
   }) {
     return error?.call(code, msg);
@@ -315,7 +315,7 @@ class _$ErrorGallery implements ErrorGallery {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Gallery gallery)? success,
+    TResult Function(AlphaImageGallery gallery)? success,
     TResult Function(int code, String msg)? error,
     required TResult orElse(),
   }) {

@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:alpha/back/accounting/accounting_repo.dart';
@@ -6,34 +7,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-class SplashModelPhoneState extends ChangeNotifier {
-
-}
+class SplashModelPhoneState extends ChangeNotifier {}
 
 class SplashModel extends ChangeNotifier {
   PackageInfo? _packageInfo;
 
+  final _registerStateController = StreamController<RegisterState>();
+  Stream<RegisterState> get registerStateStream =>
+      _registerStateController.stream;
+
+
   late AccountingRepo _accountingRepo;
 
   RegisterState _registerState = RegisterState.NotSetYet;
-  RegisterState get newState  => _registerState;
+
+  RegisterState get newState => _registerState;
 
   SplashModel() {
     getVersionInfo();
     _accountingRepo = AccountingRepo.getInstance();
-    checkPhoneRegisterState();
+    // checkPhoneRegisterState();
   }
 
   void checkPhoneRegisterState() {
     _accountingRepo.getRegisterState();
     _accountingRepo.registerStateStream.listen((registerState) {
-      this._registerState = registerState;
-      notifyListeners();
+      // this._registerState = registerState;
+      // notifyListeners();
+      _registerStateController.sink.add(registerState);
     });
   }
 
-
-
+  // Stream getRegisterStateStream() {
+  //   return _accountingRepo.registerStateStream;
+  // }
 
   getVersionInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();
@@ -45,4 +52,10 @@ class SplashModel extends ChangeNotifier {
   void refreshVersion() {
     getVersionInfo();
   }
+
+  closeButton()
+  {
+    _registerStateController.close();
+  }
+
 }
