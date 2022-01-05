@@ -3,6 +3,7 @@ import 'package:alpha/back/accounting/accounting_repo.dart';
 import 'package:alpha/back/accounting/models/swimmer.dart';
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
+import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
 import 'package:alpha/back/public_repo/public_apis.dart';
 import 'package:alpha/back/public_repo/public_repo.dart';
 import 'package:alpha/main_functions/http_functions.dart';
@@ -26,6 +27,7 @@ class FirstPageModel extends ChangeNotifier {
   AlphaImageGallery? alphaImageGallery;
 
   // AlphaImageGallery? get alphaImageGallery => _alphaImageGallery;
+  TopSwimmers? alphaTopSwimmers;
 
   getActiveSwimmer() {
     _accountingRepo.activeSwimmerStream.listen((swimmer) {
@@ -41,6 +43,13 @@ class FirstPageModel extends ChangeNotifier {
       notifyListeners();
     });
     _publicRepo.getGallery();
+  }
 
+  getTopSwimmers() {
+    _publicRepo.topSwimmersStream.listen((curAlphaTopSwimmers) {
+      alphaTopSwimmers = curAlphaTopSwimmers;
+      notifyListeners();
+    });
+    _publicRepo.getTopSwimmers();
   }
 }

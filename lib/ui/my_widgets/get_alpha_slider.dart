@@ -54,7 +54,7 @@ getImageSlide(AlphaImageItem alphaImageItem, double width) {
         child: Container(
           child: getImageForSlider(
               image:
-              'assets/images/splash_screen.png' /*alphaImageItem.image*/,
+              /*'assets/images/splash_screen.png' */alphaImageItem.image,
               width: width,
               height: 200),
           decoration:
@@ -76,7 +76,7 @@ getImageForSlider(
     {required String image, required double width, required double height}) {
   return Stack(
     children: [
-      getFitImageFromAsset(
+      getFitImageFromNetwork(
           image: image, width: width, height: height, fit: BoxFit.fill),
       Opacity(opacity: 0.5, child: Container(
         height: height,

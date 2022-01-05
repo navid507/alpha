@@ -1,0 +1,15 @@
+{
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "topSwimmers": "Top Swimmers",
+  "more": "مشاهده جزییات",
+  "inTeamChallenges": "رقابت های درون تیمی ",
+  "alphaClub": "باشگاه آلفایی ها",
+  "alphaClubView": "مشاهده باشگاه آلفایی ها",
+  "numberOfAttendant": "تعداد حضور",
+  "score": "امتیاز",
+  "viewProfile": "مشاهده پروفایل"
+
+}

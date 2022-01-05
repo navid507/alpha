@@ -3,31 +3,27 @@ import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'get_image.dart';
+
 getHeader(BuildContext context) {
-  return Stack(children: [
-    getImageOfHeader()
-  ]);
+  return Stack(children: [getImageOfHeader()]);
 }
 
-
-
-
-getTopMenu(BuildContext context)
-{
+getTopMenu(BuildContext context) {
   return Padding(
     padding: EdgeInsets.only(
         left: 12, right: 12, top: AlphaSizes.getTopPadding(constValue: 8)),
     child: Row(
       children: [
-        getEmptyIcon(),
-        Spacer(),
-        getLogoImage(),
-        Spacer(),
         getMenuIcon(
             imageAsset: 'assets/images/ic_menu.png',
             onPressed: () {
-              Scaffold.of(context).openEndDrawer();
-            })
+              Scaffold.of(context).openDrawer();
+            }),
+        Spacer(),
+        getLogoImage(),
+        Spacer(),
+        getEmptyIcon()
       ],
     ),
   );
@@ -43,27 +39,6 @@ getImageOfHeader() {
               image: AssetImage('assets/images/header_swimmer.jpg'),
               fit: BoxFit.fitWidth,
               alignment: Alignment.center)));
-}
-
-getLogoImage() {
-  return Image(
-    image: AssetImage('assets/images/alpha_top_logo.png'),
-  );
-}
-
-getEmptyIcon() {
-  return SizedBox(height: 48, width: 48);
-}
-
-getMenuIcon({void Function()? onPressed, required String imageAsset}) {
-  return SizedBox(
-    height: 48,
-    width: 48,
-    child: TextButton(
-      child: Image(image: AssetImage(imageAsset)),
-      onPressed: onPressed,
-    ),
-  );
 }
 
 getDrawer(BuildContext context) {

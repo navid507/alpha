@@ -151,12 +151,9 @@ getAlphaTextTitle1White(String text) {
   return AlphaTextBuilder(myText: text).getTitle1().setWhiteColor().build();
 }
 
-getAlphaText(String text) {
-  return Text(text,
-      style: TextStyle(
-          fontFamily: 'AlphaFonts',
-          fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.normal,
-          color: AlphaColors.White,
-          fontSize: 12));
+getAlphaTextTitle2White(String text) {
+  return AlphaTextBuilder(myText: text).getTitle2().setWhiteColor().build();
+}
+getAlphaTextMoreYellow(String text) {
+  return AlphaTextBuilder(myText: text).getMore().setYellowColor().build();
 }
