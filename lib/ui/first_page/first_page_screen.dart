@@ -6,14 +6,17 @@ import 'package:alpha/ui/first_page/first_page_model.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
-import 'package:alpha/ui/my_widgets/get_alpha_slider.dart';
+import 'package:alpha/ui/first_page/widgets/get_alpha_slider.dart';
 import 'package:alpha/ui/my_widgets/get_header.dart';
 import 'package:alpha/ui/my_widgets/get_image.dart';
+import 'package:alpha/ui/my_widgets/user_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'widgets/get_top_swimmers.dart';
 
 class FirstPage extends StatefulWidget {
   @override
@@ -50,7 +53,12 @@ class _FirstPageState extends State<FirstPage> {
         children: [
           getTopMenu(screenBodyContext),
           getGallerySlider(),
-          getTopSwimmersHeader()
+          getTopSwimmersHeader(
+              context: context,
+              onPressed: () {
+                showTopSwimmersRoute();
+              }),
+          getTopSwimmersRow()
         ],
       ),
     ]);
@@ -81,35 +89,32 @@ class _FirstPageState extends State<FirstPage> {
   // {
   //   return Column(children: [],);
   // }
-  getTopSwimmersHeader() {
-    return Container(
-        padding: const EdgeInsetsDirectional.only(start: 8.0, end: 8.0),
-        child: Row(
-          children: [
-            getMenuIcon(imageAsset: 'assets/images/ic_swimmer.png'),
-            getAlphaTextTitle1White(AppLocalizations.of(context)!.topSwimmers),
-            Spacer(),
-            GestureDetector(
-                onTap: () {
-                  showTopSwimmers();
-                },
-                child:
-                    getAlphaTextMoreYellow(AppLocalizations.of(context)!.more)),
-          ],
-        ));
+
+  getTopSwimmersRow() {
+    return Selector<FirstPageModel, TopSwimmers?>(
+        selector: (_, model) => model.alphaTopSwimmers,
+        builder: (galleyContext, topSwimmers, child) {
+          if (topSwimmers == null) {
+            return Text(AppLocalizations.of(context)!.loading);
+          } else {
+            return Container(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Row(
+                  children: [
+                    getTopSwimmers(
+                        swimmer: topSwimmers.topSwimmers![2], rank: 1),
+                    getTopSwimmers(
+                        swimmer: topSwimmers.topSwimmers![0], rank: 0),
+                    getTopSwimmers(
+                        swimmer: topSwimmers.topSwimmers![1], rank: 2)
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ));
+          }
+        });
   }
 
-  showTopSwimmers() {}
-// getTopSwimmersRow() {
-//   return Selector<FirstPageModel, TopSwimmers?>(
-//       selector: (_, model) => model.alphaTopSwimmers,
-//       builder: (galleyContext, topSwimmers, child) {
-//         if (topSwimmers == null) {
-//
-//         } else {
-//         }
-//       });
-// }
+  showTopSwimmersRoute() {}
 
 // 375 - (123 + 100 + 100)
 }

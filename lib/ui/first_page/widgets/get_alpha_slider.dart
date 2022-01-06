@@ -3,10 +3,10 @@ import 'package:alpha/back/public_repo/models/gallery/image_item.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import 'alpha_text.dart';
-import 'constant_widgets.dart';
-import 'constants.dart';
-import 'get_image.dart';
+import '../../my_widgets/alpha_text.dart';
+import '../../my_widgets/constant_widgets.dart';
+import '../../my_widgets/constants.dart';
+import '../../my_widgets/get_image.dart';
 
 getSlider(AlphaImageGallery alphaImageGallery, double width) {
   return CarouselSlider(

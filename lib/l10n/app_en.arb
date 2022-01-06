@@ -4,12 +4,12 @@
     "description": "The conventional newborn programmer greeting"
   },
   "topSwimmers": "Top Swimmers",
-  "more": "مشاهده جزییات",
+  "more": "more",
   "inTeamChallenges": "رقابت های درون تیمی ",
   "alphaClub": "باشگاه آلفایی ها",
   "alphaClubView": "مشاهده باشگاه آلفایی ها",
   "numberOfAttendant": "تعداد حضور",
   "score": "امتیاز",
-  "viewProfile": "مشاهده پروفایل"
-
+  "viewProfile": "مشاهده پروفایل",
+  "loading": "loading..."
 }

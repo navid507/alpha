@@ -10,5 +10,7 @@
   "alphaClubView": "مشاهده باشگاه آلفایی ها",
   "numberOfAttendant": "تعداد حضور",
   "score": "امتیاز",
-  "viewProfile": "مشاهده پروفایل"
+  "viewProfile": "مشاهده پروفایل",
+  "loading": "...در حال بارگذاری"
+}
 }
