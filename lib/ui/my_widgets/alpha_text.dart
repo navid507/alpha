@@ -78,6 +78,18 @@ class AlphaText extends StatelessWidget {
           fontStyle: FontStyle.normal,
           text: myText);
 
+  factory AlphaText.rank(
+      {Key? myKey,
+        required String myText,
+        Alignment alignment = Alignment.center}) =>
+      AlphaText(
+          key: myKey,
+          fontSize: 8,
+          weight: FontWeight.bold,
+          alignment: alignment,
+          fontStyle: FontStyle.normal,
+          text: myText);
+
   factory AlphaText.header(
           {Key? myKey,
           required String myText,
@@ -112,6 +124,10 @@ class AlphaTextBuilder {
     _alphaText = AlphaText.more(myText: _alphaText.text);
     return this;
   }
+  AlphaTextBuilder getRank() {
+    _alphaText = AlphaText.rank(myText: _alphaText.text);
+    return this;
+  }
 
   AlphaTextBuilder getBody() {
     _alphaText = AlphaText.body(myText: _alphaText.text);
@@ -134,6 +150,11 @@ class AlphaTextBuilder {
     _alphaText.fontColor = AlphaColors.Yellow;
     return this;
   }
+  AlphaTextBuilder setGrayColor() {
+    // fontColor = color;
+    _alphaText.fontColor = AlphaColors.TextGray;
+    return this;
+  }
 
   AlphaText build({Key? key}) {
     return AlphaText(
@@ -151,12 +172,18 @@ getAlphaTextTitle1White(String text) {
   return AlphaTextBuilder(myText: text).getTitle1().setWhiteColor().build();
 }
 
-getAlphaText(String text) {
-  return Text(text,
-      style: TextStyle(
-          fontFamily: 'AlphaFonts',
-          fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.normal,
-          color: AlphaColors.White,
-          fontSize: 12));
+getAlphaTextTitle2White(String text) {
+  return AlphaTextBuilder(myText: text).getTitle2().setWhiteColor().build();
+}
+getAlphaTextBodyWhite(String text) {
+  return AlphaTextBuilder(myText: text).getBody().setWhiteColor().build();
+}
+getAlphaTextMoreYellow(String text) {
+  return AlphaTextBuilder(myText: text).getMore().setYellowColor().build();
+}
+
+getAlphaTextRank(String text)
+{
+  return AlphaTextBuilder(myText: text).getRank().setGrayColor().build();
+
 }

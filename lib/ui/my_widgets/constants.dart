@@ -13,8 +13,8 @@ class AlphaColors {
 
   static const background = Color(0xFF353535);
 
-  // static const nnn = Color(0xyyy);
-  // static const nnn = Color(0xyyy);
+  static const backTopSwimmers = Color(0xFF919090);
+  static const TextGray = Color(0xFF5D5D5D);
   // static const nnn = Color(0xyyy);
   // static const nnn = Color(0xyyy);
 

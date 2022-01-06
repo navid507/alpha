@@ -13,11 +13,13 @@ class AvatarImage extends StatelessWidget {
   final String imageUrl;
   final AvatarImageType type;
   final double margin;
+  final double size;
 
   const AvatarImage(
       {Key? key,
       required this.imageUrl,
       this.type = AvatarImageType.User,
+      this.size = 50.0,
       this.margin = 5.0})
       : super(key: key);
 
@@ -38,17 +40,22 @@ class AvatarImage extends StatelessWidget {
         size = 40.0;
         break;
       case AvatarImageType.GoldSwimmer:
-        // TODO: Handle this case.
+        border = 3.0;
+        borderColor = AlphaColors.Yellow;
+        size = 40.0;
         break;
       case AvatarImageType.SilverSwimmer:
-        // TODO: Handle this case.
+        border = 2.0;
+        borderColor = AlphaColors.Silver;
+        size = 35.0;
         break;
       case AvatarImageType.BronzeSwimmer:
-        // TODO: Handle this case.
+        border = 2.0;
+        borderColor = AlphaColors.Bronze;
+        size = 35.0;
         break;
     }
     return Container(
-      alignment: Alignment.center,
       margin: EdgeInsets.all(margin),
       child: CircleAvatar(
         radius: size,
@@ -59,4 +66,16 @@ class AvatarImage extends StatelessWidget {
           border: Border.all(color: borderColor, width: border)),
     );
   }
+}
+
+getAvatarImageFirstTopSwimmer(String image) {
+  return AvatarImage(imageUrl: image, type: AvatarImageType.GoldSwimmer);
+}
+
+getAvatarImageSecondTopSwimmer(String image) {
+  return AvatarImage(imageUrl: image, type: AvatarImageType.SilverSwimmer);
+}
+
+getAvatarImageThirdTopSwimmer(String image) {
+  return AvatarImage(imageUrl: image, type: AvatarImageType.BronzeSwimmer);
 }
