@@ -8,9 +8,8 @@
   "inTeamChallenges": "رقابت های درون تیمی ",
   "alphaClub": "باشگاه آلفایی ها",
   "alphaClubView": "مشاهده باشگاه آلفایی ها",
-  "numberOfAttendant": "تعداد حضور",
+  "numberOfAttendant": "تعداد حضور: ",
   "score": "امتیاز",
-  "viewProfile": "مشاهده پروفایل",
-  "loading": "...در حال بارگذاری"
-}
+  "viewProfile": "مشاهده پروفایل"
+
 }

@@ -79,9 +79,9 @@ class AlphaText extends StatelessWidget {
           text: myText);
 
   factory AlphaText.rank(
-      {Key? myKey,
-        required String myText,
-        Alignment alignment = Alignment.center}) =>
+          {Key? myKey,
+          required String myText,
+          Alignment alignment = Alignment.center}) =>
       AlphaText(
           key: myKey,
           fontSize: 8,
@@ -106,6 +106,8 @@ class AlphaText extends StatelessWidget {
 class AlphaTextBuilder {
   late AlphaText _alphaText;
 
+  // var fittedBox = true;
+
   AlphaTextBuilder({required String myText}) {
     _alphaText = AlphaText(text: myText);
   }
@@ -124,6 +126,7 @@ class AlphaTextBuilder {
     _alphaText = AlphaText.more(myText: _alphaText.text);
     return this;
   }
+
   AlphaTextBuilder getRank() {
     _alphaText = AlphaText.rank(myText: _alphaText.text);
     return this;
@@ -150,21 +153,23 @@ class AlphaTextBuilder {
     _alphaText.fontColor = AlphaColors.Yellow;
     return this;
   }
+
   AlphaTextBuilder setGrayColor() {
     // fontColor = color;
     _alphaText.fontColor = AlphaColors.TextGray;
     return this;
   }
 
-  AlphaText build({Key? key}) {
-    return AlphaText(
-        key: key,
-        fontSize: _alphaText.fontSize,
-        weight: _alphaText.weight,
-        alignment: _alphaText.alignment,
-        fontStyle: _alphaText.fontStyle,
-        fontColor: _alphaText.fontColor,
-        text: _alphaText.text);
+  Widget build({Key? key}) {
+    return FittedBox(
+        child: AlphaText(
+            key: key,
+            fontSize: _alphaText.fontSize,
+            weight: _alphaText.weight,
+            alignment: _alphaText.alignment,
+            fontStyle: _alphaText.fontStyle,
+            fontColor: _alphaText.fontColor,
+            text: _alphaText.text));
   }
 }
 
@@ -175,15 +180,15 @@ getAlphaTextTitle1White(String text) {
 getAlphaTextTitle2White(String text) {
   return AlphaTextBuilder(myText: text).getTitle2().setWhiteColor().build();
 }
+
 getAlphaTextBodyWhite(String text) {
   return AlphaTextBuilder(myText: text).getBody().setWhiteColor().build();
 }
+
 getAlphaTextMoreYellow(String text) {
   return AlphaTextBuilder(myText: text).getMore().setYellowColor().build();
 }
 
-getAlphaTextRank(String text)
-{
+getAlphaTextRank(String text) {
   return AlphaTextBuilder(myText: text).getRank().setGrayColor().build();
-
 }

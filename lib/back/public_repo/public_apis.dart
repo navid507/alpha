@@ -1,4 +1,6 @@
 import 'package:alpha/back/accounting/models/swimmer.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/image_item.dart';
@@ -8,13 +10,16 @@ import 'abstracts/public_api_abstracts.dart';
 import 'models/alpha_club/alpha_club.dart';
 import 'models/alpha_club/alpha_club_result.dart';
 import 'models/top_swimmers/top_swimmer.dart';
+import 'models/top_swimmers/top_swimmers.dart';
 import 'models/top_swimmers/top_swimmers_result.dart';
 
 class PublicURLs {
   static const String _root = "http://orkaswim.ir/index.php/alpha_api/base";
+  static const String _rootTeam = "http://orkaswim.ir/index.php/alpha_api/team";
   static const String TopSwimmers = "$_root/top_swimmer";
   static const String AlphaSwimmers = "$_root/alpha_swimmers";
   static const String ImageGallery = "$_root/news";
+  static const String AlphaTeams = "$_rootTeam/team_info";
 
 // Profile
 }
@@ -61,4 +66,16 @@ class PublicApis implements PublicApiInterface {
       return TopSwimmersResult.error(res.state.error, res.state.msg);
     }
   }
+
+
+  @override
+  Future<AlphaTeamsResult> getAlphaTeams() async {
+    var res = await httpCalls.get(url: PublicURLs.AlphaTeams);
+    if (res.isSuccess) {
+      return AlphaTeamsResult.success(AlphaTeams.fromJson(res.data));
+    } else {
+      return AlphaTeamsResult.error(res.state.error, res.state.msg);
+    }
+  }
+
 }

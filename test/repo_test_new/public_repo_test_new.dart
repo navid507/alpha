@@ -1,6 +1,8 @@
-import 'package:alpha/back/periods/models/session/session.dart';
-import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/team_info.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/team_member.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_group.dart';
@@ -9,27 +11,19 @@ import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/image_item.dart';
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
+import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers.dart';
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers_result.dart';
 import 'package:alpha/back/public_repo/public_apis.dart';
 import 'package:alpha/back/public_repo/public_repo.dart';
-import 'package:alpha/main_functions/http_functions.dart';
-import 'package:alpha/main_functions/main_models/api_result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'public_repo_test_new.mocks.dart';
 
-// import 'package:http/http.dart' as http;
-// import 'public_repo_test.mocks.dart';
-
-// class MockHttpFunctions extends Mock implements HttpCalls {}
-// class MockClient extends Mock implements http.Client {}
 
 @GenerateMocks([PublicApis])
 void main() {
-  // var session1 = Session(description: "description", id: "1", score: "7.5", date: "date", type: "1");
-  // var session2 = Session(description: "description", id: "2", score: "7.7", date: "date", type: "1");
 
   var alphaSwimmer1 = AlphaSwimmer(
       score: "9", image: "image", fullName: "alpha 1", sessions: "1200");
@@ -144,9 +138,44 @@ void main() {
 
     publicRepo.getTopSwimmers();
     publicRepo.topSwimmersStream.listen((TopSwimmers topSwimmers) {
-      expect(topSwimmers.topSwimmers!.length, greaterThan(1));
+      expect(topSwimmers.topSwimmers.length, greaterThan(1));
     }, onError: (error) {
       fail('problem $error');
     }, onDone: () {});
   });
+
+  var alphaTeamMember11 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember12 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember13 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember14 = TeamMember(name: 'name', score: 4, image: 'image');
+  var teamInfo1 = TeamInfo(name: 'team1', rank: 1, score: 4, members: [alphaTeamMember11, alphaTeamMember12, alphaTeamMember13, alphaTeamMember14]);
+
+  var alphaTeamMember21 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember22 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember23 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember24 = TeamMember(name: 'name', score: 4, image: 'image');
+  var teamInfo2 = TeamInfo(name: 'team2', rank: 2, score: 4, members: [alphaTeamMember21, alphaTeamMember22, alphaTeamMember23, alphaTeamMember24]);
+
+  var alphaTeamMember31 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember32 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember33 = TeamMember(name: 'name', score: 4, image: 'image');
+  var alphaTeamMember34 = TeamMember(name: 'name', score: 4, image: 'image');
+  var teamInfo3 = TeamInfo(name: 'team3', rank: 3, score: 4, members: [alphaTeamMember31, alphaTeamMember32, alphaTeamMember33, alphaTeamMember34]);
+
+  var alphaTeamsMock = AlphaTeams(alphaTeams: [teamInfo2, teamInfo1, teamInfo3]);
+
+
+  test('is alpha teams ok', () async {
+    when(mockPublicApis.getAlphaTeams()).thenAnswer(
+            (realInvocation) async => AlphaTeamsResult.success(alphaTeamsMock));
+
+    publicRepo.getAlphaTeams();
+    publicRepo.alphaTeamsStream.listen((AlphaTeams alphaTeams) {
+      expect(alphaTeams.getRankedTeams()[1].rank, equals(2));
+    }, onError: (error) {
+      fail('problem $error');
+    }, onDone: () {});
+  });
+
+
 }

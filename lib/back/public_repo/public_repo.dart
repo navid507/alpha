@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
@@ -11,6 +13,7 @@ import 'package:alpha/main_functions/http_functions.dart';
 import 'package:http/http.dart' as http;
 
 import 'models/alpha_club/alpha_club.dart';
+import 'models/top_swimmers/top_swimmers.dart';
 import 'models/top_swimmers/top_swimmers_result.dart';
 
 class PublicRepo implements PublicRepositoryInterface {
@@ -41,7 +44,6 @@ class PublicRepo implements PublicRepositoryInterface {
   @override
   Stream<AlphaClub> get alphaClubStream => _alphaClubStreamController.stream;
 
-
   AlphaClub? _alphaClub;
 
   // defining Controllers:
@@ -59,12 +61,6 @@ class PublicRepo implements PublicRepositoryInterface {
     } else {
       getAlphaClubFromServer();
     }
-    // if (_alphaClub != null)
-    //   {
-    //     _alphaClubStreamController.sink.add(_alphaClub!);
-    //   }else
-    //     {
-    //    _alphaClub ?? getAlphaClubFromServer;
   }
 
   getAlphaClubFromServer() async {
@@ -85,7 +81,8 @@ class PublicRepo implements PublicRepositoryInterface {
   final _galleryStreamController = StreamController<AlphaImageGallery>();
 
 // defining Streams:
-  Stream<AlphaImageGallery> get galleryStream => _galleryStreamController.stream;
+  Stream<AlphaImageGallery> get galleryStream =>
+      _galleryStreamController.stream;
   AlphaImageGallery? _gallery;
 
   final _galleryErrorStreamController = StreamController<String>();
@@ -132,5 +129,42 @@ class PublicRepo implements PublicRepositoryInterface {
     }
   }
 
+  // Alpha Team
 
+  AlphaTeams? _alphaTeams;
+  final _alphaTeamsStreamController = StreamController<AlphaTeams>();
+
+  @override
+  Stream<AlphaTeams> get alphaTeamsStream => _alphaTeamsStreamController.stream;
+
+  final _alphaTeamsErrorStreamController = StreamController<String>();
+
+  @override
+  Stream<String> get alphaTeamsErrorStream =>
+      _alphaClubErrorStreamController.stream;
+  String _alphaTeamsErrorMsg = '';
+
+
+
+  @override
+  getAlphaTeams() {
+    if (_alphaTeams != null) {
+      _alphaTeamsStreamController.sink.add(_alphaTeams!);
+    } else {
+      getAlphaTeamsFromServer();
+    }
+  }
+
+  getAlphaTeamsFromServer() async {
+    var alphaTeamResult = await publicAPI.getAlphaTeams();
+    if (alphaTeamResult is SuccessAlphaTeams) {
+      _alphaTeams = alphaTeamResult.alphaTeam;
+      _alphaTeamsStreamController.sink.add(_alphaTeams!);
+    } else if (alphaTeamResult is ErrorAlphaTeams) {
+      _alphaTeamsErrorMsg = alphaTeamResult.msg;
+      _alphaTeamsErrorStreamController.sink.add(_alphaTeamsErrorMsg);
+    }
+
+    // _alphaClub = await publicAPI.getAlphaClub();
+  }
 }

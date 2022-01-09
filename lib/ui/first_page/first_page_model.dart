@@ -2,8 +2,10 @@ import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:alpha/back/accounting/accounting_repo.dart';
 import 'package:alpha/back/accounting/models/swimmer.dart';
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
+import 'package:alpha/back/public_repo/models/alpha_club/alpha_club.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
+import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers.dart';
 import 'package:alpha/back/public_repo/public_apis.dart';
 import 'package:alpha/back/public_repo/public_repo.dart';
 import 'package:alpha/main_functions/http_functions.dart';
@@ -29,6 +31,8 @@ class FirstPageModel extends ChangeNotifier {
   // AlphaImageGallery? get alphaImageGallery => _alphaImageGallery;
   TopSwimmers? alphaTopSwimmers;
 
+  AlphaClub? alphaClub;
+
   getActiveSwimmer() {
     _accountingRepo.activeSwimmerStream.listen((swimmer) {
       activeSwimmer = swimmer;
@@ -52,4 +56,20 @@ class FirstPageModel extends ChangeNotifier {
     });
     _publicRepo.getTopSwimmers();
   }
+
+  getAlphaClub() {
+    _publicRepo.alphaClubStream.listen((curAlphaClub) {
+      alphaClub = curAlphaClub;
+      notifyListeners();
+    });
+    _publicRepo.getAlphaClub();
+  }
+
+// getInTeamCompetitions() {
+  //   _publicRepo.tea.listen((curAlphaTopSwimmers) {
+  //     alphaTopSwimmers = curAlphaTopSwimmers;
+  //     notifyListeners();
+  //   });
+  //   _publicRepo.getTopSwimmers();
+  // }
 }

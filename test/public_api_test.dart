@@ -1,4 +1,5 @@
 import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
+import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers_result.dart';
@@ -27,7 +28,7 @@ void main()
 
     var res = await publicApi.getTopSwimmers();
     if (res is SuccessTopSwimmers) {
-      expect(res.topSwimmers.topSwimmers!.length, greaterThan(1));
+      expect(res.topSwimmers.topSwimmers.length, greaterThan(1));
     }
 
     // var res = await publicApi.getTopSwimmers();
@@ -45,5 +46,12 @@ void main()
     // var res = await publicApi.getGallery();
     // expect(res!.length, greaterThan(1));
 
+  });
+
+  test('is get alpha teams ok', () async {
+    var res = await publicApi.getAlphaTeams();
+    if (res is SuccessAlphaTeams) {
+      expect(res.alphaTeam.alphaTeams.length, greaterThan(1));
+    }
   });
 }
