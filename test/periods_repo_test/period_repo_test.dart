@@ -11,7 +11,6 @@ import 'package:mockito/mockito.dart';
 
 import 'period_repo_test.mocks.dart';
 
-
 @GenerateMocks([PeriodsApi, SessionApi, AccountingRepo])
 void main() {
   late MockPeriodsApi mockPeriodApis = MockPeriodsApi();
@@ -31,7 +30,8 @@ void main() {
 
     when(mockAccountingRepo.userID)
         .thenAnswer((realInvocation) => sampleUserID);
-    when(mockAccountingRepo.token).thenAnswer((realInvocation) => sampleToken);
+    when(mockAccountingRepo.token)
+        .thenAnswer((realInvocation) => Future.value(sampleToken));
   });
 
   test('is get active period details ok', () async {
@@ -76,6 +76,4 @@ void main() {
       expect(event.isEmpty, equals(false));
     }));
   });
-
-
 }

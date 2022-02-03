@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 
 part 'medical.freezed.dart';

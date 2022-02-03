@@ -1,6 +1,6 @@
 import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers_result.dart';
 import 'package:alpha/back/public_repo/public_apis.dart';

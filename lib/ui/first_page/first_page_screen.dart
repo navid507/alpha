@@ -1,22 +1,25 @@
-import 'package:alpha/back/accounting/models/swimmer.dart';
+import 'package:alpha/back/accounting/accounting_repo.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club.dart';
-import 'package:alpha/back/public_repo/models/alpha_club/alpha_swimmer.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/team_info.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/image_item.dart';
-import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers.dart';
+import 'package:alpha/ui/alpha_club/alpha_club_model.dart';
+import 'package:alpha/ui/alpha_club/alpha_club_route.dart';
+import 'package:alpha/ui/drawer/alpha_drawer_widget.dart';
+import 'package:alpha/ui/drawer/drawer_model.dart';
 import 'package:alpha/ui/first_page/first_page_model.dart';
 import 'package:alpha/ui/first_page/widgets/get_alpha_club.dart';
-import 'package:alpha/ui/first_page/widgets/get_in_team_competetions.dart';
+import 'package:alpha/ui/first_page/widgets/get_alpha_teams.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/first_page/widgets/get_alpha_slider.dart';
-import 'package:alpha/ui/my_widgets/get_header.dart';
+import 'package:alpha/ui/drawer/get_header.dart';
 import 'package:alpha/ui/my_widgets/get_image.dart';
-import 'package:alpha/ui/my_widgets/user_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:alpha/ui/top_swimmers/top_swimmers_model.dart';
+import 'package:alpha/ui/top_swimmers/top_swimmers_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,35 +33,51 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> {
   BuildContext? apContext;
+  late AlphaHeader alphaHeader;
+
+  FirstPageModel get model =>
+      Provider.of<FirstPageModel>(context, listen: false);
 
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      Provider.of<FirstPageModel>(apContext!, listen: false).getGallery();
-      Provider.of<FirstPageModel>(apContext!, listen: false).getTopSwimmers();
-      Provider.of<FirstPageModel>(apContext!, listen: false).getAlphaClub();
+      model.getGallery();
+      model.getTopSwimmers();
+      model.getAlphaTeams();
+      model.getAlphaClub();
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext buildContext) {
-    return ChangeNotifierProvider<FirstPageModel>(
-        create: (context) => FirstPageModel(),
-        child: Scaffold(
-            drawer: getDrawer(context),
-            body: Builder(builder: (context) => getScreenBody(context))));
+    alphaHeader = AlphaHeader(drawerContext: buildContext, needBack: false);
+
+    return Scaffold(
+        drawer: getDrawerWithProvider(),
+        body: Builder(builder: (drawerContext) {
+          return getScreenBody(drawerContext);
+        }));
+  }
+
+  getDrawerWithProvider() {
+    return ChangeNotifierProvider<DrawerModel>(
+      create: (_) {
+        return DrawerModel();
+      },
+      child: AlphaDrawerWidget(page: AlphaRoutes.Home),
+    );
   }
 
   getScreenBody(BuildContext screenBodyContext) {
     apContext = screenBodyContext;
 
     return Stack(children: [
-      getImageOfHeader(),
-      ListView(
-        scrollDirection: Axis.vertical,
-        children: [
-          getTopMenu(screenBodyContext),
+      alphaHeader.getImageOfHeader(),
+      Column(children: [
+        alphaHeader.getTopMenu(screenBodyContext),
+        Expanded(
+            child: ListView(scrollDirection: Axis.vertical, children: [
           getGallerySlider(),
           getTopSwimmersHeader(
               context: context,
@@ -67,11 +86,12 @@ class _FirstPageState extends State<FirstPage> {
               }),
           getTopSwimmersRow(),
           getInTeamCompetitionsHeader(context: context, onPressed: () {}),
-          getTeamCompetitionRow(),
+          getAlphaTeamRow(),
           getAlphaClubHeader(context: context, onPressed: () {}),
-          getAlphaClubRow()
-        ],
-      ),
+          getAlphaClubRow(),
+          getAlphaClubButton(context)
+        ]))
+      ]),
     ]);
   }
 
@@ -124,28 +144,46 @@ class _FirstPageState extends State<FirstPage> {
         });
   }
 
-  getTeamCompetitionRow() {
-    return Selector<FirstPageModel, TopSwimmers?>(
-        selector: (_, model) => model.alphaTopSwimmers,
-        builder: (galleyContext, topSwimmers, child) {
-          if (topSwimmers == null) {
-            return Text(AppLocalizations.of(context)!.loading);
-          } else {
-            return Container(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: getTeamImages(
-                    lead: topSwimmers.topSwimmers[0].image,
-                    swimmer2: topSwimmers.topSwimmers[1].image,
-                    swimmer3: topSwimmers.topSwimmers[2].image));
-          }
-        });
-  }
+  // getTeamCompetitionRow() {
+  //   return Selector<FirstPageModel, TopSwimmers?>(
+  //       selector: (_, model) => model.alphaTopSwimmers,
+  //       builder: (galleyContext, topSwimmers, child) {
+  //         if (topSwimmers == null) {
+  //           return Text(AppLocalizations.of(context)!.loading);
+  //         } else {
+  //           return Container(
+  //               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+  //               child: getTeamImages(
+  //                   lead: topSwimmers.topSwimmers[0].image,
+  //                   swimmer2: topSwimmers.topSwimmers[1].image,
+  //                   swimmer3: topSwimmers.topSwimmers[2].image));
+  //         }
+  //       });
+  // }
 
-  showTopSwimmersRoute() {}
+  showTopSwimmersRoute() {
+    Future.delayed(
+        Duration.zero,
+        () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider<TopSwimmersModel>(
+                    create: (context) => TopSwimmersModel(),
+                    child: TopSwimmersRoute()))));
+  }
 
   showInTeamCompetitionRoute() {}
 
-  showAlphaClubRoute() {}
+  showAlphaClubRoute() {
+    Future.delayed(
+        Duration.zero,
+        () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider<AlphaClubModel>(
+                    create: (context) => AlphaClubModel(),
+                    child: AlphaClubRoute()))));
+  }
 
   getAlphaClubRow() {
     return Selector<FirstPageModel, AlphaClub?>(
@@ -157,7 +195,8 @@ class _FirstPageState extends State<FirstPage> {
             return Container(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: Row(
-                children: getAlphaSwimmers(alphaClub),
+                children:
+                    getAlphaSwimmers(alphaClub: alphaClub, context: context),
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               ),
               height: 140,
@@ -166,55 +205,77 @@ class _FirstPageState extends State<FirstPage> {
         });
   }
 
-  getAlphaSwimmers(AlphaClub alphaClub) {
-    var size = (alphaClub.alphaSwimmers.swimmers.length < 4)
-        ? alphaClub.alphaSwimmers.swimmers.length
-        : 3;
-    return alphaClub.alphaSwimmers.swimmers
-        .getRange(0, size)
-        .map<Widget>((s) => getAlphaElement(s))
-        .toList();
+  getAlphaTeamRow() {
+    return Selector<FirstPageModel, AlphaTeams?>(
+        selector: (_, model) => model.alphaTeams,
+        builder: (galleyContext, alphaTeams, child) {
+          if (alphaTeams == null) {
+            return Text(AppLocalizations.of(context)!.loading);
+          } else {
+            return Container(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child:
+                  getAlphaTeams(alphaTeams: alphaTeams, buildContext: context),
+              height: 180,
+            );
+          }
+        });
   }
 
-  getAlphaElement(AlphaSwimmer swimmer) {
-    var height = 140.0;
-    var width = 120.0;
-    return Container(
-        height: height,
-        width: width,
-        child: Stack(
-          children: [
-            getAlphaClubSwimmer(),
-            Column(
-              children: [
-                getAvatarImageAlphaClub(swimmer.image),
-                Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: getAlphaTextTitle2White(swimmer.fullName)),
-                getAlphaTextMoreYellow(
-                    AppLocalizations.of(context)!.numberOfAttendant +
-                        " ${swimmer.sessions}")
-              ],
-            )
-          ],
-          alignment: Alignment.topCenter,
-        ));
-    // return getAlphaClubSwimmer(child: child);
-  }
-
-  getAlphaClubSwimmer(
-      {double height = 140.0, double width = 120.0, double topPadding = 0}) {
-    return Positioned(
-      child: Opacity(
-          opacity: 0.1,
-          child: Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-                color: AlphaColors.backTopSwimmers,
-                borderRadius: BorderRadius.circular(5.0)),
-          )),
-      top: topPadding,
+  getAlphaTeams(
+      {required AlphaTeams alphaTeams, required BuildContext buildContext}) {
+    var size =
+        (alphaTeams.alphaTeams.length > 3) ? 3 : alphaTeams.alphaTeams.length;
+    return Column(
+      children: alphaTeams
+          .getRankedTeams()
+          .getRange(0, size)
+          .map<Widget>((t) => getTeamInfo(t))
+          .toList(),
     );
+  }
+
+  getTeamInfo(TeamInfo teamInfo) {
+    return Container(
+      height: 60,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(children: [
+            getTeamImages(
+                lead: teamInfo.members![0].image,
+                swimmer2: teamInfo.members![1].image,
+                swimmer3: teamInfo.members![2].image),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                getAlphaTextBodyWhite(teamInfo.name),
+                getAlphaTextTeamScore(AppLocalizations.of(context)!.score +
+                    ": " +
+                    teamInfo.score.toString())
+              ],
+            ),
+            Spacer(),
+            getMenuIcon(imageAsset: "assets/images/ic_more.png")
+          ]),
+          Container(
+            height: 1,
+            color: AlphaColors.TextGray,
+            width: getScreenWidth(context),
+          )
+        ],
+      ),
+    );
+  }
+
+  getAlphaClubButton(BuildContext context) {
+    return getAlphaButton(
+        width: getScreenWidth(context),
+        height: 45.0,
+        text: AppLocalizations.of(context)!.alphaClubView,
+        onPressed: () {
+          showAlphaClubRoute();
+        });
   }
 }

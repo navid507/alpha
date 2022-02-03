@@ -12,11 +12,21 @@ class AlphaColors {
   static const Transparent = Colors.transparent;
 
   static const background = Color(0xFF353535);
+  static const backFormSection = Color(0xFF504F4F);
 
   static const backTopSwimmers = Color(0xFF919090);
   static const TextGray = Color(0xFF5D5D5D);
-  // static const nnn = Color(0xyyy);
-  // static const nnn = Color(0xyyy);
+  static const TextGrayLight = Color(0xFF919090);
+  static const TextDark = Color(0xFF3F3F3F);
+  static const backDrawer = Color(0xFF4C4C4C);
+  static const backDialog = Color(0xFF434242);
+  static const cancelButtonDialog = Color(0xFF5C5A5A);
+
+  static const backRegisterForm = Color(0xFF404040);
+
+// static const nnn = Color(0xFFyyy);
+// static const nnn = Color(0xFFyyy);
+// static const nnn = Color(0xFFyyy);
 
   // Top Swimmers Gradient
   static const _TopSwimmerGradientTop = Colors.white;
@@ -40,13 +50,12 @@ class AlphaColors {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [_ImageGalleryGradientTop, _ImageGalleryGradientBottom]);
-
 }
 
 class AlphaSizes {
   static const TopHeader = 70.0;
   static const TopHeaderBar = 30.0;
-  static const NotchHeight = 32.0;
+  static const NotchHeight = 24.0;
 
   static late bool isNeedSafeArea;
 

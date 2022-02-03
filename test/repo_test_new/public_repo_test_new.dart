@@ -1,12 +1,12 @@
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/team_info.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/team_member.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_group.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_swimmer.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams_result.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/team_info.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/team_member.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/image_item.dart';

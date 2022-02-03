@@ -125,15 +125,16 @@ class PeriodsRepo implements PeriodsRepoInterface {
   Stream<String> get discountErrorStream => _discountErrorSC.stream;
 
   @override
-  getAllPeriods() {
+  Future<PeriodsResult> getAllPeriods() {
     if (_allPeriods == null || !_needUpdateAllPeriods) {
-      getAllPeriodsFromServer();
+      return getAllPeriodsFromServer();
     } else {
       _allPeriodsStreamController.sink.add(_allPeriods!);
+      return Future<PeriodsResult>.value(PeriodsResult.success(_allPeriods!));
     }
   }
 
-  getAllPeriodsFromServer() async {
+  Future<PeriodsResult> getAllPeriodsFromServer() async {
     var recentPeriods = await periodsApi.getAllPeriods();
     if (recentPeriods is SuccessPeriods) {
       _allPeriods = recentPeriods.periods;
@@ -142,18 +143,21 @@ class PeriodsRepo implements PeriodsRepoInterface {
     } else if (recentPeriods is ErrorPeriods) {
       _allPeriodsErrorStreamController.sink.add(recentPeriods.msg);
     }
+    return recentPeriods;
   }
 
   @override
-  getAllRegisteredPeriods() {
+  Future<PeriodsResult> getAllRegisteredPeriods() {
     if (_allRegisteredPeriods == null || !_needUpdateRegisteredPeriods) {
-      getAllRegisteredPeriodsFromServer();
+      return getAllRegisteredPeriodsFromServer();
     } else {
       _allPeriodsStreamController.sink.add(_allPeriods!);
+      return Future<PeriodsResult>.value(
+          PeriodsResult.success(_allRegisteredPeriods!));
     }
   }
 
-  getAllRegisteredPeriodsFromServer() async {
+  Future<PeriodsResult> getAllRegisteredPeriodsFromServer() async {
     var recentRegisteredPeriods = await periodsApi.getRegisteredPeriods(
         userID: accountingRepository.userID);
     if (recentRegisteredPeriods is SuccessPeriods) {
@@ -164,6 +168,7 @@ class PeriodsRepo implements PeriodsRepoInterface {
       _allRegisteredPeriodsErrorStreamController.sink
           .add(recentRegisteredPeriods.msg);
     }
+    return recentRegisteredPeriods;
   }
 
   @override
@@ -171,8 +176,9 @@ class PeriodsRepo implements PeriodsRepoInterface {
       {required String periodID,
       String discountCode = '',
       required String typeID}) async {
+    var userToken = await accountingRepository.token;
     var resultRegister = await periodsApi.registerPeriod(
-        userToken: accountingRepository.token,
+        userToken: userToken,
         userID: accountingRepository.userID,
         periodID: periodID,
         discountCode: discountCode,
@@ -187,8 +193,10 @@ class PeriodsRepo implements PeriodsRepoInterface {
 
   @override
   cancelPeriod({required String periodID}) async {
+    var userToken = await accountingRepository.token;
+
     var resultCancel = await periodsApi.cancelPeriod(
-        userToken: accountingRepository.token,
+        userToken: userToken,
         userID: accountingRepository.userID,
         periodID: periodID);
     if (resultCancel.isSuccess) {
@@ -211,8 +219,9 @@ class PeriodsRepo implements PeriodsRepoInterface {
 
   @override
   getDiscount({required String discountCode}) async {
+    var userToken = await accountingRepository.token;
     var resultDiscount = await periodsApi.getDiscount(
-        userToken: accountingRepository.token,
+        userToken: userToken,
         userID: accountingRepository.userID,
         discountCode: discountCode);
     if (resultDiscount.isSuccess) {
@@ -239,23 +248,28 @@ class PeriodsRepo implements PeriodsRepoInterface {
   Stream<String> get allSessionsErrorStream => _allSessionsErrorSC.stream;
 
   @override
-  getAllSessions({required String periodID}) {
+  Future<SessionsResult> getAllSessions({required String periodID}) {
     if (_allSessions == null) {
-      _getAllSessionsFromServer(periodID: periodID);
+      return _getAllSessionsFromServer(periodID: periodID);
     } else {
       _allSessionsSC.sink.add(_allSessions!);
+      return Future<SessionsResult>.value(
+          SessionsResult.success(_allSessions!));
     }
   }
 
-  _getAllSessionsFromServer({required String periodID}) async {
-    var allSessions = await sessionsApi.getAllSessions(
-        periodID: periodID, token: accountingRepository.token);
+  Future<SessionsResult> _getAllSessionsFromServer(
+      {required String periodID}) async {
+    var userToken = await accountingRepository.token;
+    var allSessions =
+        await sessionsApi.getAllSessions(periodID: periodID, token: userToken);
     if (allSessions is SuccessSessions) {
       _allSessions = allSessions.sessions;
       _allSessionsSC.sink.add(_allSessions!);
     } else if (allSessions is ErrorSessions) {
       _allMedicalErrorSC.sink.add(allSessions.msg);
     }
+    return allSessions;
   }
 
   // allMedical
@@ -271,23 +285,26 @@ class PeriodsRepo implements PeriodsRepoInterface {
   Stream<String> get allMedicalErrorStream => _allMedicalErrorSC.stream;
 
   @override
-  getAllMedicals() {
+  Future<MedicalsResult> getAllMedicals() {
     if (_allMedical == null) {
-      _getAllMedicalsServer();
+      return _getAllMedicalsServer();
     } else {
       _allMedicalSC.sink.add(_allMedical!);
+      return Future<MedicalsResult>.value(MedicalsResult.success(_allMedical!));
     }
   }
 
-  _getAllMedicalsServer() async {
+  Future<MedicalsResult> _getAllMedicalsServer() async {
+    var userToken = await accountingRepository.token;
     var allMedicals = await sessionsApi.getAllMedicals(
-        userID: accountingRepository.userID, token: accountingRepository.token);
+        userID: accountingRepository.userID, token: userToken);
     if (allMedicals is SuccessMedicals) {
       _allMedical = allMedicals.medicalsSessions;
       _allMedicalSC.sink.add(_allMedical!);
     } else if (allMedicals is ErrorMedicals) {
       _allMedicalErrorSC.sink.add(allMedicals.msg);
     }
+    return allMedicals;
   }
 
   // sessionScore
@@ -306,11 +323,9 @@ class PeriodsRepo implements PeriodsRepoInterface {
       {required String sessionID,
       required int score,
       required String comment}) async {
+    var userToken = await accountingRepository.token;
     var resultSet = await sessionsApi.setSessionScore(
-        sessionID: sessionID,
-        score: score,
-        comment: comment,
-        token: accountingRepository.token);
+        sessionID: sessionID, score: score, comment: comment, token: userToken);
 
     if (resultSet.isSuccess) {
       _buyPeriodSC.sink.add(resultSet.msg);
@@ -332,23 +347,26 @@ class PeriodsRepo implements PeriodsRepoInterface {
   Stream<String> get activePeriodErrorStream => _activePeriodErrorSC.stream;
 
   @override
-  getActivePeriod() {
+  Future<PeriodResult> getActivePeriod() {
     if (_activePeriod == null) {
-      getActivePeriodFromServer();
+      return getActivePeriodFromServer();
     } else {
       _activePeriodSC.sink.add(_activePeriod!);
+      return Future<PeriodResult>.value(PeriodResult.success(_activePeriod!));
     }
   }
 
-  getActivePeriodFromServer() async {
+  Future<PeriodResult> getActivePeriodFromServer() async {
+    var userToken = await accountingRepository.token;
     var periodDetails = await sessionsApi.getActivePeriodDetails(
-        userID: accountingRepository.userID, token: accountingRepository.token);
+        userID: accountingRepository.userID, token: userToken);
     if (periodDetails is SuccessPeriod) {
       _activePeriod = periodDetails.period;
       _activePeriodSC.sink.add(_activePeriod!);
     } else if (periodDetails is ErrorPeriod) {
       _activePeriodErrorSC.sink.add(periodDetails.msg);
     }
+    return periodDetails;
   }
 
   disposeAll() {

@@ -6,11 +6,12 @@ import 'package:alpha/back/periods/models/session/sessions_result.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 
+import '../global_constants.dart';
 import 'models/period/period_result.dart';
 import 'models/session/session.dart';
 
 class SessionsURLs {
-  static const String _root = "http://orkaswim.ir/index.php/alpha_api/session";
+  static const String _root = "$mainUrl/index.php/alpha_api/session";
   static const String AllSessions = "$_root/sessions";
   static const String PeriodDetails = "$_root/overview";
   static const String AllMedicalSession = "$_root/medical";

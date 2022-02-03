@@ -68,7 +68,7 @@ getTopSwimmers({required TopSwimmer swimmer, required int rank}) {
               ],
               alignment: Alignment.bottomCenter,
             ),
-            getAlphaTextBodyWhite(swimmer.name),
+            getAlphaTextSwimmer(swimmer.name),
             getAlphaTextMoreYellow(swimmer.score)
           ],
         )

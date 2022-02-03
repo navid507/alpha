@@ -1,15 +1,22 @@
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:alpha/back/accounting/accounting_repo.dart';
-import 'package:alpha/back/accounting/models/swimmer.dart';
+import 'package:alpha/back/accounting/models/swimmer/swimmer.dart';
+import 'package:alpha/back/accounting/user_stored_data.dart';
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams.dart';
+import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
-import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
+import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers.dart';
+import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers_result.dart';
 import 'package:alpha/back/public_repo/public_apis.dart';
 import 'package:alpha/back/public_repo/public_repo.dart';
 import 'package:alpha/main_functions/http_functions.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:alpha/ui/Models/loading_state.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
 import 'package:http/http.dart' as http;
 
 // abstract class GetSwimmerInterface extends ChangeNotifier {
@@ -17,7 +24,21 @@ import 'package:http/http.dart' as http;
 // }
 
 class FirstPageModel extends ChangeNotifier {
-  AccountingRepositoryInterface _accountingRepo = AccountingRepo.getInstance();
+  late AccountingRepositoryInterface
+      _accountingRepo; // = AccountingRepo.getInstance();
+  LoadingState topSwimmersState = LoadingState.NotStarted;
+  LoadingState alphaClubState = LoadingState.NotStarted;
+  LoadingState galleryState = LoadingState.NotStarted;
+  LoadingState alphaTeamsState = LoadingState.NotStarted;
+
+  FirstPageModel() {
+    // UserStoredData.createUserStoredData(deviceInfo: DeviceInfoPlugin())
+    //     .then((userStoredData) {
+    //   _accountingRepo = AccountingRepo.getInstance(userStoredData: userStoredData);
+    // });
+    _accountingRepo = AccountingRepo.getInstance(
+        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+  }
 
   PublicRepositoryInterface _publicRepo = PublicRepo.getInstance(
       PublicApis(httpCalls: HttpCalls(httpClient: http.Client())));
@@ -33,6 +54,8 @@ class FirstPageModel extends ChangeNotifier {
 
   AlphaClub? alphaClub;
 
+  AlphaTeams? alphaTeams;
+
   getActiveSwimmer() {
     _accountingRepo.activeSwimmerStream.listen((swimmer) {
       activeSwimmer = swimmer;
@@ -42,34 +65,52 @@ class FirstPageModel extends ChangeNotifier {
   }
 
   getGallery() {
-    _publicRepo.galleryStream.listen((curAlphaImageGallery) {
-      alphaImageGallery = curAlphaImageGallery;
+    _publicRepo.getGallery().asStream().listen((curAlphaImageGallery) {
+      if (curAlphaImageGallery is SuccessGallery) {
+        alphaImageGallery = curAlphaImageGallery.gallery;
+        galleryState = LoadingState.Loaded;
+      } else {
+        galleryState = LoadingState.LoadError;
+      }
       notifyListeners();
     });
-    _publicRepo.getGallery();
+    // _publicRepo.getGallery();
   }
 
   getTopSwimmers() {
-    _publicRepo.topSwimmersStream.listen((curAlphaTopSwimmers) {
-      alphaTopSwimmers = curAlphaTopSwimmers;
+    _publicRepo.getTopSwimmers().asStream().listen((curAlphaTopSwimmers) {
+      if (curAlphaTopSwimmers is SuccessTopSwimmers) {
+        alphaTopSwimmers = curAlphaTopSwimmers.topSwimmers;
+        topSwimmersState = LoadingState.Loaded;
+      } else {
+        topSwimmersState = LoadingState.LoadError;
+      }
       notifyListeners();
     });
-    _publicRepo.getTopSwimmers();
   }
 
   getAlphaClub() {
-    _publicRepo.alphaClubStream.listen((curAlphaClub) {
-      alphaClub = curAlphaClub;
+    _publicRepo.getAlphaClub().asStream().listen((curAlphaClub) {
+      if (curAlphaClub is SuccessAlphaClub) {
+        alphaClubState = LoadingState.Loaded;
+        alphaClub = curAlphaClub.alphaClub;
+      } else {
+        alphaClubState = LoadingState.LoadError;
+      }
       notifyListeners();
     });
-    _publicRepo.getAlphaClub();
+    // _publicRepo.getAlphaClub();
   }
 
-// getInTeamCompetitions() {
-  //   _publicRepo.tea.listen((curAlphaTopSwimmers) {
-  //     alphaTopSwimmers = curAlphaTopSwimmers;
-  //     notifyListeners();
-  //   });
-  //   _publicRepo.getTopSwimmers();
-  // }
+  getAlphaTeams() {
+    _publicRepo.getAlphaTeams().asStream().listen((curAlphaTeams) {
+      if (curAlphaTeams is SuccessAlphaTeams) {
+        alphaTeamsState = LoadingState.Loaded;
+        alphaTeams = curAlphaTeams.alphaTeam;
+      } else {
+        alphaTeamsState = LoadingState.LoadError;
+      }
+      notifyListeners();
+    });
+  }
 }

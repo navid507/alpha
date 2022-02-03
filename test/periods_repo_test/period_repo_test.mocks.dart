@@ -9,7 +9,7 @@ import 'package:alpha/back/accounting/abstracts/accounting_api_abstract.dart'
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart'
     as _i15;
 import 'package:alpha/back/accounting/accounting_repo.dart' as _i13;
-import 'package:alpha/back/accounting/models/swimmer.dart' as _i14;
+import 'package:alpha/back/accounting/models/swimmer/swimmer.dart' as _i14;
 import 'package:alpha/back/accounting/user_stored_data.dart' as _i8;
 import 'package:alpha/back/periods/models/medical/medical_result.dart' as _i7;
 import 'package:alpha/back/periods/models/period/period_result.dart' as _i6;
@@ -229,12 +229,18 @@ class MockAccountingRepo extends _i1.Mock implements _i13.AccountingRepo {
               returnValue: Stream<_i15.RegisterState>.empty())
           as _i11.Stream<_i15.RegisterState>);
   @override
-  String get token =>
-      (super.noSuchMethod(Invocation.getter(#token), returnValue: '')
-          as String);
+  _i11.Future<String> get token =>
+      (super.noSuchMethod(Invocation.getter(#token),
+          returnValue: Future<String>.value('')) as _i11.Future<String>);
   @override
   int get userID =>
       (super.noSuchMethod(Invocation.getter(#userID), returnValue: 0) as int);
+  @override
+  _i11.Future<_i15.RegisterState> getRegisterState() =>
+      (super.noSuchMethod(Invocation.method(#getRegisterState, []),
+              returnValue:
+                  Future<_i15.RegisterState>.value(_i15.RegisterState.Nothing))
+          as _i11.Future<_i15.RegisterState>);
   @override
   _i11.Future<_i4.StateResult> registerPhone(String? phone) =>
       (super.noSuchMethod(Invocation.method(#registerPhone, [phone]),
@@ -246,6 +252,9 @@ class MockAccountingRepo extends _i1.Mock implements _i13.AccountingRepo {
               returnValue: Future<_i4.StateResult>.value(_FakeStateResult_6()))
           as _i11.Future<_i4.StateResult>);
   @override
+  dynamic changeRegisterState(_i15.RegisterState? state) =>
+      super.noSuchMethod(Invocation.method(#changeRegisterState, [state]));
+  @override
   dynamic changeActiveSwimmer(_i14.Swimmer? activeSwimmer) => super
       .noSuchMethod(Invocation.method(#changeActiveSwimmer, [activeSwimmer]));
   @override
@@ -254,4 +263,9 @@ class MockAccountingRepo extends _i1.Mock implements _i13.AccountingRepo {
       (super.noSuchMethod(Invocation.method(#insertSwimmer, [swimmer, files]),
               returnValue: Future<_i4.StateResult>.value(_FakeStateResult_6()))
           as _i11.Future<_i4.StateResult>);
+  @override
+  _i11.Future<_i14.Swimmer?> getActiveSwimmer() =>
+      (super.noSuchMethod(Invocation.method(#getActiveSwimmer, []),
+              returnValue: Future<_i14.Swimmer?>.value())
+          as _i11.Future<_i14.Swimmer?>);
 }

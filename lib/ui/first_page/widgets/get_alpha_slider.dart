@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import '../../my_widgets/alpha_text.dart';
-import '../../my_widgets/constant_widgets.dart';
 import '../../my_widgets/constants.dart';
 import '../../my_widgets/get_image.dart';
 

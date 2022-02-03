@@ -1,6 +1,10 @@
 import 'package:alpha/back/periods/models/medical/medical.dart';
+import 'package:alpha/back/periods/models/medical/medical_result.dart';
 import 'package:alpha/back/periods/models/period/period.dart';
+import 'package:alpha/back/periods/models/period/period_result.dart';
+import 'package:alpha/back/periods/models/period/periods_result.dart';
 import 'package:alpha/back/periods/models/session/session.dart';
+import 'package:alpha/back/periods/models/session/sessions_result.dart';
 
 abstract class PeriodsRepoInterface {
   Stream<List<Period>> get allPeriodsStream;
@@ -43,10 +47,9 @@ abstract class PeriodsRepoInterface {
 
   Stream<String> get activePeriodErrorStream;
 
+  Future<PeriodsResult> getAllPeriods();
 
-  getAllPeriods();
-
-  getAllRegisteredPeriods();
+  Future<PeriodsResult> getAllRegisteredPeriods();
 
   registerPeriod(
       {required String periodID,
@@ -59,12 +62,12 @@ abstract class PeriodsRepoInterface {
 
   buyPeriod({required String periodID});
 
-  getAllMedicals();
+  Future<MedicalsResult> getAllMedicals();
 
-  getAllSessions({required String periodID});
+  Future<SessionsResult> getAllSessions({required String periodID});
 
   setSessionScore(
       {required String sessionID, required int score, required String comment});
 
-  getActivePeriod();
+  Future<PeriodResult> getActivePeriod();
 }

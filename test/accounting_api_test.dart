@@ -2,19 +2,10 @@
 
 import 'package:alpha/back/accounting/abstracts/accounting_api_abstract.dart';
 import 'package:alpha/back/accounting/accounting_api.dart';
-import 'package:alpha/back/accounting/accounting_repo.dart';
 import 'package:alpha/back/accounting/models/record/record_result.dart';
 import 'package:alpha/back/accounting/models/record/record_type_result.dart';
 import 'package:alpha/main_functions/http_functions.dart';
-import 'package:alpha/main_functions/main_models/api_result.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart';
-import 'package:mockito/mockito.dart';
-import 'package:http/testing.dart';
-import 'dart:convert';
-// class MockClient extends Mock implements http.Client{
-//
-// }
 
 import 'package:http/http.dart' as http;
 void main()

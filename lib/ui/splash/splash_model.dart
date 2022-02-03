@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:alpha/back/accounting/accounting_repo.dart';
-import 'package:alpha/ui/first_page/first_page_screen.dart';
+import 'package:alpha/back/accounting/user_stored_data.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 
 class SplashModelPhoneState extends ChangeNotifier {}
 
@@ -13,11 +15,11 @@ class SplashModel extends ChangeNotifier {
   PackageInfo? _packageInfo;
 
   final _registerStateController = StreamController<RegisterState>();
+
   Stream<RegisterState> get registerStateStream =>
       _registerStateController.stream;
 
-
-  late AccountingRepo _accountingRepo;
+  late AccountingRepositoryInterface? _accountingRepo;
 
   RegisterState _registerState = RegisterState.NotSetYet;
 
@@ -25,15 +27,15 @@ class SplashModel extends ChangeNotifier {
 
   SplashModel() {
     getVersionInfo();
-    _accountingRepo = AccountingRepo.getInstance();
+    _accountingRepo = AccountingRepo.getInstance(
+        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+
     // checkPhoneRegisterState();
   }
 
   void checkPhoneRegisterState() {
-    _accountingRepo.getRegisterState();
-    _accountingRepo.registerStateStream.listen((registerState) {
-      // this._registerState = registerState;
-      // notifyListeners();
+    // _accountingRepo!.getRegisterState();
+    _accountingRepo!.getRegisterState().asStream().listen((registerState) {
       _registerStateController.sink.add(registerState);
     });
   }
@@ -53,9 +55,7 @@ class SplashModel extends ChangeNotifier {
     getVersionInfo();
   }
 
-  closeButton()
-  {
+  closeButton() {
     _registerStateController.close();
   }
-
 }

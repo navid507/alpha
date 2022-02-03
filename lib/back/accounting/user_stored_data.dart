@@ -4,103 +4,115 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
 
 class UserStoredData {
-  SharedPreferences? _preferences;
-  late DeviceInfoPlugin _deviceInfo; // = DeviceInfoPlugin();
+  // hide the constructor:
+  // UserStoredData._();
+
+  // SharedPreferences? _preferences;
+  late DeviceInfoPlugin deviceInfo; // = DeviceInfoPlugin();
 
   static const PREFERENCE_NAME = "userPreferences";
 
   static const REGISTER_STATE = "registerState";
+
   // static const USER_NAME = "userName";
   static const DEVICE_ID = "deviceId";
   static const UNIQUE_ID = "uniqueId";
   static const USER_TOKEN = "userToken";
   static const ACTIVE_USER = "activeUser";
+
   // static const USER_PASSWORD = "userPassword";
 
-  static Future<UserStoredData> createUserStoredData(
-      {required DeviceInfoPlugin deviceInfo}) async {
-    var myUSD = UserStoredData();
-    myUSD._preferences = await SharedPreferences.getInstance();
-    myUSD._deviceInfo = deviceInfo;
-    return myUSD;
+  // static Future<UserStoredData> createUserStoredData(
+  //     {required DeviceInfoPlugin deviceInfo}) async {
+  //   var myUSD = UserStoredData._();
+  //   // myUSD._preferences = await SharedPreferences.getInstance();
+  //   myUSD._deviceInfo = deviceInfo;
+  //   return myUSD;
+  // }
+
+  UserStoredData({required this.deviceInfo});
+
+  Future<bool> setValue(String name, dynamic value) async {
+    var _preferences = await SharedPreferences.getInstance();
+    var done = false;
+    switch (value.runtimeType) {
+      case String:
+        _preferences.setString(name, value);
+        done = true;
+        break;
+      case int:
+        _preferences.setInt(name, value);
+        done = true;
+        break;
+      case bool:
+        _preferences.setBool(name, value);
+        done = true;
+        break;
+      case double:
+        _preferences.setDouble(name, value);
+        done = true;
+        break;
+      default:
+        done = false;
+    }
+    // _preferences.clear();
+    return done;
   }
 
-  bool setValue(String name, dynamic value) {
-    if (_preferences != null) {
-      switch (value.runtimeType) {
-        case String:
-          _preferences!.setString(name, value);
-          return true;
-        case int:
-          _preferences!.setInt(name, value);
-          return true;
-        case bool:
-          _preferences!.setBool(name, value);
-          return true;
-        case double:
-          _preferences!.setDouble(name, value);
-          return true;
-      }
-    }
-    return false;
-  }
-
-  dynamic readValue(String name) {
-    if (_preferences != null) {
-      var val = _preferences!.get(name);
-      return val;
-    }
-    return null;
+  Future<T> readValue<T>(String name) async {
+    var _preferences = await SharedPreferences.getInstance();
+    var val = _preferences.get(name) as T;
+    // _preferences.clear();
+    return val;
   }
 
   setRegisterState(RegisterState registerState) {
     setValue(REGISTER_STATE, registerState.index);
   }
 
-  RegisterState getRegisterState() {
-    return RegisterState.values[readValue(REGISTER_STATE) ?? 0];
+  Future<RegisterState> getRegisterState() async {
+    var state = await readValue<int?>(REGISTER_STATE);
+    return RegisterState.values[state ?? 0];
   }
 
   setActiveUser(int userID) {
     setValue(ACTIVE_USER, userID);
   }
 
-  int getActiveUser() {
-    return readValue(ACTIVE_USER);
+  Future<int?> getActiveUser() async {
+    return readValue<int?>(ACTIVE_USER);
   }
 
-  // setUsername(String username) {
-  //   setValue(USER_NAME, username);
-  // }
-  //
-  // String getUsername() {
-  //   return readValue(USER_NAME) ?? "";
-  // }
-  //
-  // setUserPass(String password) {
-  //   setValue(USER_PASSWORD, password);
-  // }
-  //
-  // String getUserPass() {
-  //   return readValue(USER_PASSWORD) ?? "";
-  // }
+// setUsername(String username) {
+//   setValue(USER_NAME, username);
+// }
+//
+// String getUsername() {
+//   return readValue<String?>(USER_NAME) ?? "";
+// }
+//
+// setUserPass(String password) {
+//   setValue(USER_PASSWORD, password);
+// }
+//
+// String getUserPass() {
+//   return readValue<String?>(USER_PASSWORD) ?? "";
+// }
 
-
-  setDeviceID(String userToken) {
-    setValue(DEVICE_ID, userToken);
+  setDeviceID(String deviceID) {
+    setValue(DEVICE_ID, deviceID);
   }
 
-  String? getDeviceID() {
-    return readValue(DEVICE_ID);
+  Future<String?> getDeviceID() async {
+    return readValue<String?>(DEVICE_ID);
   }
-
 
   setUserToken(String userToken) {
     setValue(USER_TOKEN, userToken);
   }
 
-  String? getUserToken() {
-    return readValue(USER_TOKEN);
+  Future<String?> getUserToken() async {
+    return readValue<String?>(USER_TOKEN);
   }
 
   _setDeviceUniqueID(String deviceID) {
@@ -108,26 +120,26 @@ class UserStoredData {
   }
 
   Future<String> getDeviceUniqueID() async {
-    var uID = readValue(UNIQUE_ID);
+    var uID = await readValue<String?>(UNIQUE_ID);
     if (uID == null) {
       uID = await findDeviceUniqueID();
-      _setDeviceUniqueID(uID);
+      _setDeviceUniqueID(uID!);
     }
     return uID;
   }
 
   Future<String?> findDeviceUniqueID() async {
     if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       return androidInfo.androidId;
     } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       return iosInfo.identifierForVendor;
     }
     return "";
   }
 
-  reset() {
-    _preferences!.clear();
-  }
+// reset() {
+//   _preferences!.clear();
+// }
 }

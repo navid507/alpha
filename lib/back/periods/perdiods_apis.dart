@@ -1,3 +1,4 @@
+import 'package:alpha/back/global_constants.dart';
 import 'package:alpha/back/periods/models/period/period.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
@@ -6,7 +7,7 @@ import 'abstracts/periods_api_abstracts.dart';
 import 'models/period/periods_result.dart';
 
 class PeriodsURLs {
-  static const String _root = "http://orkaswim.ir/index.php/alpha_api/period";
+  static const String _root = "$mainUrl/index.php/alpha_api/period";
   static const String AllPeriods = "$_root/get";
   static const String RegisteredPeriods = "$_root/periods";
   static const String RegisterPeriod = "$_root/register";

@@ -1,8 +1,6 @@
 import '../../../global_constants.dart';
 
-
 class TopSwimmer {
-
   static const assetsURL = mainUrl + "/assets/upload/";
   String name;
   String image;
@@ -10,6 +8,7 @@ class TopSwimmer {
   String present;
   String absent;
   String score;
+  String? teamName;
 
   TopSwimmer(
       {required this.name,
@@ -17,7 +16,8 @@ class TopSwimmer {
       required this.absent,
       required this.present,
       required this.score,
-      required this.total});
+      required this.total,
+      this.teamName});
 
   factory TopSwimmer.fromJson(Map<String, dynamic> json) {
     return TopSwimmer(
@@ -26,6 +26,7 @@ class TopSwimmer {
         absent: json['absent'],
         present: json['present'],
         score: json['average'],
+        teamName: json['team_name'],
         total: json['num']);
   }
 }

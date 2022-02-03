@@ -1,8 +1,8 @@
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
+import 'package:alpha/ui/first_page/first_page_model.dart';
 import 'package:alpha/ui/first_page/first_page_screen.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/splash/splash_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +16,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-
     super.initState();
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
@@ -26,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
           .registerStateStream
           .listen((registerState) {
         if (registerState != RegisterState.NotSetYet) {
-          navigateToMainScreen(context);
+          if (mounted) navigateToMainScreen(context);
         }
       });
 
@@ -39,7 +38,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     // to hide both:
     // SystemChrome.setEnabledSystemUIOverlays([]);
-
 
     return ChangeNotifierProvider<SplashModel>(
       create: (context) => SplashModel(),
@@ -73,7 +71,10 @@ navigateToMainScreen(BuildContext context) {
   Future.delayed(
       Duration.zero,
       () => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => FirstPage())));
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChangeNotifierProvider<FirstPageModel>(
+                  create: (context) => FirstPageModel(), child: FirstPage()))));
 }
 
 getRefreshButton({required BuildContext context}) {

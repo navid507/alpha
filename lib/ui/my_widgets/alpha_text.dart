@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class AlphaText extends StatelessWidget {
   final FontWeight weight;
-  final Alignment alignment;
+  Alignment alignment;
   final String text;
   final double fontSize;
   final FontStyle fontStyle;
@@ -21,7 +21,7 @@ class AlphaText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('$text',
+    return Text(text,
         style: TextStyle(
             fontFamily: 'AlphaFonts',
             fontStyle: fontStyle,
@@ -96,7 +96,7 @@ class AlphaText extends StatelessWidget {
           Alignment alignment = Alignment.center}) =>
       AlphaText(
           key: myKey,
-          fontSize: 14,
+          fontSize: 16,
           weight: FontWeight.bold,
           alignment: alignment,
           fontStyle: FontStyle.normal,
@@ -105,6 +105,7 @@ class AlphaText extends StatelessWidget {
 
 class AlphaTextBuilder {
   late AlphaText _alphaText;
+  var isFitted = false;
 
   // var fittedBox = true;
 
@@ -148,6 +149,12 @@ class AlphaTextBuilder {
     return this;
   }
 
+  AlphaTextBuilder setRedColor() {
+    // fontColor = color;
+    _alphaText.fontColor = AlphaColors.Red;
+    return this;
+  }
+
   AlphaTextBuilder setYellowColor() {
     // fontColor = color;
     _alphaText.fontColor = AlphaColors.Yellow;
@@ -160,21 +167,62 @@ class AlphaTextBuilder {
     return this;
   }
 
+  AlphaTextBuilder setGrayLightColor() {
+    // fontColor = color;
+    _alphaText.fontColor = AlphaColors.TextGrayLight;
+    return this;
+  }
+
+  AlphaTextBuilder setFit() {
+    // fontColor = color;
+    isFitted = true;
+    return this;
+  }
+
+  AlphaTextBuilder setBlackColor() {
+    // fontColor = color;
+    _alphaText.fontColor = AlphaColors.TextDark;
+    return this;
+  }
+
+  AlphaTextBuilder setAlignment(Alignment alignment) {
+    // fontColor = color;
+    _alphaText.alignment = alignment;
+    return this;
+  }
+
   Widget build({Key? key}) {
-    return FittedBox(
-        child: AlphaText(
+    return (isFitted)
+        ? FittedBox(
+            child: AlphaText(
+                key: key,
+                fontSize: _alphaText.fontSize,
+                weight: _alphaText.weight,
+                alignment: _alphaText.alignment,
+                fontStyle: _alphaText.fontStyle,
+                fontColor: _alphaText.fontColor,
+                text: _alphaText.text))
+        : AlphaText(
             key: key,
             fontSize: _alphaText.fontSize,
             weight: _alphaText.weight,
             alignment: _alphaText.alignment,
             fontStyle: _alphaText.fontStyle,
             fontColor: _alphaText.fontColor,
-            text: _alphaText.text));
+            text: _alphaText.text);
   }
+}
+
+getAlphaPageTitleWhite(String text) {
+  return AlphaTextBuilder(myText: text).getHeader().setWhiteColor().build();
 }
 
 getAlphaTextTitle1White(String text) {
   return AlphaTextBuilder(myText: text).getTitle1().setWhiteColor().build();
+}
+
+getAlphaTextTitle1Dark(String text) {
+  return AlphaTextBuilder(myText: text).getTitle1().setBlackColor().build();
 }
 
 getAlphaTextTitle2White(String text) {
@@ -189,6 +237,90 @@ getAlphaTextMoreYellow(String text) {
   return AlphaTextBuilder(myText: text).getMore().setYellowColor().build();
 }
 
+getAlphaTextMoreWhite(String text) {
+  return AlphaTextBuilder(myText: text).getMore().setWhiteColor().build();
+}
+
 getAlphaTextRank(String text) {
   return AlphaTextBuilder(myText: text).getRank().setGrayColor().build();
+}
+
+getAlphaTextTeamScore(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getRank()
+      .setGrayColor()
+      .setAlignment(Alignment.centerRight)
+      .build();
+}
+
+getAlphaTextTitle1Black(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getMore()
+      .setBlackColor()
+      .setAlignment(Alignment.center)
+      .build();
+}
+
+getAlphaTextSwimmer(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getTitle2()
+      .setWhiteColor()
+      .setFit()
+      .build();
+}
+
+getBetaTextSwimmer(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getBody()
+      .setWhiteColor()
+      .setFit()
+      .build();
+}
+
+getOmegaTextSwimmer(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getMore()
+      .setWhiteColor()
+      .setFit()
+      .build();
+}
+
+getAlphaTextHeaderBlack(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getHeader()
+      .setBlackColor()
+      .setAlignment(Alignment.center)
+      .build();
+}
+
+getAlphaTextTitleEditText(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getMore()
+      .setAlignment(Alignment.centerRight)
+      .setWhiteColor()
+      .build();
+}
+
+getAlphaTextErrorEditText(String text) {
+  return AlphaTextBuilder(myText: text)
+      .getMore()
+      .setAlignment(Alignment.centerRight)
+      .setRedColor()
+      .build();
+}
+
+getAlphaSecondaryTitle(String text) {
+  return AlphaTextBuilder(myText: text).getMore().setGrayLightColor().build();
+}
+
+getAlphaSecondaryValue(String text) {
+  return AlphaTextBuilder(myText: text).getBody().setWhiteColor().build();
+}
+
+getAlphaTextHeaderWhite(String text) {
+  return AlphaTextBuilder(myText: text).getHeader().setWhiteColor().build();
+}
+
+getAlphaTextTitle1Yellow(String text) {
+  return AlphaTextBuilder(myText: text).getHeader().setYellowColor().build();
 }

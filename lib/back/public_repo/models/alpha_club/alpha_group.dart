@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'alpha_swimmer.dart';
 

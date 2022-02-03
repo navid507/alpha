@@ -6,7 +6,7 @@ import 'dart:async' as _i8;
 
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart'
     as _i3;
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart'
+import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams_result.dart'
     as _i6;
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart'
     as _i4;

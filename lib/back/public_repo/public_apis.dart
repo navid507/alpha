@@ -1,21 +1,19 @@
-import 'package:alpha/back/accounting/models/swimmer.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
-import 'package:alpha/back/public_repo/models/gallery/image_item.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 
+import '../global_constants.dart';
 import 'abstracts/public_api_abstracts.dart';
 import 'models/alpha_club/alpha_club.dart';
 import 'models/alpha_club/alpha_club_result.dart';
-import 'models/top_swimmers/top_swimmer.dart';
+import 'models/alpha_teams/alpha_teams.dart';
+import 'models/alpha_teams/alpha_teams_result.dart';
 import 'models/top_swimmers/top_swimmers.dart';
 import 'models/top_swimmers/top_swimmers_result.dart';
 
 class PublicURLs {
-  static const String _root = "http://orkaswim.ir/index.php/alpha_api/base";
-  static const String _rootTeam = "http://orkaswim.ir/index.php/alpha_api/team";
+  static const String _root = "$mainUrl/index.php/alpha_api/base";
+  static const String _rootTeam = "$mainUrl/index.php/alpha_api/team";//"https://orkaswim.ir/index.php/alpha_api/team";
   static const String TopSwimmers = "$_root/top_swimmer";
   static const String AlphaSwimmers = "$_root/alpha_swimmers";
   static const String ImageGallery = "$_root/news";

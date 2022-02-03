@@ -1,7 +1,8 @@
 import 'package:alpha/back/accounting/abstracts/accounting_api_abstract.dart';
 import 'package:alpha/back/accounting/models/record/record_type.dart';
 import 'package:alpha/back/accounting/models/record/record_type_result.dart';
-import 'package:alpha/back/accounting/models/swimmer.dart';
+import 'package:alpha/back/accounting/models/swimmer/swimmer.dart';
+import 'package:alpha/back/accounting/models/swimmer/swimmers_result.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 
@@ -27,20 +28,24 @@ class AccountingAPI implements AccountingApiInterface {
   AccountingAPI({required this.http});
 
   @override
-  Future<List<Swimmer>> findRelativeSwimmers({required String private}) async {
+  Future<SwimmersResult> findRelativeSwimmers({required String private}) async {
     List<Swimmer> swimmers = List.empty(growable: true);
-
-    var res = await http.get(url: AccountingURLs.RelatedSwimmers);
-
-    int err = res.state.error;
-    if (err != 0) return swimmers;
-
-    List<dynamic> swimmersJson = res.data;
-    swimmersJson.forEach((element) {
-      swimmers.add(Swimmer.fromJson(element));
-    });
-
-    return swimmers;
+    Map<String, dynamic> body = Map();
+    body['private'] = private;
+    var res = await http.post(url: AccountingURLs.RelatedSwimmers, body: body);
+    if (res.isSuccess) {
+      List<dynamic> swimmersJson = res.data;
+      swimmersJson.forEach((element) {
+        swimmers.add(Swimmer.fromJson(element));
+      });
+      return SwimmersResult.success(swimmers);
+    } else {
+      return SwimmersResult.error(res.state.error, res.state.msg);
+    }
+    // // int err = res.state.error;
+    // // if (err != 0) return swimmers;
+    //
+    // return swimmers;
   }
 
   @override
@@ -68,16 +73,22 @@ class AccountingAPI implements AccountingApiInterface {
   }
 
   @override
-  Future<APIResult> registerUser({required Swimmer swimmer, required Map<String, String> files}) async {
-    // var res = await http.get(url: AccountingURLs.RegisterSwimmer);
-    var res = await http.multiPartPost(url: AccountingURLs.RegisterSwimmer, body: swimmer.toJson(), files: files);
+  Future<APIResult> registerUser({required Swimmer swimmer}) async {
+    var res = await http.multiPartPost(
+        url: AccountingURLs.RegisterSwimmer,
+        body: swimmer.toJson(),
+        files: swimmer.toJsonFiles());
     return res;
   }
 
   @override
-  Future<StateResult> editUser({required Swimmer swimmer, required Map<String, String> files}) async {
-    var res = await http.get(url: AccountingURLs.RegisterSwimmer);
-    return res.state;
+  Future<APIResult> editUser({required Swimmer swimmer}) async {
+    // var res = await http.get(url: AccountingURLs.RegisterSwimmer);
+    var res = await http.multiPartPost(
+        url: AccountingURLs.EditSwimmer,
+        body: swimmer.toJson(),
+        files: swimmer.toJsonFiles());
+    return res;
   }
 
 
@@ -98,9 +109,9 @@ class AccountingAPI implements AccountingApiInterface {
     return RecordTypesResult.error(res.state.error, res.state.msg);
   }
 
-
   @override
-  Future<RecordsResult> getRecordOfUser(String userID, String type, String token) async {
+  Future<RecordsResult> getRecordOfUser(
+      String userID, String type, String token) async {
     List<Record> records = List.empty(growable: true);
 
     Map<String, dynamic> body = Map();
@@ -121,7 +132,6 @@ class AccountingAPI implements AccountingApiInterface {
     }
     return RecordsResult.error(res.state.error, res.state.msg);
   }
-
 
 /*
    @override

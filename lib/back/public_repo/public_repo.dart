@@ -2,17 +2,13 @@ import 'dart:async';
 
 import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams.dart';
-import 'package:alpha/back/public_repo/models/AlphaTeams/alpha_teams_result.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
-import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
-import 'package:alpha/back/public_repo/public_apis.dart';
-import 'package:alpha/main_functions/http_functions.dart';
-import 'package:http/http.dart' as http;
 
 import 'models/alpha_club/alpha_club.dart';
+import 'models/alpha_teams/alpha_teams.dart';
+import 'models/alpha_teams/alpha_teams_result.dart';
 import 'models/top_swimmers/top_swimmers.dart';
 import 'models/top_swimmers/top_swimmers_result.dart';
 
@@ -55,15 +51,17 @@ class PublicRepo implements PublicRepositoryInterface {
   String _alphaClubErrorMsg = '';
 
   @override
-  getAlphaClub() {
+  Future<AlphaClubResult> getAlphaClub() {
     if (_alphaClub != null) {
       _alphaClubStreamController.sink.add(_alphaClub!);
+      return Future<AlphaClubResult>.value(
+          AlphaClubResult.success(_alphaClub!));
     } else {
-      getAlphaClubFromServer();
+      return getAlphaClubFromServer();
     }
   }
 
-  getAlphaClubFromServer() async {
+  Future<AlphaClubResult> getAlphaClubFromServer() async {
     var alphaClubResult = await publicAPI.getAlphaClub();
     if (alphaClubResult is SuccessAlphaClub) {
       _alphaClub = alphaClubResult.alphaClub;
@@ -72,6 +70,7 @@ class PublicRepo implements PublicRepositoryInterface {
       _alphaClubErrorMsg = alphaClubResult.msg;
       _alphaClubErrorStreamController.sink.add(_alphaClubErrorMsg);
     }
+    return alphaClubResult;
 
     // _alphaClub = await publicAPI.getAlphaClub();
   }
@@ -91,14 +90,20 @@ class PublicRepo implements PublicRepositoryInterface {
   Stream<String> get galleryErrorStream => _galleryErrorStreamController.stream;
   String _galleryErrorMsg = '';
 
-  getGallery() async {
-    var galleryResult = await publicAPI.getGallery();
-    if (galleryResult is SuccessGallery) {
-      _gallery = galleryResult.gallery;
-      _galleryStreamController.sink.add(_gallery!);
-    } else if (galleryResult is ErrorGallery) {
-      _galleryErrorMsg = galleryResult.msg;
-      _galleryErrorStreamController.sink.add(_galleryErrorMsg);
+  @override
+  Future<GalleryResult> getGallery() async {
+    if (_gallery != null) {
+      return Future<GalleryResult>.value(GalleryResult.success(_gallery!));
+    } else {
+      var galleryResult = await publicAPI.getGallery();
+      if (galleryResult is SuccessGallery) {
+        _gallery = galleryResult.gallery;
+        _galleryStreamController.sink.add(_gallery!);
+      } else if (galleryResult is ErrorGallery) {
+        _galleryErrorMsg = galleryResult.msg;
+        _galleryErrorStreamController.sink.add(_galleryErrorMsg);
+      }
+      return galleryResult;
     }
   }
 
@@ -118,7 +123,8 @@ class PublicRepo implements PublicRepositoryInterface {
       _topSwimmersErrorStreamController.stream;
   String _topSwimmersErrorMsg = '';
 
-  getTopSwimmers() async {
+  @override
+  Future<TopSwimmersResult> getTopSwimmers() async {
     var topSwimmersResult = await publicAPI.getTopSwimmers();
     if (topSwimmersResult is SuccessTopSwimmers) {
       _topSwimmers = topSwimmersResult.topSwimmers;
@@ -127,6 +133,7 @@ class PublicRepo implements PublicRepositoryInterface {
       _topSwimmersErrorMsg = topSwimmersResult.msg;
       _topSwimmersErrorStreamController.sink.add(_topSwimmersErrorMsg);
     }
+    return topSwimmersResult;
   }
 
   // Alpha Team
@@ -144,18 +151,18 @@ class PublicRepo implements PublicRepositoryInterface {
       _alphaClubErrorStreamController.stream;
   String _alphaTeamsErrorMsg = '';
 
-
-
   @override
-  getAlphaTeams() {
+  Future<AlphaTeamsResult> getAlphaTeams() {
     if (_alphaTeams != null) {
       _alphaTeamsStreamController.sink.add(_alphaTeams!);
+      return Future<AlphaTeamsResult>.value(
+          AlphaTeamsResult.success(_alphaTeams!));
     } else {
-      getAlphaTeamsFromServer();
+      return getAlphaTeamsFromServer();
     }
   }
 
-  getAlphaTeamsFromServer() async {
+  Future<AlphaTeamsResult> getAlphaTeamsFromServer() async {
     var alphaTeamResult = await publicAPI.getAlphaTeams();
     if (alphaTeamResult is SuccessAlphaTeams) {
       _alphaTeams = alphaTeamResult.alphaTeam;
@@ -164,6 +171,7 @@ class PublicRepo implements PublicRepositoryInterface {
       _alphaTeamsErrorMsg = alphaTeamResult.msg;
       _alphaTeamsErrorStreamController.sink.add(_alphaTeamsErrorMsg);
     }
+    return alphaTeamResult;
 
     // _alphaClub = await publicAPI.getAlphaClub();
   }
