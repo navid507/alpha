@@ -17,7 +17,8 @@ class DrawerModel extends ChangeNotifier {
       _accountingRepo; // = AccountingRepo.getInstance();
   RegisterState registerState = RegisterState.NotSetYet;
 
-  SwimmerResult activeSwimmer = SwimmerResult.error(-11, 'Not Assigned');
+  SwimmerResult activeSwimmer = SwimmerResult.error(11, 'Not Assigned');
+  // LoadingState activeSwimmerLoadingState = Loading
 
   DrawerModel() {
     _accountingRepo = AccountingRepo.getInstance(

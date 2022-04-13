@@ -40,18 +40,18 @@ class RegisterSwimmerModel extends ChangeNotifier {
           dialogState = DialogState.finish;
           _registerSwimmerStateController.sink.add(result);
         } else {
-          dialogState = DialogState.serverEroor;
+          dialogState = DialogState.serverError;
           error = result.msg;
           notifyListeners();
         }
       });
     } else {
       _accountingRepo.editSwimmer(curSwimmer).then((result) {
-        if (!result.isSuccess) {
+        if (result.isSuccess) {
           dialogState = DialogState.finish;
           _registerSwimmerStateController.sink.add(result);
         } else {
-          dialogState = DialogState.serverEroor;
+          dialogState = DialogState.serverError;
           error = result.msg;
           notifyListeners();
         }

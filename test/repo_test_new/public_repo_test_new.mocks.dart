@@ -2,8 +2,10 @@
 // in alpha/test/repo_test_new/public_repo_test_new.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i8;
+import 'dart:async' as _i9;
 
+import 'package:alpha/back/accounting/models/record/record_type_result.dart'
+    as _i7;
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart'
     as _i3;
 import 'package:alpha/back/public_repo/models/alpha_teams/alpha_teams_result.dart'
@@ -12,7 +14,7 @@ import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart'
     as _i4;
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers_result.dart'
     as _i5;
-import 'package:alpha/back/public_repo/public_apis.dart' as _i7;
+import 'package:alpha/back/public_repo/public_apis.dart' as _i8;
 import 'package:alpha/main_functions/http_functions.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -38,10 +40,13 @@ class _FakeTopSwimmersResult_3 extends _i1.Fake
 class _FakeAlphaTeamsResult_4 extends _i1.Fake implements _i6.AlphaTeamsResult {
 }
 
+class _FakeRecordTypesResult_5 extends _i1.Fake
+    implements _i7.RecordTypesResult {}
+
 /// A class which mocks [PublicApis].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPublicApis extends _i1.Mock implements _i7.PublicApis {
+class MockPublicApis extends _i1.Mock implements _i8.PublicApis {
   MockPublicApis() {
     _i1.throwOnMissingStub(this);
   }
@@ -56,27 +61,33 @@ class MockPublicApis extends _i1.Mock implements _i7.PublicApis {
       super.noSuchMethod(Invocation.setter(#httpCalls, _httpCalls),
           returnValueForMissingStub: null);
   @override
-  _i8.Future<_i3.AlphaClubResult> getAlphaClub({String? uid = r'-1'}) =>
+  _i9.Future<_i3.AlphaClubResult> getAlphaClub({String? uid = r'-1'}) =>
       (super.noSuchMethod(Invocation.method(#getAlphaClub, [], {#uid: uid}),
               returnValue:
                   Future<_i3.AlphaClubResult>.value(_FakeAlphaClubResult_1()))
-          as _i8.Future<_i3.AlphaClubResult>);
+          as _i9.Future<_i3.AlphaClubResult>);
   @override
-  _i8.Future<_i4.GalleryResult> getGallery({String? uid = r'-1'}) =>
+  _i9.Future<_i4.GalleryResult> getGallery({String? uid = r'-1'}) =>
       (super.noSuchMethod(Invocation.method(#getGallery, [], {#uid: uid}),
               returnValue:
                   Future<_i4.GalleryResult>.value(_FakeGalleryResult_2()))
-          as _i8.Future<_i4.GalleryResult>);
+          as _i9.Future<_i4.GalleryResult>);
   @override
-  _i8.Future<_i5.TopSwimmersResult> getTopSwimmers({String? uid = r'-1'}) =>
+  _i9.Future<_i5.TopSwimmersResult> getTopSwimmers({String? uid = r'-1'}) =>
       (super.noSuchMethod(Invocation.method(#getTopSwimmers, [], {#uid: uid}),
               returnValue: Future<_i5.TopSwimmersResult>.value(
                   _FakeTopSwimmersResult_3()))
-          as _i8.Future<_i5.TopSwimmersResult>);
+          as _i9.Future<_i5.TopSwimmersResult>);
   @override
-  _i8.Future<_i6.AlphaTeamsResult> getAlphaTeams() =>
+  _i9.Future<_i6.AlphaTeamsResult> getAlphaTeams() =>
       (super.noSuchMethod(Invocation.method(#getAlphaTeams, []),
               returnValue:
                   Future<_i6.AlphaTeamsResult>.value(_FakeAlphaTeamsResult_4()))
-          as _i8.Future<_i6.AlphaTeamsResult>);
+          as _i9.Future<_i6.AlphaTeamsResult>);
+  @override
+  _i9.Future<_i7.RecordTypesResult> getRecordTypes() => (super.noSuchMethod(
+          Invocation.method(#getRecordTypes, []),
+          returnValue:
+              Future<_i7.RecordTypesResult>.value(_FakeRecordTypesResult_5()))
+      as _i9.Future<_i7.RecordTypesResult>);
 }

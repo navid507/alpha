@@ -2,21 +2,24 @@
 // in alpha/test/periods_repo_test/period_repo_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i11;
+import 'dart:async' as _i12;
 
 import 'package:alpha/back/accounting/abstracts/accounting_api_abstract.dart'
     as _i9;
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart'
-    as _i15;
-import 'package:alpha/back/accounting/accounting_repo.dart' as _i13;
-import 'package:alpha/back/accounting/models/swimmer/swimmer.dart' as _i14;
+    as _i16;
+import 'package:alpha/back/accounting/accounting_repo.dart' as _i14;
+import 'package:alpha/back/accounting/models/record/record_result.dart' as _i10;
+import 'package:alpha/back/accounting/models/record/record_type.dart' as _i17;
+import 'package:alpha/back/accounting/models/swimmer/swimmer.dart' as _i15;
 import 'package:alpha/back/accounting/user_stored_data.dart' as _i8;
 import 'package:alpha/back/periods/models/medical/medical_result.dart' as _i7;
-import 'package:alpha/back/periods/models/period/period_result.dart' as _i6;
 import 'package:alpha/back/periods/models/period/periods_result.dart' as _i3;
+import 'package:alpha/back/periods/models/period/registered_period_result.dart'
+    as _i6;
 import 'package:alpha/back/periods/models/session/sessions_result.dart' as _i5;
-import 'package:alpha/back/periods/perdiods_apis.dart' as _i10;
-import 'package:alpha/back/periods/sessions_api.dart' as _i12;
+import 'package:alpha/back/periods/perdiods_apis.dart' as _i11;
+import 'package:alpha/back/periods/sessions_api.dart' as _i13;
 import 'package:alpha/main_functions/http_functions.dart' as _i2;
 import 'package:alpha/main_functions/main_models/api_result.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
@@ -39,7 +42,8 @@ class _FakeAPIResult_2 extends _i1.Fake implements _i4.APIResult {}
 
 class _FakeSessionsResult_3 extends _i1.Fake implements _i5.SessionsResult {}
 
-class _FakePeriodResult_4 extends _i1.Fake implements _i6.PeriodResult {}
+class _FakeRegisteredPeriodResult_4 extends _i1.Fake
+    implements _i6.RegisteredPeriodResult {}
 
 class _FakeMedicalsResult_5 extends _i1.Fake implements _i7.MedicalsResult {}
 
@@ -50,10 +54,12 @@ class _FakeUserStoredData_7 extends _i1.Fake implements _i8.UserStoredData {}
 class _FakeAccountingApiInterface_8 extends _i1.Fake
     implements _i9.AccountingApiInterface {}
 
+class _FakeRecordsResult_9 extends _i1.Fake implements _i10.RecordsResult {}
+
 /// A class which mocks [PeriodsApi].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPeriodsApi extends _i1.Mock implements _i10.PeriodsApi {
+class MockPeriodsApi extends _i1.Mock implements _i11.PeriodsApi {
   MockPeriodsApi() {
     _i1.throwOnMissingStub(this);
   }
@@ -68,19 +74,19 @@ class MockPeriodsApi extends _i1.Mock implements _i10.PeriodsApi {
       super.noSuchMethod(Invocation.setter(#http, _http),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<_i3.PeriodsResult> getAllPeriods() => (super.noSuchMethod(
+  _i12.Future<_i3.PeriodsResult> getAllPeriods() => (super.noSuchMethod(
           Invocation.method(#getAllPeriods, []),
           returnValue: Future<_i3.PeriodsResult>.value(_FakePeriodsResult_1()))
-      as _i11.Future<_i3.PeriodsResult>);
+      as _i12.Future<_i3.PeriodsResult>);
   @override
-  _i11.Future<_i3.PeriodsResult> getRegisteredPeriods({int? userID}) =>
+  _i12.Future<_i3.PeriodsResult> getRegisteredPeriods({int? userID}) =>
       (super.noSuchMethod(
               Invocation.method(#getRegisteredPeriods, [], {#userID: userID}),
               returnValue:
                   Future<_i3.PeriodsResult>.value(_FakePeriodsResult_1()))
-          as _i11.Future<_i3.PeriodsResult>);
+          as _i12.Future<_i3.PeriodsResult>);
   @override
-  _i11.Future<_i4.APIResult> registerPeriod(
+  _i12.Future<_i4.APIResult> registerPeriod(
           {String? userToken,
           int? userID,
           String? periodID,
@@ -95,9 +101,9 @@ class MockPeriodsApi extends _i1.Mock implements _i10.PeriodsApi {
                 #type: type
               }),
               returnValue: Future<_i4.APIResult>.value(_FakeAPIResult_2()))
-          as _i11.Future<_i4.APIResult>);
+          as _i12.Future<_i4.APIResult>);
   @override
-  _i11.Future<_i4.APIResult> cancelPeriod(
+  _i12.Future<_i4.APIResult> cancelPeriod(
           {String? userToken, int? userID, String? periodID}) =>
       (super.noSuchMethod(
               Invocation.method(#cancelPeriod, [], {
@@ -106,16 +112,16 @@ class MockPeriodsApi extends _i1.Mock implements _i10.PeriodsApi {
                 #periodID: periodID
               }),
               returnValue: Future<_i4.APIResult>.value(_FakeAPIResult_2()))
-          as _i11.Future<_i4.APIResult>);
+          as _i12.Future<_i4.APIResult>);
   @override
-  _i11.Future<_i4.APIResult> buyPeriod({int? userID, String? periodID}) =>
+  _i12.Future<_i4.APIResult> buyPeriod({int? userID, String? periodID}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #buyPeriod, [], {#userID: userID, #periodID: periodID}),
               returnValue: Future<_i4.APIResult>.value(_FakeAPIResult_2()))
-          as _i11.Future<_i4.APIResult>);
+          as _i12.Future<_i4.APIResult>);
   @override
-  _i11.Future<_i4.APIResult> getDiscount(
+  _i12.Future<_i4.APIResult> getDiscount(
           {String? userToken, int? userID, String? discountCode}) =>
       (super.noSuchMethod(
               Invocation.method(#getDiscount, [], {
@@ -124,13 +130,13 @@ class MockPeriodsApi extends _i1.Mock implements _i10.PeriodsApi {
                 #discountCode: discountCode
               }),
               returnValue: Future<_i4.APIResult>.value(_FakeAPIResult_2()))
-          as _i11.Future<_i4.APIResult>);
+          as _i12.Future<_i4.APIResult>);
 }
 
 /// A class which mocks [SessionApi].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSessionApi extends _i1.Mock implements _i12.SessionApi {
+class MockSessionApi extends _i1.Mock implements _i13.SessionApi {
   MockSessionApi() {
     _i1.throwOnMissingStub(this);
   }
@@ -145,35 +151,35 @@ class MockSessionApi extends _i1.Mock implements _i12.SessionApi {
       super.noSuchMethod(Invocation.setter(#http, _http),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<_i5.SessionsResult> getAllSessions(
+  _i12.Future<_i5.SessionsResult> getAllSessions(
           {String? periodID, String? token}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getAllSessions, [], {#periodID: periodID, #token: token}),
               returnValue:
                   Future<_i5.SessionsResult>.value(_FakeSessionsResult_3()))
-          as _i11.Future<_i5.SessionsResult>);
+          as _i12.Future<_i5.SessionsResult>);
   @override
-  _i11.Future<_i6.PeriodResult> getActivePeriodDetails(
+  _i12.Future<_i6.RegisteredPeriodResult> getActivePeriodDetails(
           {int? userID, String? token}) =>
       (super.noSuchMethod(
           Invocation.method(
               #getActivePeriodDetails, [], {#userID: userID, #token: token}),
-          returnValue:
-              Future<_i6.PeriodResult>.value(_FakePeriodResult_4())) as _i11
-          .Future<_i6.PeriodResult>);
+          returnValue: Future<_i6.RegisteredPeriodResult>.value(
+              _FakeRegisteredPeriodResult_4())) as _i12
+          .Future<_i6.RegisteredPeriodResult>);
   @override
-  _i11.Future<_i7.MedicalsResult> getAllMedicals(
+  _i12.Future<_i7.MedicalsResult> getAllMedicals(
           {int? userID, String? token}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getAllMedicals, [], {#userID: userID, #token: token}),
               returnValue:
                   Future<_i7.MedicalsResult>.value(_FakeMedicalsResult_5()))
-          as _i11.Future<_i7.MedicalsResult>);
+          as _i12.Future<_i7.MedicalsResult>);
   @override
-  _i11.Future<_i4.StateResult> setSessionScore(
-          {String? sessionID, int? score, String? comment, String? token}) =>
+  _i12.Future<_i4.StateResult> setSessionScore(
+          {String? sessionID, String? score, String? comment, String? token}) =>
       (super.noSuchMethod(
               Invocation.method(#setSessionScore, [], {
                 #sessionID: sessionID,
@@ -182,13 +188,13 @@ class MockSessionApi extends _i1.Mock implements _i12.SessionApi {
                 #token: token
               }),
               returnValue: Future<_i4.StateResult>.value(_FakeStateResult_6()))
-          as _i11.Future<_i4.StateResult>);
+          as _i12.Future<_i4.StateResult>);
 }
 
 /// A class which mocks [AccountingRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAccountingRepo extends _i1.Mock implements _i13.AccountingRepo {
+class MockAccountingRepo extends _i1.Mock implements _i14.AccountingRepo {
   MockAccountingRepo() {
     _i1.throwOnMissingStub(this);
   }
@@ -215,57 +221,73 @@ class MockAccountingRepo extends _i1.Mock implements _i13.AccountingRepo {
       super.noSuchMethod(Invocation.setter(#lastPhone, _lastPhone),
           returnValueForMissingStub: null);
   @override
-  _i11.Stream<_i14.Swimmer> get activeSwimmerStream => (super.noSuchMethod(
+  _i12.Stream<_i15.Swimmer> get activeSwimmerStream => (super.noSuchMethod(
       Invocation.getter(#activeSwimmerStream),
-      returnValue: Stream<_i14.Swimmer>.empty()) as _i11.Stream<_i14.Swimmer>);
+      returnValue: Stream<_i15.Swimmer>.empty()) as _i12.Stream<_i15.Swimmer>);
   @override
-  _i11.Stream<List<_i14.Swimmer>> get relativeSwimmersStream =>
+  _i12.Stream<List<_i15.Swimmer>> get relativeSwimmersStream =>
       (super.noSuchMethod(Invocation.getter(#relativeSwimmersStream),
-              returnValue: Stream<List<_i14.Swimmer>>.empty())
-          as _i11.Stream<List<_i14.Swimmer>>);
+              returnValue: Stream<List<_i15.Swimmer>>.empty())
+          as _i12.Stream<List<_i15.Swimmer>>);
   @override
-  _i11.Stream<_i15.RegisterState> get registerStateStream =>
+  _i12.Stream<_i16.RegisterState> get registerStateStream =>
       (super.noSuchMethod(Invocation.getter(#registerStateStream),
-              returnValue: Stream<_i15.RegisterState>.empty())
-          as _i11.Stream<_i15.RegisterState>);
+              returnValue: Stream<_i16.RegisterState>.empty())
+          as _i12.Stream<_i16.RegisterState>);
   @override
-  _i11.Future<String> get token =>
+  _i12.Future<String> get token =>
       (super.noSuchMethod(Invocation.getter(#token),
-          returnValue: Future<String>.value('')) as _i11.Future<String>);
+          returnValue: Future<String>.value('')) as _i12.Future<String>);
   @override
   int get userID =>
       (super.noSuchMethod(Invocation.getter(#userID), returnValue: 0) as int);
   @override
-  _i11.Future<_i15.RegisterState> getRegisterState() =>
+  _i12.Future<_i16.RegisterState> getRegisterState() =>
       (super.noSuchMethod(Invocation.method(#getRegisterState, []),
               returnValue:
-                  Future<_i15.RegisterState>.value(_i15.RegisterState.Nothing))
-          as _i11.Future<_i15.RegisterState>);
+                  Future<_i16.RegisterState>.value(_i16.RegisterState.Nothing))
+          as _i12.Future<_i16.RegisterState>);
   @override
-  _i11.Future<_i4.StateResult> registerPhone(String? phone) =>
+  _i12.Future<_i4.StateResult> registerPhone(String? phone) =>
       (super.noSuchMethod(Invocation.method(#registerPhone, [phone]),
               returnValue: Future<_i4.StateResult>.value(_FakeStateResult_6()))
-          as _i11.Future<_i4.StateResult>);
+          as _i12.Future<_i4.StateResult>);
   @override
-  _i11.Future<_i4.StateResult> verifyPhone(String? code) =>
+  _i12.Future<_i4.StateResult> verifyPhone(String? code) =>
       (super.noSuchMethod(Invocation.method(#verifyPhone, [code]),
               returnValue: Future<_i4.StateResult>.value(_FakeStateResult_6()))
-          as _i11.Future<_i4.StateResult>);
+          as _i12.Future<_i4.StateResult>);
   @override
-  dynamic changeRegisterState(_i15.RegisterState? state) =>
+  dynamic changeRegisterState(_i16.RegisterState? state) =>
       super.noSuchMethod(Invocation.method(#changeRegisterState, [state]));
   @override
-  dynamic changeActiveSwimmer(_i14.Swimmer? activeSwimmer) => super
+  _i12.Future<List<_i15.Swimmer>?> updateRelatedSwimmers() =>
+      (super.noSuchMethod(Invocation.method(#updateRelatedSwimmers, []),
+              returnValue: Future<List<_i15.Swimmer>?>.value())
+          as _i12.Future<List<_i15.Swimmer>?>);
+  @override
+  dynamic changeActiveSwimmer(_i15.Swimmer? activeSwimmer) => super
       .noSuchMethod(Invocation.method(#changeActiveSwimmer, [activeSwimmer]));
   @override
-  _i11.Future<_i4.StateResult> insertSwimmer(
-          _i14.Swimmer? swimmer, Map<String, String>? files) =>
-      (super.noSuchMethod(Invocation.method(#insertSwimmer, [swimmer, files]),
+  _i12.Future<_i4.StateResult> addSwimmer(_i15.Swimmer? swimmer) =>
+      (super.noSuchMethod(Invocation.method(#addSwimmer, [swimmer]),
               returnValue: Future<_i4.StateResult>.value(_FakeStateResult_6()))
-          as _i11.Future<_i4.StateResult>);
+          as _i12.Future<_i4.StateResult>);
   @override
-  _i11.Future<_i14.Swimmer?> getActiveSwimmer() =>
+  _i12.Future<_i4.StateResult> editSwimmer(_i15.Swimmer? swimmer) =>
+      (super.noSuchMethod(Invocation.method(#editSwimmer, [swimmer]),
+              returnValue: Future<_i4.StateResult>.value(_FakeStateResult_6()))
+          as _i12.Future<_i4.StateResult>);
+  @override
+  _i12.Future<_i15.Swimmer?> getActiveSwimmer() =>
       (super.noSuchMethod(Invocation.method(#getActiveSwimmer, []),
-              returnValue: Future<_i14.Swimmer?>.value())
-          as _i11.Future<_i14.Swimmer?>);
+              returnValue: Future<_i15.Swimmer?>.value())
+          as _i12.Future<_i15.Swimmer?>);
+  @override
+  _i12.Future<_i10.RecordsResult> getAllRecordsOf(
+          _i17.RecordType? recordType) =>
+      (super.noSuchMethod(Invocation.method(#getAllRecordsOf, [recordType]),
+              returnValue:
+                  Future<_i10.RecordsResult>.value(_FakeRecordsResult_9()))
+          as _i12.Future<_i10.RecordsResult>);
 }

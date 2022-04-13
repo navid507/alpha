@@ -8,10 +8,13 @@ import 'package:alpha/back/accounting/models/user_access_data.dart';
 import 'package:alpha/back/accounting/user_stored_data.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'abstracts/accounting_repo_abstract.dart';
+import 'models/record/record_result.dart';
+import 'models/record/record_type.dart';
 
 class AccountingRepo implements AccountingRepositoryInterface {
   // Initilization
@@ -123,6 +126,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
         changeRegisterState(RegisterState.OK);
       }
     }
+    updateFirebaseToken();
     return res.state;
   }
 
@@ -130,7 +134,24 @@ class AccountingRepo implements AccountingRepositoryInterface {
     _registerState = state;
     userStoredData.setRegisterState(_registerState);
     updateRegisterState();
-    // _registerStateController.sink.add(_registerState);
+  }
+
+  @override
+  updateFirebaseToken() async {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    var token = await _userToken;
+
+    if (token != null) {
+      var firebaseToken = await _firebaseMessaging.getToken();
+
+      if (firebaseToken != null) {
+        accountingApi.updateToken(token: token, firebaseToken: firebaseToken);
+      } else {
+        _firebaseMessaging.onTokenRefresh.listen((firebaseToken) {
+          accountingApi.updateToken(token: token, firebaseToken: firebaseToken);
+        });
+      }
+    }
   }
 
   @override
@@ -198,9 +219,12 @@ class AccountingRepo implements AccountingRepositoryInterface {
 
   @override
   Future<StateResult> editSwimmer(Swimmer swimmer) async {
-    var result = await accountingApi.editUser(swimmer: swimmer);
+    var tempToken = await _userToken;
+    var result = await accountingApi.editUser(
+        swimmer: swimmer, userToken: tempToken ?? "");
     if ((result.isSuccess)) {
       _relativeSwimmers = null;
+      _activeSwimmer = null;
       updateRelatedSwimmers();
     }
 
@@ -223,6 +247,22 @@ class AccountingRepo implements AccountingRepositoryInterface {
     } else {
       await updateRelatedSwimmers();
       return Future<Swimmer?>.value(_activeSwimmer);
+    }
+  }
+
+  @override
+  Future<RecordsResult> getAllRecordsOf(RecordType recordType) async {
+    var tempToken = await _userToken;
+    if (tempToken != null) {
+      if (_activeSwimmer != null) {
+        var allRecords = await accountingApi.getRecordOfUser(
+            _activeSwimmer!.sid, recordType.id, tempToken);
+        return allRecords;
+      } else {
+        return RecordsResult.error(1, "no active user set");
+      }
+    } else {
+      return RecordsResult.error(2, "no token set");
     }
   }
 }

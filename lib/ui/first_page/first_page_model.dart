@@ -32,10 +32,6 @@ class FirstPageModel extends ChangeNotifier {
   LoadingState alphaTeamsState = LoadingState.NotStarted;
 
   FirstPageModel() {
-    // UserStoredData.createUserStoredData(deviceInfo: DeviceInfoPlugin())
-    //     .then((userStoredData) {
-    //   _accountingRepo = AccountingRepo.getInstance(userStoredData: userStoredData);
-    // });
     _accountingRepo = AccountingRepo.getInstance(
         userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
   }

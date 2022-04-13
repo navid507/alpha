@@ -15,6 +15,8 @@ class AlphaTextFieldBuilder {
   var inputType = TextInputType.text;
   TextEditingController? textEditingController;
   FormFieldValidator<String>? validator; // = (value) => null;
+  var maxLine = 1;
+  int? minLine;
 
   // var fittedBox = true;
 
@@ -69,6 +71,12 @@ class AlphaTextFieldBuilder {
     return this;
   }
 
+  AlphaTextFieldBuilder setMinLine(int minLine) {
+    this.minLine = minLine;
+    this.maxLine = minLine * 2;
+    return this;
+  }
+
   AlphaTextFieldBuilder setErrorText(String errorText) {
     // fontColor = color;
     this.errorText = errorText;
@@ -99,6 +107,8 @@ class AlphaTextFieldBuilder {
         padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
         child: SizedBox(
             child: TextFormField(
+                minLines: minLine,
+                maxLines: maxLine,
                 onTap: onTap,
                 validator: validator,
                 controller: textEditingController,
@@ -114,10 +124,6 @@ class AlphaTextFieldBuilder {
                     hintText: hint,
                     errorText: (errorText.isNotEmpty) ? errorText : null,
                     fillColor: Colors.brown,
-                    // errorBorder: OutlineInputBorder(
-                    //     borderRadius: BorderRadius.circular(4.0),
-                    //     borderSide:
-                    //     BorderSide(color: AlphaColors.Red, width: 0.75)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4.0),
                         borderSide:
@@ -172,7 +178,7 @@ getAlphaTextFormFieldNormal(
       .setErrorText(error)
       .setValidator(validator)
       .setTextEditingController(textEditingController)
-      .setInputType(TextInputType.phone)
+      .setInputType(TextInputType.text)
       .build();
 }
 
@@ -189,10 +195,25 @@ getAlphaTextFormFieldNumber(
       .setErrorText(error)
       .setValidator(validator)
       .setTextEditingController(textEditingController)
+      .setInputType(TextInputType.number)
+      .build();
+}
+getAlphaTextFormFieldPhone(
+    {required String hint,
+      String text = '',
+      String error = '',
+      FormFieldValidator<String>? validator,
+      required TextEditingController textEditingController}) {
+  return AlphaTextFieldBuilder(hint: hint, text: text)
+      .setWhiteColor()
+      .setTextAlignment(TextAlign.end)
+      .setAlignment(Alignment.center)
+      .setErrorText(error)
+      .setValidator(validator)
+      .setTextEditingController(textEditingController)
       .setInputType(TextInputType.phone)
       .build();
 }
-
 getAlphaTextFormFieldNormalForm(
     {required String hint,
     String error = '',
@@ -207,7 +228,24 @@ getAlphaTextFormFieldNormalForm(
       .setValidator(validator)
       .setHintColor(AlphaColors.backTopSwimmers)
       .setTextEditingController(textEditingController)
-      .setInputType(TextInputType.phone)
+      .setInputType(TextInputType.text)
       .setOnTap(onTap)
+      .build();
+}
+
+getAlphaTextFormFieldComment(
+    {required String hint,
+    String error = '',
+    FormFieldValidator<String>? validator,
+    required TextEditingController textEditingController}) {
+  return AlphaTextFieldBuilder(hint: hint)
+      .setWhiteColor()
+      .setMinLine(5)
+      .setTextAlignment(TextAlign.start)
+      .setAlignment(Alignment.center)
+      .setErrorText(error)
+      .setValidator(validator)
+      .setTextEditingController(textEditingController)
+      .setInputType(TextInputType.text)
       .build();
 }

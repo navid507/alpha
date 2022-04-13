@@ -6,18 +6,21 @@ class AlphaSwimmer {
   String score;
   String sessions;
   String image;
+  String id;
 
   AlphaSwimmer(
       {required this.score,
       required this.image,
       required this.fullName,
-      required this.sessions});
+      required this.sessions,
+      required this.id});
 
   factory AlphaSwimmer.fromJson(Map<String, dynamic> json) {
     return AlphaSwimmer(
         score: json['average'],
         image: assetsURL + json['image'],
         fullName: json['name'],
-        sessions: json['present']);
+        sessions: json['present'],
+        id: json['user_id']);
   }
 }

@@ -41,7 +41,7 @@ class VerifyPhoneModel extends ChangeNotifier {
         state = DialogState.finish;
       } else {
         error = result.msg;
-        state = DialogState.serverEroor;
+        state = DialogState.serverError;
       }
       notifyListeners();
     });

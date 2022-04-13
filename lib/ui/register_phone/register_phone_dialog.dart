@@ -34,16 +34,6 @@ class _RegisterPhoneDialogState extends State<RegisterPhoneDialog> {
       selector: (_, model) => model.state,
       builder: (dialogContext, state, child) {
         return initialDialog(state);
-        // switch (state) {
-        //   case DialogState.normal:
-        //     return initialDialog();
-        //   case DialogState.loading:
-        //     return loadingDialog();
-        //   case DialogState.error:
-        //     return loadingDialog();
-        //   case DialogState.finish:
-        //     return initialDialog();
-        // }
       },
     );
   }
@@ -58,7 +48,7 @@ class _RegisterPhoneDialogState extends State<RegisterPhoneDialog> {
           }
           return getAppLocalization(context).pleaseEnterValidPhone;
         },
-        defaultText: '09155101452',
+        defaultText: '',
         title: getAppLocalization(context).registerPhone,
         icon: 'assets/images/im_register_phone.png',
         desc: getAppLocalization(context).enterPhoneNumber,

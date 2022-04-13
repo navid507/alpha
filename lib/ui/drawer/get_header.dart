@@ -1,9 +1,5 @@
-import 'package:alpha/ui/first_page/first_page_model.dart';
-import 'package:alpha/ui/first_page/first_page_screen.dart';
-import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../my_widgets/get_image.dart';
@@ -13,7 +9,9 @@ enum AlphaRoutes {
   Home,
   ChangeUser,
   Periods,
+  Gallery,
   Profile,
+  PublicProfile,
   AboutUs,
   ContactUs,
   TopSwimmers,
@@ -21,6 +19,9 @@ enum AlphaRoutes {
   Teams,
   RegisteredPeriods,
   MedicalSessions,
+  SwimmerRecords,
+  Rules,
+  Payment,
   Sessions,
   SessionDetails,
 }

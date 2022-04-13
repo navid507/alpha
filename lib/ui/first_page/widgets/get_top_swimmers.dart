@@ -1,4 +1,5 @@
 import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
+import 'package:alpha/ui/first_page/widgets/get_alpha_club.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/my_widgets/get_image.dart';
@@ -22,7 +23,10 @@ getTopSwimmersHeader({required BuildContext context, Function()? onPressed}) {
       ));
 }
 
-getTopSwimmers({required TopSwimmer swimmer, required int rank}) {
+getTopSwimmers(
+    {required BuildContext context,
+    required TopSwimmer swimmer,
+    required int rank}) {
   var containerWidth = 100.0;
   var containerHeight = 170.0;
   var avatarTopPadding = 50.0;
@@ -55,28 +59,33 @@ getTopSwimmers({required TopSwimmer swimmer, required int rank}) {
       break;
   }
 
-  return Container(
-    child: Stack(
-      children: [
-        getBackTopSwimmer(topPadding: avatarTopPadding),
-        Column(
-          children: [
-            Stack(
-              children: [
-                avatar!,
-                getRankCircle(rank: rankString, color: rankColor)
-              ],
-              alignment: Alignment.bottomCenter,
-            ),
-            getAlphaTextSwimmer(swimmer.name),
-            getAlphaTextMoreYellow(swimmer.score)
-          ],
-        )
-      ],
-      alignment: Alignment.topCenter,
+  return GestureDetector(
+    onTap: () {
+      showPublicProfile(context, swimmer.id);
+    },
+    child: Container(
+      child: Stack(
+        children: [
+          getBackTopSwimmer(topPadding: avatarTopPadding),
+          Column(
+            children: [
+              Stack(
+                children: [
+                  avatar!,
+                  getRankCircle(rank: rankString, color: rankColor)
+                ],
+                alignment: Alignment.bottomCenter,
+              ),
+              getAlphaTextSwimmer(swimmer.name),
+              getAlphaTextMoreYellow(swimmer.score)
+            ],
+          )
+        ],
+        alignment: Alignment.topCenter,
+      ),
+      height: containerHeight,
+      width: containerWidth,
     ),
-    height: containerHeight,
-    width: containerWidth,
   );
 }
 

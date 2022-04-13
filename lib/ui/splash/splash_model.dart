@@ -4,10 +4,10 @@ import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:alpha/back/accounting/accounting_repo.dart';
 import 'package:alpha/back/accounting/user_stored_data.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 
 class SplashModelPhoneState extends ChangeNotifier {}
 
@@ -31,6 +31,12 @@ class SplashModel extends ChangeNotifier {
         userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
 
     // checkPhoneRegisterState();
+  }
+
+  Future<bool> initFirebase() async {
+    // await Firebase.initializeApp();
+    _accountingRepo!.updateFirebaseToken();
+    return true;
   }
 
   void checkPhoneRegisterState() {

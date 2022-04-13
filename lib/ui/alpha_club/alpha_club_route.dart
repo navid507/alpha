@@ -5,6 +5,7 @@ import 'package:alpha/ui/alpha_club/alpha_club_model.dart';
 import 'package:alpha/ui/drawer/alpha_drawer_widget.dart';
 import 'package:alpha/ui/drawer/drawer_model.dart';
 import 'package:alpha/ui/drawer/get_header.dart';
+import 'package:alpha/ui/first_page/widgets/get_alpha_club.dart';
 import 'package:alpha/ui/first_page/widgets/get_top_swimmers.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
@@ -136,7 +137,7 @@ class _AlphaClubRouteState extends State<AlphaClubRoute> {
     return ListView(scrollDirection: Axis.vertical, children: [
       Container(
         padding: EdgeInsets.only(bottom: 12),
-        child: getAlphaTextTitle1Yellow(model.alphaClub!.alphaSwimmers.title),
+        child: getAlphaTextHeaderYellow(model.alphaClub!.alphaSwimmers.title),
         alignment: Alignment.center,
         width: getScreenWidth(context),
       ),
@@ -148,7 +149,7 @@ class _AlphaClubRouteState extends State<AlphaClubRoute> {
       ),
       Container(
         padding: EdgeInsets.only(bottom: 12, top: 24),
-        child: getAlphaTextTitle1Yellow(model.alphaClub!.betaSwimmers.title),
+        child: getAlphaTextHeaderYellow(model.alphaClub!.betaSwimmers.title),
         alignment: Alignment.center,
         width: getScreenWidth(context),
       ),
@@ -160,7 +161,7 @@ class _AlphaClubRouteState extends State<AlphaClubRoute> {
       ),
       Container(
         padding: EdgeInsets.only(bottom: 12, top: 24),
-        child: getAlphaTextTitle1Yellow(model.alphaClub!.omegaSwimmers.title),
+        child: getAlphaTextHeaderYellow(model.alphaClub!.omegaSwimmers.title),
         alignment: Alignment.center,
         width: getScreenWidth(context),
       ),
@@ -212,7 +213,7 @@ class _AlphaClubRouteState extends State<AlphaClubRoute> {
         containerWidth = 100.0;
         containerHeight = 130.0;
         avatarTopPadding = 40.0;
-        avatar = getAvatarImageTOmegaSwimmer(swimmer.image);
+        avatar = getAvatarImageOmegaSwimmer(swimmer.image);
         nameTextView = getOmegaTextSwimmer(swimmer.fullName);
         sessionTextView = getAlphaTextMoreYellow(sessionText);
         rankColor = AlphaColors.Bronze;
@@ -221,18 +222,22 @@ class _AlphaClubRouteState extends State<AlphaClubRoute> {
         break;
     }
 
-    return Container(
-      child: Stack(
-        children: [
-          back,
-          Column(
-            children: [avatar!, nameTextView, sessionTextView],
-          )
-        ],
-        alignment: Alignment.topCenter,
+    return GestureDetector(onTap: (){
+      showPublicProfile(context, swimmer.id);
+    },
+      child: Container(
+        child: Stack(
+          children: [
+            back,
+            Column(
+              children: [avatar!, nameTextView, sessionTextView],
+            )
+          ],
+          alignment: Alignment.topCenter,
+        ),
+        height: containerHeight,
+        width: containerWidth,
       ),
-      height: containerHeight,
-      width: containerWidth,
     );
   }
 }

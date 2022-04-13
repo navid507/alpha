@@ -20,6 +20,7 @@ class AlphaColors {
   static const TextDark = Color(0xFF3F3F3F);
   static const backDrawer = Color(0xFF4C4C4C);
   static const backDialog = Color(0xFF434242);
+  static const backCoach = Color(0xFF4F4E4E);
   static const cancelButtonDialog = Color(0xFF5C5A5A);
 
   static const backRegisterForm = Color(0xFF404040);
@@ -50,16 +51,26 @@ class AlphaColors {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [_ImageGalleryGradientTop, _ImageGalleryGradientBottom]);
+
+  static const _PublicImageGradientTop = Color(0x00201943);
+  static const _PublicImageGradientBottom = backDialog;
+  static const PublicImageGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [_PublicImageGradientTop, _PublicImageGradientBottom]);
 }
 
 class AlphaSizes {
   static const TopHeader = 70.0;
   static const TopHeaderBar = 30.0;
   static const NotchHeight = 24.0;
+  static const StandardHeight = 12.0;
 
   static late bool isNeedSafeArea;
 
   static double getTopPadding({double constValue = 0}) {
-    return AlphaSizes.isNeedSafeArea ? NotchHeight + constValue : constValue;
+    return AlphaSizes.isNeedSafeArea
+        ? NotchHeight + constValue
+        : StandardHeight + constValue;
   }
 }

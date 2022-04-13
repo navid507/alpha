@@ -82,7 +82,7 @@ class _RegisteredPeriodsRouteState extends State<RegisteredPeriodsRoute> {
             case LoadingState.Loaded:
               {
                 // return getLoadingView();
-                return getTopSwimmersListView();
+                return getPeriodsListView();
               }
             case LoadingState.LoadError:
               return getRetryButton();
@@ -90,7 +90,7 @@ class _RegisteredPeriodsRouteState extends State<RegisteredPeriodsRoute> {
         });
   }
 
-  getTopSwimmersListView() {
+  getPeriodsListView() {
     List<Widget> all = model.allRegisteredPeriods!.map<Widget>((period) {
       return getPeriodView(period);
     }).toList();

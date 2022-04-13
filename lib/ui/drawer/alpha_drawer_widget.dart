@@ -1,19 +1,26 @@
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:alpha/back/accounting/models/swimmer/swimmer_result.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
+import 'package:alpha/ui/about_us/about_us_route.dart';
 import 'package:alpha/ui/alpha_club/alpha_club_model.dart';
 import 'package:alpha/ui/alpha_club/alpha_club_route.dart';
+import 'package:alpha/ui/alpha_team_details/alpha_teams_model.dart';
+import 'package:alpha/ui/alpha_team_details/alpha_teams_route.dart';
 import 'package:alpha/ui/change_user_dialog/change_user_dialog.dart';
 import 'package:alpha/ui/change_user_dialog/change_user_model.dart';
+import 'package:alpha/ui/contact_us/contact_us_route.dart';
 import 'package:alpha/ui/drawer/drawer_model.dart';
 import 'package:alpha/ui/drawer/get_header.dart';
 import 'package:alpha/ui/first_page/first_page_model.dart';
 import 'package:alpha/ui/first_page/first_page_screen.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
+import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/my_widgets/user_image.dart';
 import 'package:alpha/ui/periods/period_route.dart';
 import 'package:alpha/ui/periods/periods_model.dart';
+import 'package:alpha/ui/profile/profile_model.dart';
+import 'package:alpha/ui/profile/profile_route.dart';
 import 'package:alpha/ui/register_phone/register_phone_dialog.dart';
 import 'package:alpha/ui/register_phone/register_phone_model.dart';
 import 'package:alpha/ui/top_swimmers/top_swimmers_model.dart';
@@ -88,20 +95,56 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
   }
 
   getHeaderContent({required SwimmerResult swimmerResult}) {
-    return (swimmerResult is SuccessSwimmer)
-        ? Column(
-            children: [
-              getAvatarImageDrawer(swimmerResult.swimmer.image),
-              getAlphaTextTitle1White(swimmerResult.swimmer.fullName)
-            ],
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-          )
-        : Column(
-            children: [getAvatarImageDrawerEmpty()],
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-          );
+    if (swimmerResult is SuccessSwimmer) {
+      return GestureDetector(
+        child: Column(
+          children: [
+            getAvatarImageDrawer(swimmerResult.swimmer.image),
+            getAlphaTextTitle1White(swimmerResult.swimmer.fullName)
+          ],
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+        ),
+        onTap: () {
+          showProfileRoute();
+        },
+      );
+    } else if (swimmerResult is ErrorSwimmer) {
+      if (swimmerResult.code == 11) {
+        return Column(
+          children: [/*getAvatarImageDrawerEmpty(),*/ getLoadingView()],
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+        );
+      } else {
+        return Column(
+          children: [
+            getAvatarImageDrawerEmpty(),
+            getAlphaDialogButtonCancel(
+                text: getAppLocalization(context).registerNow,
+                onPressed: () {
+                  showRegisterPhoneDialog();
+                })
+          ],
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+        );
+      }
+    }
+  }
+
+  getLoadingView() {
+    return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.all(5.0),
+      child: CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        color: Colors.red,
+        strokeWidth: 2.0,
+      ),
+      height: 20,
+      width: 20,
+    );
   }
 
   getHomeTile() {
@@ -167,7 +210,6 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           title: AppLocalizations.of(drawerContext)!.periods,
           icon: 'assets/images/ic_menu_periods.png'),
       onTap: () {
-        resetRegisterState();
         Navigator.pop(drawerContext);
       },
     );
@@ -197,7 +239,6 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           title: AppLocalizations.of(drawerContext)!.aboutUs,
           icon: 'assets/images/ic_menu_about_us.png'),
       onTap: () {
-        resetRegisterState();
         Navigator.pop(drawerContext);
       },
     );
@@ -208,7 +249,9 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
       title: getDrawerElement(
           title: AppLocalizations.of(drawerContext)!.aboutUs,
           icon: 'assets/images/ic_menu_about_us_unselected.png'),
-      onTap: () {},
+      onTap: () {
+        showAboutUsRoute();
+      },
     );
   }
 
@@ -225,7 +268,6 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           title: AppLocalizations.of(drawerContext)!.inTeamChallenges,
           icon: 'assets/images/ic_menu_alpha_teams.png'),
       onTap: () {
-        resetRegisterState();
         Navigator.pop(drawerContext);
       },
     );
@@ -236,7 +278,9 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
       title: getDrawerElement(
           title: AppLocalizations.of(drawerContext)!.inTeamChallenges,
           icon: 'assets/images/ic_menu_about_us_unselected.png'),
-      onTap: () {},
+      onTap: () {
+        showTeamsRoute();
+      },
     );
   }
 
@@ -282,7 +326,6 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           title: AppLocalizations.of(drawerContext)!.topSwimmers,
           icon: 'assets/images/ic_menu_top_swimmers.png'),
       onTap: () {
-        resetRegisterState();
         Navigator.pop(drawerContext);
       },
     );
@@ -342,7 +385,6 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           title: AppLocalizations.of(drawerContext)!.contactUs,
           icon: 'assets/images/ic_menu_contact_us.png'),
       onTap: () {
-        resetRegisterState();
         Navigator.pop(drawerContext);
       },
     );
@@ -353,7 +395,9 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
       title: getDrawerElement(
           title: AppLocalizations.of(drawerContext)!.contactUs,
           icon: 'assets/images/ic_menu_contact_us_unselected.png'),
-      onTap: () {},
+      onTap: () {
+        showContactUsRoute();
+      },
     );
   }
 
@@ -426,8 +470,8 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           title: AppLocalizations.of(drawerContext)!.setUserPhone,
           icon: 'assets/images/ic_menu_register_phone_unselected.png'),
       onTap: () {
-        // showRegisterPhoneDialog();
-        requestActiveSwimmer();
+        showRegisterPhoneDialog();
+        // requestActiveSwimmer();
       },
     );
   }
@@ -486,11 +530,6 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
 
   requestActiveSwimmer() {
     Provider.of<DrawerModel>(drawerContext, listen: false).getActiveSwimmer();
-  }
-
-//todo remove this function
-  resetRegisterState() {
-    Provider.of<DrawerModel>(drawerContext, listen: false).resetRegisterState();
   }
 
   showRegisterPhoneDialog() {
@@ -598,6 +637,7 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
   }
 
   showFirstPageRoute() {
+    closeDrawer();
     Future.delayed(
         Duration.zero,
         () => Navigator.pushReplacement(
@@ -609,9 +649,10 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
   }
 
   showTopSwimmersRoute() {
+    closeDrawer();
     Future.delayed(
         Duration.zero,
-        () => Navigator.pushReplacement(
+        () => Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ChangeNotifierProvider<TopSwimmersModel>(
@@ -620,9 +661,10 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
   }
 
   showAlphaClubRoute() {
+    closeDrawer();
     Future.delayed(
         Duration.zero,
-        () => Navigator.pushReplacement(
+        () => Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ChangeNotifierProvider<AlphaClubModel>(
@@ -631,13 +673,58 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
   }
 
   showPeriodsRoute() {
+    closeDrawer();
     Future.delayed(
         Duration.zero,
-        () => Navigator.pushReplacement(
+        () => Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ChangeNotifierProvider<PeriodsModel>(
                     create: (context) => PeriodsModel(),
                     child: PeriodRoute()))));
+  }
+
+  showProfileRoute() {
+    closeDrawer();
+    Future.delayed(
+        Duration.zero,
+        () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider<ProfileModel>(
+                    create: (context) => ProfileModel(),
+                    child: ProfileRoute()))));
+  }
+
+  showAboutUsRoute() {
+    closeDrawer();
+    Future.delayed(
+        Duration.zero,
+        () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AboutUsRoute())));
+  }
+
+  showContactUsRoute() {
+    closeDrawer();
+    Future.delayed(
+        Duration.zero,
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ContactUsRoute())));
+  }
+
+  showTeamsRoute() {
+    closeDrawer();
+    Future.delayed(
+        Duration.zero,
+        () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider<AlphaTeamsModel>(
+                    create: (context) => AlphaTeamsModel(),
+                    child: AlphaTeamsRoute()))));
+  }
+
+  closeDrawer() {
+    Navigator.pop(context);
   }
 }

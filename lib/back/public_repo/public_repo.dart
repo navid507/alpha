@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:alpha/back/accounting/models/record/record_type.dart';
+import 'package:alpha/back/accounting/models/record/record_type_result.dart';
 import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
 import 'package:alpha/back/public_repo/abstracts/public_repo_abstracts.dart';
 import 'package:alpha/back/public_repo/models/alpha_club/alpha_club_result.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery.dart';
 import 'package:alpha/back/public_repo/models/gallery/gallery_result.dart';
+import 'package:alpha/back/public_repo/models/public_profile/public_profile.dart';
+import 'package:alpha/back/public_repo/models/public_profile/public_profile_result.dart';
 
 import 'models/alpha_club/alpha_club.dart';
 import 'models/alpha_teams/alpha_teams.dart';
@@ -174,5 +178,28 @@ class PublicRepo implements PublicRepositoryInterface {
     return alphaTeamResult;
 
     // _alphaClub = await publicAPI.getAlphaClub();
+  }
+
+  List<RecordType>? _allSwimTypes;
+
+  @override
+  Future<RecordTypesResult> getAllSwimTypes() async {
+    if (_allSwimTypes == null) {
+      var allSwimTypes = await publicAPI.getRecordTypes();
+
+      if (allSwimTypes is SuccessRecordTypes) {
+        _allSwimTypes = allSwimTypes.recordTypes;
+      } else if (allSwimTypes is ErrorRecordTypes) {}
+      return allSwimTypes;
+    } else {
+      return Future<RecordTypesResult>.value(
+          RecordTypesResult.success(_allSwimTypes!));
+    }
+  }
+
+  @override
+  Future<PublicProfileResult> getPublicProfile(
+      {required String swimmerID}) async {
+    return publicAPI.getPublicProfile(swimmerID: swimmerID);
   }
 }

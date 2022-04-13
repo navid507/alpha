@@ -6,18 +6,19 @@ import 'package:alpha/back/accounting/models/swimmer/swimmers_result.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 
+import '../global_constants.dart';
 import 'models/record/record.dart';
 import 'models/record/record_result.dart';
 
 class AccountingURLs {
-  static const String _root = "http://orkaswim.ir/index.php/alpha_api/user";
+  static const String _root = "$mainUrl/index.php/alpha_api/user";
   static const String RelatedSwimmers = "$_root/relativeswimmer";
   static const String RegisterPhone = "$_root/addphone";
   static const String Verify = "$_root/verify";
   static const String RegisterSwimmer = "$_root/register";
   static const String EditSwimmer = "$_root/profile";
-  static const String RecordTypes = "$_root/record_type";
   static const String RecordOfUser = "$_root/record";
+  static const String updateToken = "$_root/updateToken";
 
 // Profile
 }
@@ -82,31 +83,17 @@ class AccountingAPI implements AccountingApiInterface {
   }
 
   @override
-  Future<APIResult> editUser({required Swimmer swimmer}) async {
+  Future<APIResult> editUser(
+      {required Swimmer swimmer, required String userToken}) async {
     // var res = await http.get(url: AccountingURLs.RegisterSwimmer);
+    Map<String, dynamic> body = swimmer.toJson();
+    body['private'] = userToken;
+
     var res = await http.multiPartPost(
         url: AccountingURLs.EditSwimmer,
-        body: swimmer.toJson(),
+        body: body,
         files: swimmer.toJsonFiles());
     return res;
-  }
-
-
-  @override
-  Future<RecordTypesResult> getRecordTypes() async {
-    List<RecordType> records = List.empty(growable: true);
-
-    var res = await http.get(url: AccountingURLs.RecordTypes);
-
-    if (res.isSuccess) {
-      List<dynamic> swimmersJson = res.data;
-      swimmersJson.forEach((element) {
-        records.add(RecordType.fromJson(element));
-      });
-
-      return RecordTypesResult.success(records);
-    }
-    return RecordTypesResult.error(res.state.error, res.state.msg);
   }
 
   @override
@@ -122,6 +109,7 @@ class AccountingAPI implements AccountingApiInterface {
     // var res = await http.get(url: "${AccountingURLs.RecordOfUser}/$userID/$type/$token");
     var res = await http.post(url: AccountingURLs.RecordOfUser, body: body);
 
+    Record.reset();
     if (res.isSuccess) {
       List<dynamic> recordsJson = res.data;
       recordsJson.forEach((element) {
@@ -131,6 +119,17 @@ class AccountingAPI implements AccountingApiInterface {
       return RecordsResult.success(records);
     }
     return RecordsResult.error(res.state.error, res.state.msg);
+  }
+
+  @override
+  Future<APIResult> updateToken(
+      {required String token, required String firebaseToken}) async {
+    Map<String, dynamic> body = Map();
+    body['private'] = token;
+    body['token'] = firebaseToken;
+
+    var res = await http.post(url: AccountingURLs.updateToken, body: body);
+    return res;
   }
 
 /*

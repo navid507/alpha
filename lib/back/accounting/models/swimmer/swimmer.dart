@@ -24,6 +24,7 @@ class Swimmer {
   String? score = "0";
   String reagent = "";
   String image = "";
+  String? publicImage;
   String nationalImage = "";
   String shenasImage = "";
   String insuranceImage = "";
@@ -34,7 +35,7 @@ class Swimmer {
 
   String familiarityType = '0';
 
-  int get id => int.parse(sid);
+  int get id => int.tryParse(sid) ?? -1;
 
   XFile? profileImageFile;
   XFile? melliImageFile;
@@ -45,22 +46,22 @@ class Swimmer {
   factory Swimmer.emptySwimmer() {
     return Swimmer(
         sid: '-1',
-        code: '0941959384',
-        phone: '09155101452',
-        firstName: 'test name',
-        lastName: 'test family',
-        birthDate: '1360/02/20',
-        homeAddress: 'sanabad',
-        homePhone: '05137601101',
+        code: '',
+        phone: '',
+        firstName: '',
+        lastName: '',
+        birthDate: '',
+        homeAddress: '',
+        homePhone: '',
         schoolAddress: '',
         schoolPhone: '',
         schoolRegion: '',
         fatherEducation: '',
         fatherJob: '',
-        fatherPhone: '09366743096',
+        fatherPhone: '',
         motherEducation: '',
         motherJob: '',
-        motherPhone: '09366743096',
+        motherPhone: '',
         useService: '',
         reagent: '',
         image: '',
@@ -69,7 +70,8 @@ class Swimmer {
         shenasImage: '',
         insuranceImage: '',
         eshtegalImage: '',
-        familiarity: '');
+        familiarity: '',
+        publicImage: '');
   }
 
   Swimmer(
@@ -95,6 +97,7 @@ class Swimmer {
       this.score,
       required this.reagent,
       required this.image,
+      this.publicImage,
       required this.nationalImage,
       required this.shenasImage,
       required this.insuranceImage,
@@ -125,6 +128,7 @@ class Swimmer {
         reagent: json['reagent'],
         familiarity: json['introduction'],
         image: json['image'],
+        publicImage: json['public_image'],
         nationalImage: json['national_image'],
         shenasImage: json['shenas_image'],
         insuranceImage: json['insurance_image'],

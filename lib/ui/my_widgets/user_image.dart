@@ -46,9 +46,11 @@ class AvatarImage extends StatelessWidget {
       child: CircleAvatar(
         radius: size,
         backgroundColor: backColor,
-        backgroundImage: (isAsset)
-            ? AssetImage(imageUrl)
-            : NetworkImage(imageUrl) as ImageProvider,
+        backgroundImage: (imageUrl.isEmpty)
+            ? null
+            : (isAsset)
+                ? AssetImage(imageUrl)
+                : NetworkImage(imageUrl) as ImageProvider,
       ),
       decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -228,8 +230,6 @@ getAvatarImageRegisterForm(String image) {
       .build();
 }
 
-
-
 getAvatarImageAlphaClubSwimmer(String image) {
   return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)
       .setSize(size: 45.0)
@@ -248,12 +248,59 @@ getAvatarImageBetaClubSwimmer(String image) {
       .build();
 }
 
-getAvatarImageTOmegaSwimmer(String image) {
+getAvatarImageOmegaSwimmer(String image) {
   return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)
       .setSize(size: 25.0)
       .setMargin(margin: 3.0)
       .setBorderColor(borderColor: AlphaColors.Bronze)
       .setBorderSize(borderSize: 1.0)
+      .build();
+}
+
+getAvatarImageTeacherSmall(String image) {
+  return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)
+      .setSize(size: 20.0)
+      .setMargin(margin: 2.0)
+      .setBorderColor(borderColor: AlphaColors.White)
+      .setBorderSize(borderSize: 1.0)
+      .build();
+}
+
+getAvatarImagePeriodSmall(String image) {
+  return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)
+      .setSize(size: 20.0)
+      .setBackColor(backColor: AlphaColors.White.withAlpha(10))
+      .setAsset(isAsset: true)
+      .setMargin(margin: 2.0)
+      .setBorderColor(borderColor: AlphaColors.White.withAlpha(10))
+      .setBorderSize(borderSize: 1.0)
+      .build();
+}
+
+getAvatarImageFirstInTeamSwimmerMain(String image) {
+  return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)
+      .setSize(size: 30.0)
+      .setMargin(margin: 7.0)
+      .setBorderColor(borderColor: AlphaColors.Gold)
+      .setBorderSize(borderSize: 2)
+      .build();
+}
+
+getAvatarImageNextInTeamSwimmerMain(String image) {
+  return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)
+      .setSize(size: 23.0)
+      .setMargin(margin: 0.0)
+      .setBorderColor(borderColor: AlphaColors.White)
+      .setBorderSize(borderSize: 1.5)
+      .build();
+}
+
+getAvatarImageProfile(String image) {
+  return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)
+      .setSize(size: 30.0)
+      .setMargin(margin: 5.0)
+      .setBorderColor(borderColor: AlphaColors.White)
+      .setBorderSize(borderSize: 1.5)
       .build();
 }
 /*

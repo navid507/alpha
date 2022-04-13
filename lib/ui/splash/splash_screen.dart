@@ -1,9 +1,11 @@
+
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:alpha/ui/first_page/first_page_model.dart';
 import 'package:alpha/ui/first_page/first_page_screen.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/splash/splash_model.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,6 +15,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   // This widget is the root of your application.
+  var isAnimationEnd = false;
+  var isCheckRegistrationEnd = false;
+  var isFirebaseInitialized = false;
+
+  SplashModel get model => Provider.of<SplashModel>(context, listen: false);
 
   @override
   void initState() {
@@ -21,16 +28,26 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       AlphaSizes.isNeedSafeArea = MediaQuery.of(context).viewPadding.bottom > 0;
 
-      Provider.of<SplashModel>(context, listen: false)
-          .registerStateStream
-          .listen((registerState) {
+      model.initFirebase().asStream().listen((event) {
+        isFirebaseInitialized = true;
+        if (mounted) navigateToMainScreen();
+      });
+
+      model.registerStateStream.listen((registerState) {
         if (registerState != RegisterState.NotSetYet) {
-          if (mounted) navigateToMainScreen(context);
+          isCheckRegistrationEnd = true;
+          if (mounted) navigateToMainScreen();
         }
       });
 
-      Provider.of<SplashModel>(context, listen: false)
-          .checkPhoneRegisterState();
+      model.checkPhoneRegisterState();
+
+      //
+      Future.delayed(Duration(seconds: 1), () {
+        isAnimationEnd = true;
+        navigateToMainScreen();
+      });
+      //
     });
   }
 
@@ -53,10 +70,23 @@ class _SplashScreenState extends State<SplashScreen> {
               height: double.infinity,
               width: double.infinity,
               alignment: Alignment.center),
+          Visibility(
+            visible: false,
+            child: Container(
+              alignment: Alignment.center,
+              child: Lottie.asset(
+                'assets/jik.json',
+                width: 200,
+                height: 200,
+                reverse: true,
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
           Column(
             children: [
-              getRefreshButton(context: context),
               Spacer(),
+              // getRefreshButton(context: context),
               getLoading(),
               getJustVersionTextInfo()
             ],
@@ -65,75 +95,68 @@ class _SplashScreenState extends State<SplashScreen> {
       )),
     );
   }
-}
 
-navigateToMainScreen(BuildContext context) {
-  Future.delayed(
-      Duration.zero,
-      () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ChangeNotifierProvider<FirstPageModel>(
-                  create: (context) => FirstPageModel(), child: FirstPage()))));
-}
+  navigateToMainScreen() {
+    if (isAnimationEnd && isCheckRegistrationEnd && isFirebaseInitialized) {
+      Future.delayed(
+          Duration.zero,
+          () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ChangeNotifierProvider<FirstPageModel>(
+                      create: (context) => FirstPageModel(),
+                      child: FirstPage()))));
+    }
+  }
 
-getRefreshButton({required BuildContext context}) {
-  return TextButton(
-      onPressed: () {
-        Provider.of<SplashModel>(context, listen: false)
-            .checkPhoneRegisterState();
+  getRefreshButton({required BuildContext context}) {
+    return TextButton(
+        onPressed: () {
+          model.checkPhoneRegisterState();
+        },
+        child: Text('change name'));
+  }
+
+  getVersionTextInfo() {
+    return Consumer<SplashModel>(
+      builder: (context, splash, child) {
+        return Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.all(5.0),
+            child: Text('For ${splash.versionName}'));
       },
-      child: Text('change name'));
-}
+    );
+  }
 
-getVersionTextInfo() {
-  return Consumer<SplashModel>(
-    builder: (context, splash, child) {
-      return Container(
-          alignment: Alignment.center,
-          margin: const EdgeInsets.all(5.0),
-          child: Text('For ${splash.versionName}'));
-    },
-  );
-}
+  getJustVersionTextInfo() {
+    return Container(
+        alignment: Alignment.center,
+        margin: const EdgeInsets.all(5.0),
+        child: Selector<SplashModel, String>(
+          selector: (
+            _,
+            model,
+          ) =>
+              model.versionName,
+          builder: (context, versionName, child) {
+            return Text(' $versionName');
+          },
+        ));
+  }
 
-getJustVersionTextInfo() {
-  return Container(
+  getLoading() {
+    return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.all(5.0),
-      child: Selector<SplashModel, String>(
-        selector: (
-          _,
-          model,
-        ) =>
-            model.versionName,
-        builder: (context, versionName, child) {
-          return Text(' $versionName');
-        },
-      ));
+      child: CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        color: Colors.red,
+        strokeWidth: 2.0,
+      ),
+      height: 20,
+      width: 20,
+    );
 
-  // return Selector<SplashModel, String>(selector: (_, model) => model.versionName,
-  //   builder: (context, versionName, child) {
-  //     return Container(
-  //         alignment: Alignment.center,
-  //         margin: const EdgeInsets.all(5.0),
-  //         child: Text('For $versionName'));
-  //   },
-  // );
-}
-
-getLoading() {
-  return Container(
-    alignment: Alignment.center,
-    margin: const EdgeInsets.all(5.0),
-    child: CircularProgressIndicator(
-      backgroundColor: Colors.white,
-      color: Colors.red,
-      strokeWidth: 2.0,
-    ),
-    height: 20,
-    width: 20,
-  );
-
-  // _flush
+    // _flush
+  }
 }

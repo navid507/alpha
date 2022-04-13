@@ -215,6 +215,7 @@ class _RegisterSwimmerDialogState extends State<RegisterSwimmerDialog> {
 
   getDialogBased(DialogState state) {
     switch (state) {
+      case DialogState.finish:
       case DialogState.normal:
         return Column(
           children: [getOk(), getCancel()],
@@ -229,7 +230,7 @@ class _RegisterSwimmerDialogState extends State<RegisterSwimmerDialog> {
             getCancel()
           ],
         );
-      case DialogState.serverEroor:
+      case DialogState.serverError:
         return Column(
           children: [getOk(), getError(model.error), getCancel()],
         );

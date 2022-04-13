@@ -1,13 +1,13 @@
 import 'package:alpha/back/periods/abstracts/sessions_api_abstract.dart';
 import 'package:alpha/back/periods/models/medical/medical.dart';
 import 'package:alpha/back/periods/models/medical/medical_result.dart';
-import 'package:alpha/back/periods/models/period/period.dart';
+import 'package:alpha/back/periods/models/period/registered_period_result.dart';
 import 'package:alpha/back/periods/models/session/sessions_result.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 
 import '../global_constants.dart';
-import 'models/period/period_result.dart';
+import 'models/period/registered_period.dart';
 import 'models/session/session.dart';
 
 class SessionsURLs {
@@ -15,7 +15,7 @@ class SessionsURLs {
   static const String AllSessions = "$_root/sessions";
   static const String PeriodDetails = "$_root/overview";
   static const String AllMedicalSession = "$_root/medical";
-  static const String SetScore = "$_root/reg_score";
+  static const String SetScore = "$_root/set_swimmer_content";
 }
 
 class SessionApi implements SessionsApiInterface {
@@ -46,16 +46,25 @@ class SessionApi implements SessionsApiInterface {
   }
 
   @override
-  Future<PeriodResult> getActivePeriodDetails(
+  Future<RegisteredPeriodResult> getActivePeriodDetails(
       {required int userID, required String token}) async {
     var res =
         await http.get(url: "${SessionsURLs.PeriodDetails}/$userID/$token");
     if (res.isSuccess) {
-      PeriodResult pr = PeriodResult.success(Period.fromJson(res.data));
-      return pr;
+      List<RegisteredPeriod> periods = List.empty(growable: true);
+      List<dynamic> periodsJson = res.data;
+      periodsJson.forEach((element) {
+        periods.add(RegisteredPeriod.fromJson(element));
+      });
+      if (periods.isNotEmpty) {
+        RegisteredPeriodResult pr = RegisteredPeriodResult.success(periods[0]);
+        return pr;
+      } else {
+        return RegisteredPeriodResult.error(1, "no active period");
+      }
     }
 
-    return PeriodResult.error(res.state.error, res.state.msg);
+    return RegisteredPeriodResult.error(res.state.error, res.state.msg);
   }
 
   @override
@@ -80,7 +89,7 @@ class SessionApi implements SessionsApiInterface {
   @override
   Future<StateResult> setSessionScore(
       {required String sessionID,
-      required int score,
+      required String score,
       required String comment,
       required String token}) async {
     var body = Map<String, dynamic>();
@@ -93,7 +102,4 @@ class SessionApi implements SessionsApiInterface {
 
     return res.state;
   }
-
-
-
 }

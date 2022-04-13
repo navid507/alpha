@@ -42,8 +42,18 @@ class HttpCalls implements HttpFunctionsInterface {
     }
     try {
       var res = await req.send();
-      var jsonRes = await createResultFromStreamedResponse(res);
-      return jsonRes;
+      if (res.statusCode == 200) {
+        var jsonRes = await createResultFromStreamedResponse(res);
+        return jsonRes;
+      } else {
+        print(await res.stream.transform(utf8.decoder).join());
+
+        // print(res.stream.toString());
+        // print(utf8.decodeStream(res.stream));
+        return Future<APIResult>.value(APIResult(
+            state: StateResult(
+                msg: "nnr: ${res.reasonPhrase ?? ""}", error: res.statusCode)));
+      }
     } catch (e) {
       return Future<APIResult>.value(APIResult(
           state: StateResult(msg: "network not reachable!", error: -101)));
@@ -65,9 +75,14 @@ class HttpCalls implements HttpFunctionsInterface {
   @override
   Future<APIResult> get({required String url}) async {
     print('url: $url');
-    var res = await httpClient.get(Uri.parse(url));
+    try {
+      var res = await httpClient.get(Uri.parse(url));
 
-    return createResult(res);
+      return createResult(res);
+    } catch (e) {
+      return Future<APIResult>.value(APIResult(
+          state: StateResult(msg: "network not reachable!", error: 101)));
+    }
   }
 
   @override
@@ -75,12 +90,19 @@ class HttpCalls implements HttpFunctionsInterface {
       {required String url, Map<String, dynamic>? body}) async {
     print('url: $url');
     print('parameters: $body');
-    var res = await httpClient.post(
-      Uri.parse(url),
-      body: json.encode(body),
-      headers: {'Content-Type': 'application/json'},
-    );
-    return createResult(res);
+    try {
+      var res = await httpClient.post(
+        Uri.parse(url),
+        body: json.encode(body),
+        headers: {'Content-Type': 'application/json'},
+      );
+      return createResult(res);
+    } catch (e) {
+      print('error: $e');
+
+      return Future<APIResult>.value(APIResult(
+          state: StateResult(msg: "network not reachable!", error: 101)));
+    }
   }
 
   APIResult createResult(http.Response response) {

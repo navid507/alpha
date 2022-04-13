@@ -1,7 +1,6 @@
 import 'package:alpha/back/accounting/models/swimmer/swimmer.dart';
 import 'package:alpha/back/accounting/models/swimmer/swimmers_result.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
-import 'package:alpha/ui/alpha_dialog/alpha_dialog.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
@@ -91,18 +90,19 @@ class _ChangeUserDialogState extends State<ChangeUserDialog> {
               getConnectedSwimmersSection(),
               Container(
                   width: getScreenWidth(context),
+                  child: getAlphaDialogButtonCancel(
+                      text: getAppLocalization(context).ok,
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      })),
+              Spacer(),
+              Container(
+                  width: getScreenWidth(context),
                   child: getAlphaDialogButtonOk(
                       text: getAppLocalization(context).addNewSwimmers,
                       onPressed: () {
                         showRegisterSwimmerDialog();
                       })),
-              Container(
-                  width: getScreenWidth(context),
-                  child: getAlphaDialogButtonCancel(
-                      text: getAppLocalization(context).ok,
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      }))
             ])));
   }
 

@@ -1,7 +1,8 @@
 import 'package:alpha/back/periods/models/period/period.dart';
+import 'package:alpha/ui/my_widgets/user_image.dart';
 import 'package:alpha/ui/periods/periods_model.dart';
+import 'package:alpha/ui/rules/rules_route.dart';
 import 'package:flutter/material.dart';
-import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
 import 'package:alpha/ui/Models/loading_state.dart';
 import 'package:alpha/ui/drawer/alpha_drawer_widget.dart';
 import 'package:alpha/ui/drawer/drawer_model.dart';
@@ -9,8 +10,6 @@ import 'package:alpha/ui/drawer/get_header.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
-import 'package:alpha/ui/my_widgets/user_image.dart';
-import 'package:alpha/ui/top_swimmers/top_swimmers_model.dart';
 import 'package:provider/provider.dart';
 
 class PeriodRoute extends StatefulWidget {
@@ -92,13 +91,9 @@ class _PeriodRoute extends State<PeriodRoute> {
 
   getTopSwimmersListView() {
     List<Widget> all = model.allPeriods!.map<Widget>((period) {
-      return getPeriodView(period);
+      return getCurrentPeriodView(period);
     }).toList();
-    // all.insert(
-    //     0,
-    //     Padding(
-    //         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-    //         child: getAlphaPageTitleWhite(model.alphaTopSwimmers!.title)));
+
     return ListView(
       scrollDirection: Axis.vertical,
       children: all,
@@ -130,73 +125,160 @@ class _PeriodRoute extends State<PeriodRoute> {
             }));
   }
 
-  getPeriodView(Period period) {
+
+  getSplitterLine() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-          decoration: BoxDecoration(
-              color: AlphaColors.backDialog,
-              borderRadius: BorderRadius.circular(12)),
-          width: getScreenWidth(context),
-          height: 140,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: Row(
+        height: 40,
+        width: 1,
+        color: AlphaColors.White.withAlpha(100),
+      ),
+    );
+  }
+
+  getCurrentPeriodView(Period period) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: AlphaColors.backDialog,
+            borderRadius: BorderRadius.circular(12)),
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                getAlphaTextHeaderWhite(period.name),
+                Spacer(),
+                getAlphaTextTitle1Yellow(getAppLocalization(context).periodCost)
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: AlphaColors.White.withAlpha(50),
+                    borderRadius: BorderRadius.circular(8.0)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      getAlphaTextTitle2White(period.description),
+                      Row(
+                        children: [
+                          getAlphaTextTitle1White(
+                              getAppLocalization(context).periodLevel),
+                          getSplitterLine(),
+                          getAlphaTextTitle1Yellow(period.level)
+                        ],
+                      ),
+                      getHorizontalLine(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Row(
+                          children: [
+                            getAvatarImageTeacherSmall(
+                                period.teacherImage ?? ""),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  getAlphaTextBodyWhite(
+                                      getAppLocalization(context).coachName),
+                                  getAlphaTextBodyYellow(period.teacher ?? "")
+                                ],
+                              ),
+                            ),
+                            Spacer(),
+                            getAvatarImagePeriodSmall(
+                                "assets/images/ic_pool.png"),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  getAlphaTextBodyWhite(
+                                      getAppLocalization(context).poolName),
+                                  getAlphaTextBodyYellow(period.poolName)
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Image.asset(
+                  "assets/images/ic_date.png",
+                  width: 25,
+                ),
+                Column(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(right: 8.0),
+                        child: getAlphaTextMoreWhite(
+                            "${getAppLocalization(context).periodStart}: ${period.startDate} ")),
+                    getAlphaTextMoreWhite(
+                        "${getAppLocalization(context).periodEnd}: ${period.endDate}")
+                  ],
+                ),
+                Spacer(),
+                Image.asset(
+                  "assets/images/ic_time.png",
+                  width: 25,
+                ),
+                Column(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(right: 8.0),
+                        child: getAlphaTextMoreWhite(
+                            "${getAppLocalization(context).periodStartTime}: ${period.startTIme} ")),
+                    getAlphaTextMoreWhite(
+                        "${getAppLocalization(context).periodEndTime}: ${period.endTIme}")
+                  ],
+                )
+              ],
+            ),
+            Row(
               children: [
                 Expanded(
                     child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      getAlphaTextTitle1White(period.name),
-                      getAlphaTextMoreYellow(
-                          " ${getAppLocalization(context).score}: ${period.price}"),
-                      Expanded(
-                          child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                              child: Padding(
-                            padding:
-                                const EdgeInsets.only(top: 8.0, right: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                getAlphaSecondaryTitle(
-                                    getAppLocalization(context)
-                                        .practiseSessionNumber),
-                                getAlphaSecondaryValue(period.description),
-                                getAlphaSecondaryTitle(
-                                    getAppLocalization(context)
-                                        .absentsSessionNumber),
-                                getAlphaSecondaryValue(period.endDate)
-                              ],
-                            ),
-                          )),
-                          Expanded(
-                              child: Padding(
-                            padding:
-                                const EdgeInsets.only(top: 8.0, right: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                getAlphaSecondaryTitle(
-                                    getAppLocalization(context).teamName),
-                                getAlphaSecondaryValue(period.name)
-                              ],
-                            ),
-                          )),
-                        ],
-                      ))
-                    ],
-                  ),
-                ))
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: getAlphaDialogButtonOk(
+                            text: getAppLocalization(context).periodRegister,
+                            onPressed: () {
+                              showRules(period);
+                            })))
               ],
-            ),
-          )),
+            )
+          ],
+        ),
+      ),
     );
+  }
+
+  getHorizontalLine() {
+    return Container(
+      color: AlphaColors.White.withAlpha(30),
+      width: getScreenWidth(context),
+      height: 1,
+    );
+  }
+
+  showRules(Period period) async {
+    var result = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => RulesRoute(period: period)));
+    if (result) {
+      Navigator.pop(context);
+    }
   }
 }

@@ -7,11 +7,31 @@ import 'package:alpha/back/periods/models/medical/medical.dart';
 import 'package:alpha/back/periods/models/medical/medical_result.dart';
 import 'package:alpha/back/periods/models/period/period_result.dart';
 import 'package:alpha/back/periods/models/period/periods_result.dart';
+import 'package:alpha/back/periods/models/period/registered_period.dart';
 import 'package:alpha/back/periods/models/session/session.dart';
 import 'package:alpha/back/periods/models/session/sessions_result.dart';
+import 'package:alpha/main_functions/main_models/api_result.dart';
 
 import 'abstracts/periods_repo_abstracts.dart';
 import 'models/period/period.dart';
+import 'models/period/registered_period_result.dart';
+
+enum PaymentType { Cash, Cart, Nothing, Online }
+
+extension PaymentTypeValue on PaymentType {
+  String get value {
+    switch (this) {
+      case PaymentType.Cash:
+        return '0';
+      case PaymentType.Cart:
+        return '1';
+      case PaymentType.Nothing:
+        return '2';
+      case PaymentType.Online:
+        return '3';
+    }
+  }
+}
 
 class PeriodsRepo implements PeriodsRepoInterface {
   // initialization
@@ -172,23 +192,24 @@ class PeriodsRepo implements PeriodsRepoInterface {
   }
 
   @override
-  registerPeriod(
+  Future<APIResult> registerPeriod(
       {required String periodID,
       String discountCode = '',
-      required String typeID}) async {
+      required PaymentType typeID}) async {
     var userToken = await accountingRepository.token;
     var resultRegister = await periodsApi.registerPeriod(
         userToken: userToken,
         userID: accountingRepository.userID,
         periodID: periodID,
         discountCode: discountCode,
-        type: typeID);
-    if (resultRegister.isSuccess) {
+        type: typeID.value);
+    if (resultRegister.isSuccess && typeID == PaymentType.Online) {
       _registerPeriodSC.sink.add(resultRegister.state.msg);
       _needUpdateRegisteredPeriods = true;
     } else {
       _registerPeriodErrorSC.sink.add(resultRegister.state.msg);
     }
+    return resultRegister;
   }
 
   @override
@@ -248,14 +269,20 @@ class PeriodsRepo implements PeriodsRepoInterface {
   Stream<String> get allSessionsErrorStream => _allSessionsErrorSC.stream;
 
   @override
-  Future<SessionsResult> getAllSessions({required String periodID}) {
-    if (_allSessions == null) {
-      return _getAllSessionsFromServer(periodID: periodID);
+  Future<SessionsResult> getAllSessions() {
+    // if (_allSessions == null) {
+    if (_activePeriod != null) {
+      return _getAllSessionsFromServer(
+          periodID: _activePeriod!.registerPeriodId);
     } else {
-      _allSessionsSC.sink.add(_allSessions!);
       return Future<SessionsResult>.value(
-          SessionsResult.success(_allSessions!));
+          SessionsResult.error(1, "no Active Period"));
     }
+    // } else {
+    //   _allSessionsSC.sink.add(_allSessions!);
+    //   return Future<SessionsResult>.value(
+    //       SessionsResult.success(_allSessions!));
+    // }
   }
 
   Future<SessionsResult> _getAllSessionsFromServer(
@@ -319,9 +346,9 @@ class PeriodsRepo implements PeriodsRepoInterface {
   Stream<String> get sessionScoreErrorStream => _sessionScoreErrorSC.stream;
 
   @override
-  setSessionScore(
+  Future<StateResult> setSessionScore(
       {required String sessionID,
-      required int score,
+      required String score,
       required String comment}) async {
     var userToken = await accountingRepository.token;
     var resultSet = await sessionsApi.setSessionScore(
@@ -329,41 +356,43 @@ class PeriodsRepo implements PeriodsRepoInterface {
 
     if (resultSet.isSuccess) {
       _buyPeriodSC.sink.add(resultSet.msg);
+      _allSessions = null;
     } else {
       _buyPeriodErrorSC.sink.add(resultSet.msg);
     }
+    return resultSet;
   }
 
   // periodDetails
 
-  Period? _activePeriod;
-  final _activePeriodSC = StreamController<Period>();
+  RegisteredPeriod? _activePeriod;
+  final _activePeriodSC = StreamController<RegisteredPeriod>();
   final _activePeriodErrorSC = StreamController<String>();
 
   @override
-  Stream<Period> get activePeriodStream => _activePeriodSC.stream;
+  Stream<RegisteredPeriod> get activePeriodStream => _activePeriodSC.stream;
 
   @override
   Stream<String> get activePeriodErrorStream => _activePeriodErrorSC.stream;
 
   @override
-  Future<PeriodResult> getActivePeriod() {
-    if (_activePeriod == null) {
-      return getActivePeriodFromServer();
-    } else {
-      _activePeriodSC.sink.add(_activePeriod!);
-      return Future<PeriodResult>.value(PeriodResult.success(_activePeriod!));
-    }
+  Future<RegisteredPeriodResult> getActivePeriod() {
+    // if (_activePeriod == null) {
+    return getActivePeriodFromServer();
+    // } else {
+    //   _activePeriodSC.sink.add(_activePeriod!);
+    //   return Future<RegisteredPeriodResult>.value(RegisteredPeriodResult.success(_activePeriod!));
+    // }
   }
 
-  Future<PeriodResult> getActivePeriodFromServer() async {
+  Future<RegisteredPeriodResult> getActivePeriodFromServer() async {
     var userToken = await accountingRepository.token;
     var periodDetails = await sessionsApi.getActivePeriodDetails(
         userID: accountingRepository.userID, token: userToken);
-    if (periodDetails is SuccessPeriod) {
+    if (periodDetails is SuccessRegisteredPeriod) {
       _activePeriod = periodDetails.period;
       _activePeriodSC.sink.add(_activePeriod!);
-    } else if (periodDetails is ErrorPeriod) {
+    } else if (periodDetails is ErrorRegisteredPeriod) {
       _activePeriodErrorSC.sink.add(periodDetails.msg);
     }
     return periodDetails;

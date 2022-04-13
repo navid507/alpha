@@ -4,7 +4,7 @@ import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:flutter/material.dart';
 
-enum DialogState { normal, loading, formError, serverEroor, finish }
+enum DialogState { normal, loading, formError, serverError, finish }
 
 class AlphaDialog extends StatefulWidget {
   final String title;
@@ -72,7 +72,7 @@ class _AlphaDialogState extends State<AlphaDialog> {
                   child: getAlphaTextTitleEditText(widget.desc)),
               Container(
                   width: getScreenWidth(context),
-                  child: getAlphaTextFormFieldNumber(
+                  child: getAlphaTextFormFieldPhone(
                       validator: widget.validator,
                       hint: widget.hint,
                       textEditingController: rpController,
@@ -90,7 +90,7 @@ class _AlphaDialogState extends State<AlphaDialog> {
     switch (widget.dialogState) {
       case DialogState.normal:
       case DialogState.formError:
-      case DialogState.serverEroor:
+      case DialogState.serverError:
       case DialogState.finish:
         return getAlphaDialogButtonOk(
             text: widget.buttonOkText,

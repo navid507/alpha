@@ -4,8 +4,11 @@ import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/my_widgets/get_image.dart';
 import 'package:alpha/ui/my_widgets/user_image.dart';
+import 'package:alpha/ui/public_profile/public_profile_model.dart';
+import 'package:alpha/ui/public_profile/public_profile_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 getAlphaClubHeader({required BuildContext context, Function()? onPressed}) {
   return Container(
@@ -38,26 +41,31 @@ getAlphaElement(
     {required BuildContext context, required AlphaSwimmer swimmer}) {
   var height = 140.0;
   var width = 100.0;
-  return Container(
-      height: height,
-      width: width,
-      child: Stack(
-        children: [
-          getAlphaClubSwimmer(),
-          Column(
-            children: [
-              getAvatarImageAlphaClub(swimmer.image),
-              Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: getAlphaTextSwimmer(swimmer.fullName)),
-              getAlphaTextMoreYellow(
-                  AppLocalizations.of(context)!.numberOfAttendant +
-                      " ${swimmer.sessions}")
-            ],
-          )
-        ],
-        alignment: Alignment.topCenter,
-      ));
+  return GestureDetector(
+    onTap: () {
+      showPublicProfile(context, swimmer.id);
+    },
+    child: Container(
+        height: height,
+        width: width,
+        child: Stack(
+          children: [
+            getAlphaClubSwimmer(),
+            Column(
+              children: [
+                getAvatarImageAlphaClub(swimmer.image),
+                Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: getAlphaTextSwimmer(swimmer.fullName)),
+                getAlphaTextMoreYellow(
+                    AppLocalizations.of(context)!.numberOfAttendant +
+                        " ${swimmer.sessions}")
+              ],
+            )
+          ],
+          alignment: Alignment.topCenter,
+        )),
+  );
   // return getAlphaClubSwimmer(child: child);
 }
 
@@ -75,4 +83,15 @@ getAlphaClubSwimmer(
         )),
     top: topPadding,
   );
+}
+
+showPublicProfile(BuildContext context, String swimmerID) {
+  Future.delayed(
+      Duration.zero,
+      () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChangeNotifierProvider<PublicProfileModel>(
+                  create: (context) => PublicProfileModel(swimmerID: swimmerID),
+                  child: PublicProfileRoute()))));
 }

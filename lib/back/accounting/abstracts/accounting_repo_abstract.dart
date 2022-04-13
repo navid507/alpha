@@ -1,3 +1,5 @@
+import 'package:alpha/back/accounting/models/record/record_result.dart';
+import 'package:alpha/back/accounting/models/record/record_type.dart';
 import 'package:alpha/back/accounting/models/swimmer/swimmer.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,8 @@ abstract class AccountingRepositoryInterface {
 
   Future<StateResult> verifyPhone(String code);
 
+  updateFirebaseToken();
+
   updateActiveSwimmer();
 
   dispose();
@@ -43,4 +47,7 @@ abstract class AccountingRepositoryInterface {
 
   Future<StateResult> addSwimmer(Swimmer swimmer);
   Future<StateResult> editSwimmer(Swimmer swimmer);
+
+  Future<RecordsResult> getAllRecordsOf(RecordType recordType);
+
 }

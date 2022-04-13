@@ -11,6 +11,7 @@ class Period {
   String level;
   String price;
   String? teacher;
+  String? teacherImage;
   String poolName;
   String status;
 
@@ -28,6 +29,7 @@ class Period {
       required this.startTIme,
       required this.status,
       required this.teacher,
+      required this.teacherImage,
       required this.userID});
 
   factory Period.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class Period {
         startTIme: json['time_start'],
         status: json['status'],
         teacher: json['teacher'],
+        teacherImage: json['teacher_image'],
         userID: json['user_id']);
   }
 }
