@@ -1,4 +1,4 @@
-import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmer.dart';
+import 'package:alpha/back/public_repo/models/top_swimmers/top_swimmers.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 

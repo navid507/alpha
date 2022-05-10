@@ -1,8 +1,6 @@
 import 'package:alpha/back/periods/abstracts/periods_api_abstracts.dart';
 import 'package:alpha/back/periods/models/period/periods_result.dart';
 import 'package:alpha/back/periods/perdiods_apis.dart';
-import 'package:alpha/back/public_repo/abstracts/public_api_abstracts.dart';
-import 'package:alpha/back/public_repo/public_apis.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +9,7 @@ import 'package:http/http.dart' as http;
 void main() {
   const PRiVATE = '614ac2e6cdcf4417afcb3c564c2af5fe';
   const DEVICEiD = '1784';
-  const USERiD = '430';
+  const USERiD = 430;
   late PeriodsApiInterface periodsApi; //
   setUp(() {
     periodsApi = PeriodsApi(http: HttpCalls(httpClient: http.Client()));

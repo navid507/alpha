@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "712447123916",
+    "project_id": "alphaswim-90b68",
+    "storage_bucket": "alphaswim-90b68.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712447123916:android:c488f806aa9551c601bd69",
+        "android_client_info": {
+          "package_name": "com.sai.alpha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712447123916-idlo7725f10vl9qo810t0po0j60mo2m6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARkH9_iSXEhVAU_QjWjw_GFXccd45Zujk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712447123916-idlo7725f10vl9qo810t0po0j60mo2m6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

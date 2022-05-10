@@ -1,6 +1,7 @@
+import 'package:alpha/back/global_constants.dart';
 
-class ImageItem
-{
+class AlphaImageItem {
+  static const assetsURL = mainUrl + "/assets/upload/";
 
   String id;
   String title;
@@ -8,11 +9,19 @@ class ImageItem
   String link;
   String image;
 
-  ImageItem({required this.id, required this.title, required this.content, required this.link, required this.image});
+  AlphaImageItem(
+      {required this.id,
+      required this.title,
+      required this.content,
+      required this.link,
+      required this.image});
 
-  factory ImageItem.fromJson(Map<String, dynamic> json)
-  {
-    return ImageItem(id: json['id'], title:json['title'] , content: json['content'], link: json['link'], image: json['image']);
+  factory AlphaImageItem.fromJson(Map<String, dynamic> json) {
+    return AlphaImageItem(
+        id: json['id'],
+        title: json['title'],
+        content: json['content'],
+        link: json['link'],
+        image: assetsURL + json['image']);
   }
-
 }

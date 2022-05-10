@@ -8,6 +8,6 @@ part 'gallery_result.freezed.dart';
 
 @freezed
 class GalleryResult with _$GalleryResult{
-  const factory GalleryResult.success(Gallery gallery) = SuccessGallery;
+  const factory GalleryResult.success(AlphaImageGallery gallery) = SuccessGallery;
   const factory GalleryResult.error(int code, String msg) = ErrorGallery;
 }

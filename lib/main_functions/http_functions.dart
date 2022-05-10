@@ -11,8 +11,11 @@ abstract class HttpFunctionsInterface {
   Future<APIResult> get({required String url});
 
   Future<APIResult> post({required String url, Map<String, dynamic> body});
-  Future<APIResult> multiPartPost({required String url, Map<String, dynamic>? body, Map<String, String>? files});
 
+  Future<APIResult> multiPartPost(
+      {required String url,
+      Map<String, dynamic>? body,
+      Map<String, String>? files});
 }
 
 class HttpCalls implements HttpFunctionsInterface {
@@ -24,6 +27,7 @@ class HttpCalls implements HttpFunctionsInterface {
     print('url: $url');
     print('parameters: $body');
     var req = http.MultipartRequest("POST", Uri.parse(url));
+
     for (String key in body!.keys) {
       req.fields[key] = body[key];
     }
@@ -32,18 +36,34 @@ class HttpCalls implements HttpFunctionsInterface {
       // req.fields[key] = body[key];
       var filePath = files[key];
       req.files.add(http.MultipartFile.fromBytes(
-          'file', await File.fromUri(Uri.parse(filePath!)).readAsBytes(),
-          contentType: MediaType('image', 'jpeg')));
+          key, await File.fromUri(Uri.parse(filePath!)).readAsBytes(),
+          contentType: MediaType('image', 'jpeg'),
+          filename: filePath.split("/").last));
     }
+    try {
+      var res = await req.send();
+      if (res.statusCode == 200) {
+        var jsonRes = await createResultFromStreamedResponse(res);
+        return jsonRes;
+      } else {
+        print(await res.stream.transform(utf8.decoder).join());
 
-    var res = await req.send();
+        // print(res.stream.toString());
+        // print(utf8.decodeStream(res.stream));
+        return Future<APIResult>.value(APIResult(
+            state: StateResult(
+                msg: "nnr: ${res.reasonPhrase ?? ""}", error: res.statusCode)));
+      }
+    } catch (e) {
+      return Future<APIResult>.value(APIResult(
+          state: StateResult(msg: "network not reachable!", error: -101)));
+    }
 
     // var res = await httpMultiPart.Mul(
     //   Uri.parse(url),
     //   body: json.encode(body),
     //   headers: {'Content-Type': 'application/json'},
     // );
-    return createResultFromStreamedResponse(res);
   }
 
   // var http
@@ -55,9 +75,14 @@ class HttpCalls implements HttpFunctionsInterface {
   @override
   Future<APIResult> get({required String url}) async {
     print('url: $url');
-    var res = await httpClient.get(Uri.parse(url));
+    try {
+      var res = await httpClient.get(Uri.parse(url));
 
-    return createResult(res);
+      return createResult(res);
+    } catch (e) {
+      return Future<APIResult>.value(APIResult(
+          state: StateResult(msg: "network not reachable!", error: 101)));
+    }
   }
 
   @override
@@ -65,12 +90,19 @@ class HttpCalls implements HttpFunctionsInterface {
       {required String url, Map<String, dynamic>? body}) async {
     print('url: $url');
     print('parameters: $body');
-    var res = await httpClient.post(
-      Uri.parse(url),
-      body: json.encode(body),
-      headers: {'Content-Type': 'application/json'},
-    );
-    return createResult(res);
+    try {
+      var res = await httpClient.post(
+        Uri.parse(url),
+        body: json.encode(body),
+        headers: {'Content-Type': 'application/json'},
+      );
+      return createResult(res);
+    } catch (e) {
+      print('error: $e');
+
+      return Future<APIResult>.value(APIResult(
+          state: StateResult(msg: "network not reachable!", error: 101)));
+    }
   }
 
   APIResult createResult(http.Response response) {
@@ -84,19 +116,14 @@ class HttpCalls implements HttpFunctionsInterface {
     }
   }
 
-  APIResult createResultFromStreamedResponse(http.StreamedResponse response)  {
-    response.stream.bytesToString().then((resString) {
-      print(resString);
-      if (response.statusCode == 200) {
-        // return jsonDecode(res.body);
-        return APIResult.fromJson(jsonDecode(resString));
-      }
-    });
-
-    return APIResult(
-        state: StateResult(msg: "server not found!", error: -100));
-
-
-
+  Future<APIResult> createResultFromStreamedResponse(
+      http.StreamedResponse response) async {
+    if (response.statusCode == 200) {
+      var resString = await response.stream.bytesToString();
+      return APIResult.fromJson(jsonDecode(resString));
+    } else {
+      return APIResult(
+          state: StateResult(msg: "server not found!", error: -100));
+    }
   }
 }
