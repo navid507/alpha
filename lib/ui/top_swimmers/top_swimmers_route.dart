@@ -7,6 +7,8 @@ import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/my_widgets/user_image.dart';
+import 'package:alpha/ui/public_profile/public_profile_model.dart';
+import 'package:alpha/ui/public_profile/public_profile_route.dart';
 import 'package:alpha/ui/top_swimmers/top_swimmers_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -151,74 +153,93 @@ class _TopSwimmersRouteState extends State<TopSwimmersRoute> {
   }
 
   getTopSwimmerView(TopSwimmer topSwimmer) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-          decoration: BoxDecoration(
-              color: AlphaColors.backDialog,
-              borderRadius: BorderRadius.circular(12)),
-          width: getScreenWidth(context),
-          height: 140,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: Row(
-              children: [
-                getAvatarImageAlphaClub(topSwimmer.image),
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      getAlphaTextTitle1White(topSwimmer.name),
-                      getAlphaTextMoreYellow(
-                          " ${getAppLocalization(context).score}: ${topSwimmer.score}"),
-                      Expanded(
-                          child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                              child: Padding(
-                            padding:
-                                const EdgeInsets.only(top: 8.0, right: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                getAlphaSecondaryTitle(
-                                    getAppLocalization(context)
-                                        .practiseSessionNumber),
-                                getAlphaSecondaryValue(topSwimmer.present),
-                                getAlphaSecondaryTitle(
-                                    getAppLocalization(context)
-                                        .absentsSessionNumber),
-                                getAlphaSecondaryValue(topSwimmer.absent)
-                              ],
-                            ),
-                          )),
-                          Expanded(
-                              child: Padding(
-                            padding:
-                                const EdgeInsets.only(top: 8.0, right: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                getAlphaSecondaryTitle(
-                                    getAppLocalization(context).teamName),
-                                getAlphaSecondaryValue(
-                                    topSwimmer.teamName ?? "")
-                              ],
-                            ),
-                          )),
-                        ],
-                      ))
-                    ],
-                  ),
-                ))
-              ],
-            ),
-          )),
+    return GestureDetector(
+      onTap: () {
+        showPublicProfile(topSwimmer.id);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+            decoration: BoxDecoration(
+                color: AlphaColors.backDialog,
+                borderRadius: BorderRadius.circular(12)),
+            width: getScreenWidth(context),
+            height: 140,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              child: Row(
+                children: [
+                  getAvatarImageAlphaClub(topSwimmer.image),
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        getAlphaTextTitle1White(topSwimmer.name),
+                        getAlphaTextMoreYellow(
+                            " ${getAppLocalization(context).score}: ${topSwimmer.score}"),
+                        Expanded(
+                            child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, right: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  getAlphaSecondaryTitle(
+                                      getAppLocalization(context)
+                                          .practiseSessionNumber),
+                                  getAlphaSecondaryValue(topSwimmer.present),
+                                  getAlphaSecondaryTitle(
+                                      getAppLocalization(context)
+                                          .absentsSessionNumber),
+                                  getAlphaSecondaryValue(topSwimmer.absent)
+                                ],
+                              ),
+                            )),
+                            Expanded(
+                                child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, right: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  getAlphaSecondaryTitle(
+                                      getAppLocalization(context).teamName),
+                                  getAlphaSecondaryValue(
+                                      topSwimmer.teamName ?? "")
+                                ],
+                              ),
+                            )),
+                          ],
+                        ))
+                      ],
+                    ),
+                  ))
+                ],
+              ),
+            )),
+      ),
     );
+  }
+
+  showPublicProfile(String swimmerID) {
+    Future.delayed(
+        Duration.zero,
+        () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ChangeNotifierProvider<PublicProfileModel>(
+                        create: (context) =>
+                            PublicProfileModel(swimmerID: swimmerID),
+                        child: PublicProfileRoute()))));
   }
 }
