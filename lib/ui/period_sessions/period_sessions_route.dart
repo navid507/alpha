@@ -150,18 +150,21 @@ class _PeriodSessionsRouteState extends State<PeriodSessionsRoute> {
                   ),
                   Container(
                     width: 34,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        border:
-                            Border.all(color: AlphaColors.White, width: 0.5)),
+                    decoration: (session.sessionState == SessionState.Present)
+                        ? BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                                color: AlphaColors.White, width: 0.0))
+                        : null,
                     alignment: Alignment.center,
-                    child: getAlphaTextSessionScore(session.score),
+                    child: (session.sessionState == SessionState.Present)
+                        ? getAlphaTextSessionScore(session.score)
+                        : getAlphaTextSessionScore(''),
                   ),
                   Padding(
-                      padding:
-                          EdgeInsets.only(top: 8, right: 12, left: 4),
-                      child: getAlphaTextSessionDescription(
-                          session.description)),
+                      padding: EdgeInsets.only(top: 8, right: 12, left: 4),
+                      child:
+                          getAlphaTextSessionDescription(session.description)),
                   getHorizontalLine(),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -178,13 +181,14 @@ class _PeriodSessionsRouteState extends State<PeriodSessionsRoute> {
                           padding: const EdgeInsets.all(4.0),
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 4),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(
-                                    color: AlphaColors.White, width: 0.5)),
+                            decoration: (session.swimmerScore.isNotEmpty)
+                                ? BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                        color: AlphaColors.White, width: 0.5))
+                                : null,
                             alignment: Alignment.center,
-                            child:
-                                getAlphaTextBodyWhite(session.swimmerScore),
+                            child: getAlphaTextBodyWhite(session.swimmerScore),
                           ),
                         ),
                         Padding(

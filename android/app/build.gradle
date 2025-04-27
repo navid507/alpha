@@ -14,12 +14,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '3'
+    flutterVersionCode = '4'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '0.92'
+    flutterVersionName = '1.00'
 }
 
 apply plugin: 'com.android.application'
@@ -35,7 +35,7 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -44,9 +44,10 @@ android {
     defaultConfig {
         applicationId "com.sai.alpha"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        setProperty("archivesBaseName", "AlphaSwim-$versionName")
     }
     signingConfigs {
         release {
@@ -69,6 +70,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
 }
+apply plugin: 'com.google.gms.google-services'

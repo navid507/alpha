@@ -31,7 +31,7 @@ class SessionDetailsModel extends ChangeNotifier {
         sessionsApiInterface:
             SessionApi(http: HttpCalls(httpClient: http.Client())),
         accountingRepositoryInterface: AccountingRepo.getInstance(
-            userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin())));
+            userStoredData: UserStoredData()));
   }
 
   setScoreAndComment(String score, String comment) {

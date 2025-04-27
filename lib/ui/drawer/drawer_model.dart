@@ -22,7 +22,7 @@ class DrawerModel extends ChangeNotifier {
 
   DrawerModel() {
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+        userStoredData: UserStoredData());
 
     registerStateSubscription =
         _accountingRepo.registerStateStream.listen((registerState) {

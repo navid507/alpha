@@ -115,7 +115,7 @@ class RegisterSwimmerModel extends ChangeNotifier {
 
   RegisterSwimmerModel({required this.swimmer}) {
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+        userStoredData: UserStoredData());
   }
 
   getProfileImage() {

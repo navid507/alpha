@@ -2,7 +2,6 @@ import 'package:alpha/back/accounting/models/record/record_result.dart';
 import 'package:alpha/back/accounting/models/record/record_type.dart';
 import 'package:alpha/back/accounting/models/swimmer/swimmer.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
-import 'package:provider/provider.dart';
 
 enum RegisterState {
   Nothing,

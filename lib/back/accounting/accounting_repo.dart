@@ -23,12 +23,10 @@ class AccountingRepo implements AccountingRepositoryInterface {
   AccountingApiInterface accountingApi;
 
   static AccountingRepo getInstance({required UserStoredData userStoredData}) {
-    if (_instance == null) {
-      _instance = AccountingRepo._internal(
-          userStoredData: userStoredData,
-          accountingApi:
-              AccountingAPI(http: HttpCalls(httpClient: http.Client())));
-    }
+    _instance ??= AccountingRepo._internal(
+        userStoredData: userStoredData,
+        accountingApi:
+            AccountingAPI(http: HttpCalls(httpClient: http.Client())));
 
     return _instance!;
   }
@@ -72,6 +70,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
   Stream<List<Swimmer>> get relativeSwimmersStream =>
       _relativeSwimmersController.stream;
 
+  @override
   Stream<RegisterState> get registerStateStream =>
       _registerStateController.stream.asBroadcastStream();
 
