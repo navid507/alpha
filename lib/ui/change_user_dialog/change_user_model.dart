@@ -26,8 +26,8 @@ class ChangeUserModel extends ChangeNotifier {
   Swimmer? activeSwimmer;
 
   ChangeUserModel() {
-    _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+    _accountingRepo =
+        AccountingRepo.getInstance(userStoredData: UserStoredData());
   }
 
   getConnectedSwimmers() async {

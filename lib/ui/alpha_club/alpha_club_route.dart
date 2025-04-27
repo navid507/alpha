@@ -27,7 +27,7 @@ class _AlphaClubRouteState extends State<AlphaClubRoute> {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       model.getAlphaClub();
     });
     super.initState();

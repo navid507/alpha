@@ -13,7 +13,17 @@ class Session {
   String swimmerScore;
   String swimmerDescription;
 
-  SessionState get sessionState => SessionState.values[int.tryParse(type) ?? 0];
+  SessionState get sessionState {
+    switch (int.tryParse(type)) {
+      case -1:
+        return SessionState.NotSpecified;
+      case 0:
+        return SessionState.Absent;
+      default:
+        return SessionState.Present;
+    }
+    return SessionState.Present;
+  }
 
   Session(
       {required this.description,

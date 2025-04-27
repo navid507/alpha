@@ -35,13 +35,21 @@ class ProfileModel extends ChangeNotifier {
 
   ProfileModel() {
     var httpsCalls = HttpCalls(httpClient: http.Client());
-    _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+    _accountingRepo =
+        AccountingRepo.getInstance(userStoredData: UserStoredData());
 
     _periodRepo = PeriodsRepo.getInstance(
         periodsApiInterface: PeriodsApi(http: httpsCalls),
         sessionsApiInterface: SessionApi(http: httpsCalls),
         accountingRepositoryInterface: _accountingRepo);
+
+    _accountingRepo.activeSwimmerStream.listen((aS) {
+      // this.activeSwimmer = SwimmerResult.success(activeSwimmer);
+      getActiveSwimmer();
+      // notifyListeners();
+      activeSwimmer = aS;
+      notifyListeners();
+    });
   }
 
   getActiveSwimmer() {
@@ -66,7 +74,7 @@ class ProfileModel extends ChangeNotifier {
       } else if (period is ErrorRegisteredPeriod) {
         if (period.code == 1) {
           curPeriodDetailsState = LoadingState.Loaded;
-        }else {
+        } else {
           curPeriodDetailsState = LoadingState.LoadError;
         }
       }

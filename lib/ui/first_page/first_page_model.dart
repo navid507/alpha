@@ -33,7 +33,7 @@ class FirstPageModel extends ChangeNotifier {
 
   FirstPageModel() {
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+        userStoredData: UserStoredData());
   }
 
   PublicRepositoryInterface _publicRepo = PublicRepo.getInstance(

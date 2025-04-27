@@ -1,7 +1,10 @@
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
+
+import 'package:uuid/uuid.dart';
 
 class UserStoredData {
   // hide the constructor:
@@ -30,7 +33,7 @@ class UserStoredData {
   //   return myUSD;
   // }
 
-  UserStoredData({required this.deviceInfo});
+  UserStoredData();
 
   Future<bool> setValue(String name, dynamic value) async {
     var _preferences = await SharedPreferences.getInstance();
@@ -122,21 +125,24 @@ class UserStoredData {
   Future<String> getDeviceUniqueID() async {
     var uID = await readValue<String?>(UNIQUE_ID);
     if (uID == null) {
-      uID = await findDeviceUniqueID();
-      _setDeviceUniqueID(uID!);
+      uID = findDeviceUniqueID();
+      _setDeviceUniqueID(uID);
     }
     return uID;
   }
 
-  Future<String?> findDeviceUniqueID() async {
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.androidId;
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor;
-    }
-    return "";
+  String findDeviceUniqueID() {
+    var uuid = Uuid();
+    return uuid.v1();
+
+    // if (Platform.isAndroid) {
+    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    //   return androidInfo.data.toString();
+    // } else if (Platform.isIOS) {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   return iosInfo.identifierForVendor;
+    // }
+    // return "";
   }
 
 // reset() {
