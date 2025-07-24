@@ -29,7 +29,7 @@ class PaymentDialogModel extends ChangeNotifier {
   PaymentDialogModel({required this.period}) {
     var httpsCalls = HttpCalls(httpClient: http.Client());
     var _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData());
+        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
 
     _periodRepo = PeriodsRepo.getInstance(
         periodsApiInterface: PeriodsApi(http: httpsCalls),

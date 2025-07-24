@@ -7,6 +7,7 @@ import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image_network/image_network.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -205,8 +206,8 @@ class _AboutUsRouteState extends State<AboutUsRoute> {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      image,
+                    child: ImageNetwork(
+                      image:image,
                       height: 72,
                       width: 120,
                     )),
@@ -237,7 +238,7 @@ class _AboutUsRouteState extends State<AboutUsRoute> {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(image)),
+                    child: ImageNetwork(image: image, height: 170, width: 200,fitWeb: BoxFitWeb.cover)),
               ),
               Padding(
                   padding: const EdgeInsets.only(bottom: 8),

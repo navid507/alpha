@@ -27,7 +27,7 @@ class PeriodSessionsModel extends ChangeNotifier {
         sessionsApiInterface:
             SessionApi(http: HttpCalls(httpClient: http.Client())),
         accountingRepositoryInterface: AccountingRepo.getInstance(
-            userStoredData: UserStoredData()));
+            userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin())));
   }
 
   getAllPeriodSessions() {

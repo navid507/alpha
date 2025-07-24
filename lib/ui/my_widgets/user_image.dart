@@ -1,6 +1,8 @@
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:flutter/material.dart';
 
+import 'avatar_image.dart';
+
 enum AvatarImageType {
   User,
   Swimmer,
@@ -200,6 +202,7 @@ getAvatarImageAlphaClub(String image) {
       .setBorderSize(borderSize: 2.0)
       .build();
 }
+
 
 getAvatarImageConnectedSwimmerActive(String image) {
   return AvatarImageBuilder(imageUrl: image, type: AvatarImageType.GoldSwimmer)

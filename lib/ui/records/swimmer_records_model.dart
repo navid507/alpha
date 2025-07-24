@@ -22,7 +22,7 @@ class SwimmerRecordsModel extends ChangeNotifier {
 
   SwimmerRecordsModel({required this.swimType}) {
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData());
+        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
   }
 
   getAllSwimTypes() {

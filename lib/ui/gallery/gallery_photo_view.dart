@@ -13,6 +13,7 @@ import 'package:alpha/ui/drawer/drawer_model.dart';
 import 'package:alpha/ui/drawer/get_header.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
+import 'package:image_network/image_network.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
@@ -156,9 +157,9 @@ class _GalleryPhotoViewState extends State<GalleryPhotoView> {
                     height: double.infinity,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        image.image,
-                        fit: BoxFit.cover,
+                      child: ImageNetwork(
+                        image:   image.image, height: 40, width: 40,
+                        fitWeb: BoxFitWeb.cover,
                       ),
                     ),
                   ),

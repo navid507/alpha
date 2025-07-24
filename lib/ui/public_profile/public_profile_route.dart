@@ -10,6 +10,7 @@ import 'package:alpha/ui/drawer/drawer_model.dart';
 import 'package:alpha/ui/drawer/get_header.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
+import 'package:image_network/image_network.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -351,8 +352,8 @@ class _PublicProfileRouteState extends State<PublicProfileRoute> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        title.image,
+                      child: ImageNetwork(
+                      image:   title.image,
                         width: 58,
                         height: 58,
                       ),

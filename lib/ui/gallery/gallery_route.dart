@@ -15,6 +15,7 @@ import 'package:alpha/ui/drawer/drawer_model.dart';
 import 'package:alpha/ui/drawer/get_header.dart';
 import 'package:alpha/ui/my_widgets/alpha_text.dart';
 import 'package:alpha/ui/my_widgets/constant_widgets.dart';
+import 'package:image_network/image_network.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -61,14 +62,16 @@ class _GalleryRouteState extends State<GalleryRoute> {
   getScreenBody(BuildContext screenBodyContext) {
     return Stack(children: [
       alphaHeader.getImageOfHeader(),
-      Column(children: [
-        alphaHeader.getTopMenu(screenBodyContext),
-        getTitle(),
-        Container(
-            height: getScreenHeight(context) - 129,
-            width: getScreenWidth(context),
-            child: getMainSectionView())
-      ])
+      SingleChildScrollView(
+        child: Column(children: [
+          alphaHeader.getTopMenu(screenBodyContext),
+          getTitle(),
+          Container(
+              height: getScreenHeight(context) - 129,
+              width: getScreenWidth(context),
+              child: getMainSectionView())
+        ]),
+      )
     ]);
   }
 
@@ -238,9 +241,9 @@ class _GalleryRouteState extends State<GalleryRoute> {
                       height: double.infinity,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          image.image,
-                          fit: BoxFit.cover,
+                        child: ImageNetwork(
+                          image:   image.image, height: 120, width: 160,
+                         fitWeb: BoxFitWeb.cover,
                         ),
                       ),
                     ),

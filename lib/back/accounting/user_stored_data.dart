@@ -6,6 +6,8 @@ import 'dart:io' show Platform;
 
 import 'package:uuid/uuid.dart';
 
+import '../global_constants.dart';
+
 class UserStoredData {
   // hide the constructor:
   // UserStoredData._();
@@ -33,7 +35,7 @@ class UserStoredData {
   //   return myUSD;
   // }
 
-  UserStoredData();
+  UserStoredData({required this.deviceInfo});
 
   Future<bool> setValue(String name, dynamic value) async {
     var _preferences = await SharedPreferences.getInstance();
@@ -122,28 +124,36 @@ class UserStoredData {
     setValue(UNIQUE_ID, deviceID);
   }
 
-  Future<String> getDeviceUniqueID() async {
+  // Future<String> getDeviceUniqueID() async {
+  //   var uID = await readValue<String?>(UNIQUE_ID);
+  //   if (uID == null) {
+  //     uID = findDeviceUniqueID();
+  //     _setDeviceUniqueID(uID);
+  //   }
+  //   return uID;
+  // }
+
+  Future<String?> getDeviceUniqueID() async {
     var uID = await readValue<String?>(UNIQUE_ID);
     if (uID == null) {
-      uID = findDeviceUniqueID();
-      _setDeviceUniqueID(uID);
+      uID = await findDeviceUniqueID(deviceInfo);
+      _setDeviceUniqueID(uID!);
     }
     return uID;
   }
-
-  String findDeviceUniqueID() {
-    var uuid = Uuid();
-    return uuid.v1();
-
-    // if (Platform.isAndroid) {
-    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    //   return androidInfo.data.toString();
-    // } else if (Platform.isIOS) {
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   return iosInfo.identifierForVendor;
-    // }
-    // return "";
-  }
+  // String findDeviceUniqueID() {
+  //   var uuid = Uuid();
+  //   return uuid.v1();
+  //
+  //   // if (Platform.isAndroid) {
+  //   //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  //   //   return androidInfo.data.toString();
+  //   // } else if (Platform.isIOS) {
+  //   //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  //   //   return iosInfo.identifierForVendor;
+  //   // }
+  //   // return "";
+  // }
 
 // reset() {
 //   _preferences!.clear();

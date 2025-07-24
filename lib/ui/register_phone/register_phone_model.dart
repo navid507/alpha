@@ -21,7 +21,7 @@ class RegisterPhoneModel extends ChangeNotifier {
 
   RegisterPhoneModel() {
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData());
+        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
   }
 
   registerPhone({required String phone}) {

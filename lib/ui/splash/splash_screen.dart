@@ -6,6 +6,7 @@ import 'package:alpha/ui/first_page/first_page_screen.dart';
 import 'package:alpha/ui/my_widgets/constants.dart';
 import 'package:alpha/ui/splash/splash_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
       model.initFirebase().asStream().listen((event) {
         final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+        isFirebaseInitialized = true;
+        if (kIsWeb) {
+          firebaseMessaging.requestPermission(
+            alert: true,
+            announcement: false,
+            badge: true,
+            carPlay: false,
+            criticalAlert: false,
+            provisional: false,
+            sound: true,
+          );
+        } else {
         if (Platform.isIOS) {
           firebaseMessaging.requestPermission(
             alert: true,
@@ -46,6 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
         isFirebaseInitialized = true;
 
         if (mounted) navigateToMainScreen();
+      }
       });
 
       model.registerStateStream.listen((registerState) {

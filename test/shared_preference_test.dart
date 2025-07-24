@@ -30,7 +30,7 @@ void main() {
   late UserStoredData shr;
   var mockDeviceInfo = MockDeviceInfo();
   setUp(() async {
-    shr =  UserStoredData();
+    shr =  UserStoredData(deviceInfo: DeviceInfoPlugin());
   });
 
   test('is share preference ok', () {
