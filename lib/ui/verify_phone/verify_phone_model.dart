@@ -21,7 +21,7 @@ class VerifyPhoneModel extends ChangeNotifier {
 
   VerifyPhoneModel() {
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+        userStoredData: UserStoredData());
   }
 
   resetPhone() async {

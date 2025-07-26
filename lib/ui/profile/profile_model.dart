@@ -36,7 +36,7 @@ class ProfileModel extends ChangeNotifier {
   ProfileModel() {
     var httpsCalls = HttpCalls(httpClient: http.Client());
     _accountingRepo =
-        AccountingRepo.getInstance(userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
+        AccountingRepo.getInstance(userStoredData: UserStoredData());
 
     _periodRepo = PeriodsRepo.getInstance(
         periodsApiInterface: PeriodsApi(http: httpsCalls),

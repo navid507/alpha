@@ -99,9 +99,9 @@ class AccountingRepo implements AccountingRepositoryInterface {
   Future<StateResult> registerPhone(String phone) async {
     String? uid = await userStoredData.getDeviceUniqueID();
     String? model = await findDeviceModel(DeviceInfoPlugin());
-    String? name = await findDeviceName(DeviceInfoPlugin());
+    String? device_name = await findDeviceName(DeviceInfoPlugin());
     lastPhone = phone;
-    var res = await accountingApi.registerPhone(phone: phone, uid: uid!);
+    var res = await accountingApi.registerPhone(phone: phone, uid: uid!, device_name: device_name!,);
     if (res.isSuccess) {
       changeRegisterState(RegisterState.Phone);
     } else {

@@ -1,3 +1,4 @@
+
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,8 +6,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
 
 import 'package:uuid/uuid.dart';
-
-import '../global_constants.dart';
 
 class UserStoredData {
   // hide the constructor:
@@ -22,6 +21,7 @@ class UserStoredData {
   // static const USER_NAME = "userName";
   static const DEVICE_ID = "deviceId";
   static const UNIQUE_ID = "uniqueId";
+  static const DEVICE_NAME= "device_name";
   static const USER_TOKEN = "userToken";
   static const ACTIVE_USER = "activeUser";
 
@@ -35,7 +35,7 @@ class UserStoredData {
   //   return myUSD;
   // }
 
-  UserStoredData({required this.deviceInfo});
+  UserStoredData();
 
   Future<bool> setValue(String name, dynamic value) async {
     var _preferences = await SharedPreferences.getInstance();
@@ -124,36 +124,28 @@ class UserStoredData {
     setValue(UNIQUE_ID, deviceID);
   }
 
-  // Future<String> getDeviceUniqueID() async {
-  //   var uID = await readValue<String?>(UNIQUE_ID);
-  //   if (uID == null) {
-  //     uID = findDeviceUniqueID();
-  //     _setDeviceUniqueID(uID);
-  //   }
-  //   return uID;
-  // }
-
-  Future<String?> getDeviceUniqueID() async {
+  Future<String> getDeviceUniqueID() async {
     var uID = await readValue<String?>(UNIQUE_ID);
     if (uID == null) {
-      uID = await findDeviceUniqueID(deviceInfo);
-      _setDeviceUniqueID(uID!);
+      uID = findDeviceUniqueID();
+      _setDeviceUniqueID(uID);
     }
     return uID;
   }
-  // String findDeviceUniqueID() {
-  //   var uuid = Uuid();
-  //   return uuid.v1();
-  //
-  //   // if (Platform.isAndroid) {
-  //   //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  //   //   return androidInfo.data.toString();
-  //   // } else if (Platform.isIOS) {
-  //   //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-  //   //   return iosInfo.identifierForVendor;
-  //   // }
-  //   // return "";
-  // }
+
+  String findDeviceUniqueID() {
+    var uuid = Uuid();
+    return uuid.v1();
+
+    // if (Platform.isAndroid) {
+    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    //   return androidInfo.data.toString();
+    // } else if (Platform.isIOS) {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   return iosInfo.identifierForVendor;
+    // }
+    // return "";
+  }
 
 // reset() {
 //   _preferences!.clear();
