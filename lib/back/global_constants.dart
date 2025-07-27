@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -14,11 +13,7 @@ Future<String?> findDeviceUniqueID(DeviceInfoPlugin deviceInfo) async {
     WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
     return   deviceIdentifier = webInfo.userAgent!;
   }
-  if (Platform.isAndroid) {
-    const _androidIdPlugin = AndroidId();
-    String? androidInfo = await _androidIdPlugin.getId();
-    return androidInfo;
-  }
+
   else if (Platform.isIOS) {
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
     return iosInfo.identifierForVendor;

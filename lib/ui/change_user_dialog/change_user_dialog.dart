@@ -20,7 +20,6 @@ class ChangeUserDialog extends StatefulWidget {
 }
 
 class _ChangeUserDialogState extends State<ChangeUserDialog> {
-  final rpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   ChangeUserModel get model =>
@@ -28,96 +27,94 @@ class _ChangeUserDialogState extends State<ChangeUserDialog> {
 
   @override
   void initState() {
-    // Provider.of<RegisterPhoneModel>(context, listen: false);
-
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       model.getConnectedSwimmers();
     });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return initialDialog();
-    // return Selector<ChangeUserModel, DialogState>(
-    //   selector: (_, model) => model.state,
-    //   builder: (dialogContext, state, child) {
-    //
-    //   },
-    // );
   }
 
-  initialDialog() {
+  Widget initialDialog() {
     return Form(
-        key: _formKey,
+      key: _formKey,
+      child: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.all(12.0),
-            width: getScreenWidth(context),
-            decoration: BoxDecoration(
-                color: AlphaColors.backDialog,
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            child: Column(children: [
+          padding: EdgeInsets.all(12.0),
+          width: getScreenWidth(context),
+          decoration: BoxDecoration(
+            color: AlphaColors.backDialog,
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Container(
-                  padding: EdgeInsets.only(top: 8.0),
-                  alignment: Alignment.center,
-                  child: getAlphaTextTitle1White(
-                      getAppLocalization(context).connectedSwimmers)),
+                padding: EdgeInsets.only(top: 8.0),
+                alignment: Alignment.center,
+                child: getAlphaTextTitle1White(
+                  getAppLocalization(context).connectedSwimmers,
+                ),
+              ),
               Padding(
-                  padding: EdgeInsets.only(
-                      left: 100, right: 100, top: 12, bottom: 24),
-                  child: Container(
-                    padding: EdgeInsets.all(90.0),
-                    height: 2,
-                    decoration:
-                        BoxDecoration(color: AlphaColors.backTopSwimmers),
-                    alignment: Alignment.center,
-                  )),
+                padding: EdgeInsets.only(left: 100, right: 100, top: 12, bottom: 24),
+                child: Container(
+                  height: 2,
+                  decoration: BoxDecoration(color: AlphaColors.backTopSwimmers),
+                ),
+              ),
               Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AlphaColors.White.withAlpha(10)),
-                  padding: EdgeInsets.all(20.0),
-                  child: Image(
-                      width: 80,
-                      height: 80,
-                      image: AssetImage(
-                          'assets/images/im_connected_swimmers.png'))),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AlphaColors.White.withAlpha(10),
+                ),
+                padding: EdgeInsets.all(20.0),
+                child: Image(
+                  width: 80,
+                  height: 80,
+                  image: AssetImage('assets/images/im_connected_swimmers.png'),
+                ),
+              ),
+              SizedBox(height: 8),
               Container(
-                height: 8,
-                width: 1,
+                height: 1,
+                width: 8,
                 color: AlphaColors.White.withAlpha(90),
               ),
+              SizedBox(height: 12),
               getConnectedSwimmersSection(),
-              Container(
-                  width: getScreenWidth(context),
-                  child: getAlphaDialogButtonCancel(
-                      text: getAppLocalization(context).ok,
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      })),
-              Spacer(),
-              Container(
-                  width: getScreenWidth(context),
-                  child: getAlphaDialogButtonOk(
-                      text: getAppLocalization(context).addNewSwimmers,
-                      onPressed: () {
-                        showRegisterSwimmerDialog();
-                      })),
-            ])));
+              SizedBox(height: 16),
+              getAlphaDialogButtonCancel(
+                text: getAppLocalization(context).ok,
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+              SizedBox(height: 12),
+              getAlphaDialogButtonOk(
+                text: getAppLocalization(context).addNewSwimmers,
+                onPressed: () {
+                  showRegisterSwimmerDialog();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  getConnectedSwimmersSection() {
+  Widget getConnectedSwimmersSection() {
     return Selector<ChangeUserModel, SwimmersResult>(
       selector: (_, model) => model.getConnectedSwimmer,
       builder: (_, connectedSwimmersResult, __) {
-        print("getConnectedSwimmersSection called:");
         if (connectedSwimmersResult is SuccessSwimmers) {
-          print("success: ${connectedSwimmersResult.swimmers[0].isActive}");
-
           return getConnectedSwimmersList(
               swimmers: connectedSwimmersResult.swimmers);
         } else if (connectedSwimmersResult is ErrorSwimmers) {
-          print("failed: ${connectedSwimmersResult.code}");
           if (connectedSwimmersResult.code > 0) {
             return getLoading();
           } else {
@@ -131,30 +128,31 @@ class _ChangeUserDialogState extends State<ChangeUserDialog> {
     );
   }
 
-  getConnectedSwimmersList({required List<Swimmer> swimmers}) {
+  Widget getConnectedSwimmersList({required List<Swimmer> swimmers}) {
     return Container(
-        height: 160,
-        child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: swimmers
-                .map<Widget>((s) => getConnectedSwimmer(swimmer: s))
-                .toList()));
+      height: 160,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children:
+        swimmers.map<Widget>((s) => getConnectedSwimmer(swimmer: s)).toList(),
+      ),
+    );
   }
 
-  getConnectedSwimmer({required Swimmer swimmer}) {
-    var height = 150.0;
-    var width = 95.0;
+  Widget getConnectedSwimmer({required Swimmer swimmer}) {
+    double height = 150.0;
+    double width = 95.0;
+
     return InkWell(
-        onTap: () {
-          // Provider.of<ChangeUserModel>(context, listen: false)
-          //     .changeActiveSwimmer(swimmer);
-          context.read<ChangeUserModel>().changeActiveSwimmer(swimmer);
-          setState(() {});
-        },
-        child: Column(children: [
+      onTap: () {
+        context.read<ChangeUserModel>().changeActiveSwimmer(swimmer);
+        setState(() {});
+      },
+      child: Column(
+        children: [
           Container(
             height: 1,
-            width: 95,
+            width: width,
             color: AlphaColors.White.withAlpha(30),
           ),
           Container(
@@ -163,90 +161,99 @@ class _ChangeUserDialogState extends State<ChangeUserDialog> {
             color: AlphaColors.White.withAlpha(90),
           ),
           Container(
-              padding: EdgeInsets.only(top: 2),
-              height: height,
-              width: width,
-              child: Stack(
-                children: [
-                  getConnectedSwimmerBack(isSelected: swimmer.isActive),
-                  Column(
-                    children: [
-                      (swimmer.isActive)
-                          ? getAvatarImageConnectedSwimmerActive(swimmer.image)
-                          : getAvatarImageConnectedSwimmer(swimmer.image),
-                      Padding(
-                          padding: EdgeInsets.all(0.0),
-                          child: (swimmer.isActive)
-                              ? getAlphaTextMoreYellow(swimmer.fullName)
-                              : getAlphaTextMoreWhite(swimmer.fullName)),
-                    ],
-                  )
-                ],
-                alignment: Alignment.topCenter,
-              ))
-        ]));
-  }
-
-  getConnectedSwimmerBack(
-      {required isSelected,
-      double height = 90.0,
-      double width = 80.0,
-      double topPadding = 0}) {
-    var border = Border.all(
-        color: (isSelected) ? AlphaColors.Gold : AlphaColors.Red,
-        width: (isSelected) ? 4 : 0);
-    return Positioned(
-      child: Opacity(
-          opacity: 0.1,
-          child: Container(
+            padding: EdgeInsets.only(top: 2),
             height: height,
             width: width,
-            decoration: BoxDecoration(
-                color: AlphaColors.White,
-                border: border,
-                borderRadius: BorderRadius.circular(5.0)),
-          )),
-      top: topPadding,
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                getConnectedSwimmerBack(isSelected: swimmer.isActive),
+                Column(
+                  children: [
+                    swimmer.isActive
+                        ? getAvatarImageConnectedSwimmerActive(swimmer.image)
+                        : getAvatarImageConnectedSwimmer(swimmer.image),
+                    Padding(
+                      padding: EdgeInsets.all(0.0),
+                      child: swimmer.isActive
+                          ? getAlphaTextMoreYellow(swimmer.fullName)
+                          : getAlphaTextMoreWhite(swimmer.fullName),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  getLoading() {
-    return Padding(
-        padding: EdgeInsets.all(12.0),
+  Widget getConnectedSwimmerBack({
+    required bool isSelected,
+    double height = 90.0,
+    double width = 80.0,
+    double topPadding = 0,
+  }) {
+    var border = Border.all(
+      color: isSelected ? AlphaColors.Gold : AlphaColors.Red,
+      width: isSelected ? 4 : 0,
+    );
+    return Positioned(
+      top: topPadding,
+      child: Opacity(
+        opacity: 0.1,
         child: Container(
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            color: AlphaColors.Yellow,
-            strokeWidth: 1,
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: AlphaColors.White,
+            border: border,
+            borderRadius: BorderRadius.circular(5.0),
           ),
-          height: 15,
-          width: 15,
-        ));
+        ),
+      ),
+    );
   }
 
-  showRegisterSwimmerDialog() {
+  Widget getLoading() {
+    return Padding(
+      padding: EdgeInsets.all(12.0),
+      child: Container(
+        alignment: Alignment.center,
+        height: 30,
+        width: 30,
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          color: AlphaColors.Yellow,
+          strokeWidth: 2,
+        ),
+      ),
+    );
+  }
+
+  void showRegisterSwimmerDialog() {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            insetPadding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
-            child: getRegisterSwimmerDialog(),
-          );
-        }).then((registerState) {
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
+          child: getRegisterSwimmerDialog(),
+        );
+      },
+    ).then((registerState) {
       if (registerState is StateResult && registerState.isSuccess) {
         model.getConnectedSwimmers();
       }
     });
   }
 
-  getRegisterSwimmerDialog() {
+  Widget getRegisterSwimmerDialog() {
     return ChangeNotifierProvider<RegisterSwimmerModel>(
-      create: (_) {
-        return RegisterSwimmerModel(swimmer: Swimmer.emptySwimmer());
-      },
+      create: (_) => RegisterSwimmerModel(swimmer: Swimmer.emptySwimmer()),
       child: RegisterSwimmerDialog(),
     );
   }
