@@ -7,7 +7,8 @@ import 'package:alpha/main_functions/main_models/api_result.dart';
 abstract class AccountingApiInterface {
   Future<StateResult> registerPhone({
     required String phone, // phone
-    required String uid, // uniq
+    required String uid,
+    required String device_name// uniq
   });
 
   Future<APIResult> verifyPhone({

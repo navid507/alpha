@@ -8,6 +8,7 @@ import 'package:alpha/back/accounting/models/user_access_data.dart';
 import 'package:alpha/back/accounting/user_stored_data.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -96,9 +97,9 @@ class AccountingRepo implements AccountingRepositoryInterface {
   @override
   Future<StateResult> registerPhone(String phone) async {
     String? uid = await userStoredData.getDeviceUniqueID();
-
+    String? device_name = await findDeviceName(DeviceInfoPlugin());
     lastPhone = phone;
-    var res = await accountingApi.registerPhone(phone: phone, uid: uid);
+    var res = await accountingApi.registerPhone(phone: phone, uid: uid,device_name: device_name!,);
     if (res.isSuccess) {
       changeRegisterState(RegisterState.Phone);
     } else {

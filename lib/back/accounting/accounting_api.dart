@@ -51,10 +51,11 @@ class AccountingAPI implements AccountingApiInterface {
 
   @override
   Future<StateResult> registerPhone(
-      {required String phone, required String uid}) async {
+      {required String phone, required String uid,required String device_name}) async {
     Map<String, dynamic> body = Map();
     body['phone'] = phone;
     body['uniq'] = uid;
+    body['device_name']=device_name;
     var res = await http.post(url: AccountingURLs.RegisterPhone, body: body);
     return res.state;
   }
