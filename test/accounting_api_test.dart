@@ -14,7 +14,7 @@ void main() {
   });
   test('test if phone checked in register phone', () async {
     var res =
-        await accountingApi.registerPhone(phone: "", uid: "testFromMacFlutter");
+        await accountingApi.registerPhone(phone: "", uid: "testFromMacFlutter",device_name: "");
     expect(res.error, equals(1));
   });
   test('test if unique checked in register phone', () async {
@@ -37,7 +37,7 @@ void main() {
   // complete registration and verify
   test('test if register phone is of', () async {
     var res = await accountingApi.registerPhone(
-        phone: "09366", uid: "testFromMacFlutter");
+        phone: "09366", uid: "testFromMacFlutter",device_name: "");
     expect(res.error, equals(0));
   });
 

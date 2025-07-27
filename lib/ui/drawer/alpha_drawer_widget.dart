@@ -29,6 +29,7 @@ import 'package:alpha/ui/verify_phone/verify_phone_dialog.dart';
 import 'package:alpha/ui/verify_phone/verify_phone_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 class AlphaDrawerWidget extends StatefulWidget {
@@ -78,7 +79,8 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           getContactUsTile(),
           getTopSwimmersTile(),
           getAlphaClubTile(),
-          getTeamsTile()
+          getTeamsTile(),
+          getVersionApp()
         ],
       ),
     );
@@ -273,6 +275,7 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
     );
   }
 
+
   getListTileTeamsUnSelected() {
     return ListTile(
       title: getDrawerElement(
@@ -280,6 +283,52 @@ class _AlphaDrawerWidgetState extends State<AlphaDrawerWidget> {
           icon: 'assets/images/ic_menu_about_us_unselected.png'),
       onTap: () {
         showTeamsRoute();
+      },
+    );
+  }
+
+  Widget getVersionApp() {
+    return FutureBuilder<PackageInfo>(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                getAlphaTextBodyWhite("نسخه"),
+
+                SizedBox(width: 4),
+                getAlphaTextBodyWhite("..."),
+              ],
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                getAlphaTextBodyWhite("نسخه"),
+                SizedBox(width: 4),
+                getAlphaTextBodyWhite("خطا در دریافت نسخه"),
+              ],
+            ),
+          );
+        } else if (snapshot.hasData) {
+          final version = snapshot.data!.version;
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                getAlphaTextBodyWhite("نسخه"),
+                SizedBox(width: 4),
+                getAlphaTextBodyWhite(version),
+              ],
+            ),
+          );
+        } else {
+          return SizedBox(); // در صورتی که داده‌ای نباشد
+        }
       },
     );
   }

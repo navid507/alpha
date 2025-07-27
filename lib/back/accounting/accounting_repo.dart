@@ -13,6 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import '../global_constants.dart';
 import 'abstracts/accounting_repo_abstract.dart';
 import 'models/record/record_result.dart';
 import 'models/record/record_type.dart';
