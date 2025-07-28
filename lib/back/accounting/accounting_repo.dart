@@ -98,8 +98,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
   @override
   Future<StateResult> registerPhone(String phone) async {
     String? uid = await userStoredData.getDeviceUniqueID();
-    String? model = await findDeviceModel(DeviceInfoPlugin());
-    String? device_name = await findDeviceName(DeviceInfoPlugin());
+    String? device_name = await userStoredData.getDeviceName();
     lastPhone = phone;
     var res = await accountingApi.registerPhone(phone: phone, uid: uid!, device_name: device_name!,);
     if (res.isSuccess) {

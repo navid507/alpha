@@ -24,7 +24,7 @@ class DrawerModel extends ChangeNotifier {
   DrawerModel() {
     getVersionInfo();
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData());
+        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
 
     registerStateSubscription =
         _accountingRepo.registerStateStream.listen((registerState) {

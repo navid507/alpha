@@ -7,6 +7,8 @@ import 'dart:io' show Platform;
 
 import 'package:uuid/uuid.dart';
 
+import '../global_constants.dart';
+
 class UserStoredData {
   // hide the constructor:
   // UserStoredData._();
@@ -35,7 +37,7 @@ class UserStoredData {
   //   return myUSD;
   // }
 
-  UserStoredData();
+  UserStoredData({required this.deviceInfo});
 
   Future<bool> setValue(String name, dynamic value) async {
     var _preferences = await SharedPreferences.getInstance();
@@ -131,6 +133,18 @@ class UserStoredData {
       _setDeviceUniqueID(uID);
     }
     return uID;
+  }
+
+
+  Future<String?> getDeviceName() async {
+    var name = await readValue<String?>(DEVICE_NAME);
+    if (name == null) {
+      name = await findDeviceName(deviceInfo);
+      if (name != null) {
+        setValue(DEVICE_NAME, name); // ✅ اینجا مقدارش رو جدا ذخیره کن
+      }
+    }
+    return name;
   }
 
   String findDeviceUniqueID() {

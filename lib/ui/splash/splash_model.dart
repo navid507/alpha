@@ -28,7 +28,7 @@ class SplashModel extends ChangeNotifier {
   SplashModel() {
     getVersionInfo();
     _accountingRepo = AccountingRepo.getInstance(
-        userStoredData: UserStoredData());
+        userStoredData: UserStoredData(deviceInfo: DeviceInfoPlugin()));
 
     // checkPhoneRegisterState();
   }
