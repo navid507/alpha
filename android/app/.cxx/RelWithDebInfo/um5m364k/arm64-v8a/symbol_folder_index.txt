@@ -1,0 +1,1 @@
+C:\projectpart\alpha\build\app\intermediates\cxx\RelWithDebInfo\um5m364k\obj\arm64-v8a

@@ -8,12 +8,8 @@ import 'package:alpha/back/accounting/models/user_access_data.dart';
 import 'package:alpha/back/accounting/user_stored_data.dart';
 import 'package:alpha/main_functions/http_functions.dart';
 import 'package:alpha/main_functions/main_models/api_result.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-
-import '../global_constants.dart';
 import 'abstracts/accounting_repo_abstract.dart';
 import 'models/record/record_result.dart';
 import 'models/record/record_type.dart';
@@ -118,7 +114,7 @@ class AccountingRepo implements AccountingRepositoryInterface {
       return StateResult(msg: 'no phone found', error: 11);
     }
     var res = await accountingApi.verifyPhone(
-        phone: lastPhone!, code: code, uid: uid ?? "12");
+        phone: lastPhone!, code: code, uid: uid);
     if (res.isSuccess) {
       if (res.data != null) {
         var accessData = UserAccessData.fromJson(res.data);

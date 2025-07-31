@@ -1,4 +1,7 @@
 
+import 'package:flutter/foundation.dart';
+import 'package:universal_html/html.dart' as html;
+
 import 'package:alpha/back/accounting/abstracts/accounting_repo_abstract.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -126,7 +129,40 @@ class UserStoredData {
     setValue(UNIQUE_ID, deviceID);
   }
 
+  String? getUidFromLocalStorage() {
+    return html.window.localStorage['unique_id'];
+  }
+
+  void saveUidToLocalStorage(String uid) {
+    html.window.localStorage['unique_id'] = uid;
+  }
+
+  // Future<String> getDeviceUniqueID() async {
+  //   var uID = await readValue<String?>(UNIQUE_ID);
+  //   if (uID == null) {
+  //     uID = findDeviceUniqueID();
+  //     _setDeviceUniqueID(uID);
+  //   }
+  //   return uID;
+  // }
+
+
   Future<String> getDeviceUniqueID() async {
+    if (kIsWeb) {
+      try {
+        var uid = html.window.localStorage['unique_id'];
+        if (uid == null) {
+          uid = Uuid().v4(); // یا v1
+          html.window.localStorage['unique_id'] = uid;
+        }
+        return uid;
+      } catch (e) {
+        print('LocalStorage error: $e');
+        return Uuid().v4(); // fallback
+      }
+    }
+
+    // برای Android / iOS
     var uID = await readValue<String?>(UNIQUE_ID);
     if (uID == null) {
       uID = findDeviceUniqueID();
@@ -135,13 +171,12 @@ class UserStoredData {
     return uID;
   }
 
-
   Future<String?> getDeviceName() async {
     var name = await readValue<String?>(DEVICE_NAME);
     if (name == null) {
       name = await findDeviceName(deviceInfo);
       if (name != null) {
-        setValue(DEVICE_NAME, name); // ✅ اینجا مقدارش رو جدا ذخیره کن
+        setValue(DEVICE_NAME, name);
       }
     }
     return name;
@@ -151,14 +186,6 @@ class UserStoredData {
     var uuid = Uuid();
     return uuid.v1();
 
-    // if (Platform.isAndroid) {
-    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    //   return androidInfo.data.toString();
-    // } else if (Platform.isIOS) {
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   return iosInfo.identifierForVendor;
-    // }
-    // return "";
   }
 
 // reset() {
